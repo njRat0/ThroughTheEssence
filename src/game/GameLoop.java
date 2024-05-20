@@ -1,6 +1,5 @@
 /*** In The Name of Allah ***/
-package game.template.bufferstrategy;
-
+package game;
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -12,8 +11,6 @@ package game.template.bufferstrategy;
  * Detailed discussion on different game loop design
  * patterns is available in the following link:
  *    http://gameprogrammingpatterns.com/game-loop.html
- * 
- * @author Seyed Mohammad Ghaffarian
  */
 public class GameLoop implements Runnable {
 	
@@ -24,7 +21,7 @@ public class GameLoop implements Runnable {
 	public static final int FPS = 30;
 	
 	private GameFrame canvas;
-	private GameState state;
+	private Player player;
 
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
@@ -35,10 +32,10 @@ public class GameLoop implements Runnable {
 	 */
 	public void init() {
 		// Perform all initializations ...
-		state = new GameState();
-		canvas.addKeyListener(state.getKeyListener());
-		canvas.addMouseListener(state.getMouseListener());
-		canvas.addMouseMotionListener(state.getMouseMotionListener());
+		player = new Player();
+		canvas.addKeyListener(player.getKeyListener());
+		canvas.addMouseListener(player.getMouseListener());
+		canvas.addMouseMotionListener(player.getMouseMotionListener());
 	}
 
 	@Override
@@ -48,8 +45,9 @@ public class GameLoop implements Runnable {
 			try {
 				long start = System.currentTimeMillis();
 				//
-				state.update();
-				canvas.render(state);
+				player.update();
+				canvas.render(player);
+				gameOver = player.gameOver;
 				//
 				long delay = (1000 / FPS) - (System.currentTimeMillis() - start);
 				if (delay > 0)
@@ -57,5 +55,6 @@ public class GameLoop implements Runnable {
 			} catch (InterruptedException ex) {
 			}
 		}
+		canvas.render(player);
 	}
 }

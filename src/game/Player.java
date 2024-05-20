@@ -1,13 +1,10 @@
 /*** In The Name of Allah ***/
-package game.sample.ball;
+package game;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 /**
  * This class holds the state of game and all of its elements.
@@ -15,7 +12,7 @@ import java.awt.event.MouseMotionListener;
  * 
  * @author Seyed Mohammad Ghaffarian
  */
-public class GameState {
+public class Player {
 	
 	public int locX, locY, diam;
 	public boolean gameOver;
@@ -25,8 +22,10 @@ public class GameState {
 	private int mouseX, mouseY;	
 	private KeyHandler keyHandler;
 	private MouseHandler mouseHandler;
+
+	public BufferedImage sprite;
 	
-	public GameState() {
+	public Player() {
 		locX = 100;
 		locY = 100;
 		diam = 32;
@@ -43,6 +42,13 @@ public class GameState {
 		//
 		keyHandler = new KeyHandler();
 		mouseHandler = new MouseHandler();
+		//
+		try{
+			    sprite = ImageIO.read(getClass().getResourceAsStream("/lib/res/Characters/Icon12.png"));
+			}
+			catch(IOException e){
+			    e.getStackTrace();
+			}
 	}
 	
 	/**

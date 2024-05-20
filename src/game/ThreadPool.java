@@ -1,14 +1,11 @@
 /*** In The Name of Allah ***/
-package game.template.bufferstrategy;
-
+package game;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * This class holds a global thread-pool for executing our threads.
- * 
- * @author Seyed Mohammad Ghaffarian
- */
+*/
 public class ThreadPool {
 	
 	private static ExecutorService executor;
