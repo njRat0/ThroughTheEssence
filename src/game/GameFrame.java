@@ -91,10 +91,17 @@ public class GameFrame extends JFrame {
 		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth(),player.sprite.getHeight(), null);
 		if(enemies != null){
 			for(Enemy enemy : enemies){
-				g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, enemy.sprite.getWidth(),enemy.sprite.getHeight(), null);
 				if(enemy.curHP>0){
-					g2d.setColor(new Color((int)((1 - enemy.curHP / enemy.maxHP) * 255),(int)(enemy.curHP / enemy.maxHP*255),0));
-					g2d.fillRect(enemy.locX + (int)((32-(int)(28 * enemy.curHP / enemy.maxHP)) / 2), enemy.locY + enemy.sprite.getHeight(), (int)(28 * enemy.curHP / enemy.maxHP), 4);	
+					if(enemy.type == TypeOfEnemy.GojoSatoru){
+						g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, (int)(enemy.sprite.getWidth() /7),(int)(enemy.sprite.getHeight()/7), null);
+						g2d.setColor(new Color((int)((1 - enemy.curHP / enemy.maxHP) * 255),(int)(enemy.curHP / enemy.maxHP*255),0));
+						g2d.fillRect(enemy.locX + (int)((32-(int)(28 * enemy.curHP / enemy.maxHP)) / 2), enemy.locY + enemy.sprite.getHeight(), (int)(28 * enemy.curHP / enemy.maxHP), 4);
+					}
+					else{
+						g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, enemy.sprite.getWidth(),enemy.sprite.getHeight(), null);
+						g2d.setColor(new Color((int)((1 - enemy.curHP / enemy.maxHP) * 255),(int)(enemy.curHP / enemy.maxHP*255),0));
+						g2d.fillRect(enemy.locX + (int)((32-(int)(28 * enemy.curHP / enemy.maxHP)) / 2), enemy.locY + enemy.sprite.getHeight(), (int)(28 * enemy.curHP / enemy.maxHP), 4);	
+					}
 				}
 			}
 		}

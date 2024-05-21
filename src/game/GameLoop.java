@@ -40,6 +40,8 @@ public class GameLoop implements Runnable {
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		listOfEnemies.add(new TestMob(player, -100, -100));
+		listOfEnemies.add(new FireLizard(player, 700, -100));
+		listOfEnemies.add(new GojoSatoru(player, 700, 200));
 		try{
 			listOfEnemies.get(0).curHP = 10f;
 		}
@@ -59,10 +61,11 @@ public class GameLoop implements Runnable {
 				long start = System.currentTimeMillis();
 				//
 				player.update();
-				for(Enemy enemy: listOfEnemies){
+				for(int i = 0; i < listOfEnemies.size();i++){
+					Enemy enemy = listOfEnemies.get(i);
 					if(enemy.curHP<=0){
 						enemy.Dead();
-						listOfEnemies.remove(enemy);
+						listOfEnemies.remove(i);
 						continue;
 					}
 					else{
@@ -70,7 +73,7 @@ public class GameLoop implements Runnable {
 					}
 				}
 				canvas.render(player, listOfEnemies);
-				gameOver = player.gameOver;
+				//gameOver = player.gameOver;
 				//
 				long delay = (1000 / FPS) - (System.currentTimeMillis() - start);
 				if (delay > 0)

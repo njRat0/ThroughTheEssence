@@ -6,6 +6,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+enum TypeOfEnemy{
+    GojoSatoru
+}
+
 public abstract class Enemy {
     public float moveSpeed = 4;
     public float damage = 1.5f;
@@ -13,6 +17,7 @@ public abstract class Enemy {
     public float maxHP = 20;
     public int locX, locY;
     public BufferedImage sprite;
+    public TypeOfEnemy type;
 
     public Player player;
     private boolean isRangeAttack = false;
@@ -57,3 +62,25 @@ class TestMob extends Enemy{
     }
     
 }
+
+class FireLizard extends Enemy{
+    public FireLizard(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res\\Icon28.png");
+        super.maxHP = 30f;
+        super.curHP = 30f;
+    }
+    
+}
+class GojoSatoru extends Enemy{
+    public GojoSatoru(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res\\524a84a508a5a16.png");
+        super.maxHP = 100f;
+        super.curHP = 100f;
+        super.moveSpeed = 12f;
+        super.type = TypeOfEnemy.GojoSatoru;
+    }
+    
+}
+
