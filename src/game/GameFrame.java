@@ -87,12 +87,16 @@ public class GameFrame extends JFrame {
 		// Draw background
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-		// Draw ball
-		// //g2d.setColor(Color.BLACK);
-		//g2d.fillOval(player.locX, player.locY, player.diam, player.diam);
-		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth()*2,player.sprite.getHeight()*2, null);
-		for(Enemy enemy : enemies){
-			g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, enemy.sprite.getWidth()*2,enemy.sprite.getHeight()*2, null);
+		//Draw player and enemies
+		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth(),player.sprite.getHeight(), null);
+		if(enemies != null){
+			for(Enemy enemy : enemies){
+				g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, enemy.sprite.getWidth(),enemy.sprite.getHeight(), null);
+				if(enemy.curHP>0){
+					g2d.setColor(new Color((int)((1 - enemy.curHP / enemy.maxHP) * 255),(int)(enemy.curHP / enemy.maxHP*255),0));
+					g2d.fillRect(enemy.locX + (int)((32-(int)(28 * enemy.curHP / enemy.maxHP)) / 2), enemy.locY + enemy.sprite.getHeight(), (int)(28 * enemy.curHP / enemy.maxHP), 4);	
+				}
+			}
 		}
 		// Print FPS info
 		long currentRender = System.currentTimeMillis();

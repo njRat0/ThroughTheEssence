@@ -15,6 +15,7 @@ public abstract class Enemy {
     public BufferedImage sprite;
 
     public Player player;
+    private boolean isRangeAttack = false;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -37,6 +38,15 @@ public abstract class Enemy {
         double angle = Math.atan2( deltaY, deltaX );
         locX += moveSpeed * Math.cos( angle );
         locY += moveSpeed * Math.sin( angle );
+        curHP -= 0.1f;
+    }
+
+    public void Dead(){
+        
+    }
+
+    private void RangeAttack(){
+
     }
 }
 

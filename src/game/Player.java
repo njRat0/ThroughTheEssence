@@ -63,13 +63,13 @@ public class Player {
 			locX = mouseX - diam / 2;
 		}
 		if (keyUP)
-			locY -= moveSpeed;
+			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 		if (keyDOWN)
-			locY += moveSpeed;
+			locY += (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 		if (keyLEFT)
-			locX -= moveSpeed;
+			locX -= (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 		if (keyRIGHT)
-			locX += moveSpeed;
+			locX += (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 
 		locX = Math.max(locX, 0);
 		locX = Math.min(locX, GameFrame.GAME_WIDTH - diam);

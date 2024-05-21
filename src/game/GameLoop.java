@@ -39,7 +39,13 @@ public class GameLoop implements Runnable {
 		// Perform all initializations ...
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
-		listOfEnemies.add(new TestMob(player, 0, 0));
+		listOfEnemies.add(new TestMob(player, -100, -100));
+		try{
+			listOfEnemies.get(0).curHP = 10f;
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			e.getStackTrace();
+		}
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
@@ -54,7 +60,14 @@ public class GameLoop implements Runnable {
 				//
 				player.update();
 				for(Enemy enemy: listOfEnemies){
-					enemy.update();
+					if(enemy.curHP<=0){
+						enemy.Dead();
+						listOfEnemies.remove(enemy);
+						continue;
+					}
+					else{
+						enemy.update();
+					}
 				}
 				canvas.render(player, listOfEnemies);
 				gameOver = player.gameOver;
