@@ -4,6 +4,8 @@ package game;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,6 +16,7 @@ import java.io.IOException;
  */
 public class Player {
 	
+	public float moveSpeed = 8;
 	public int locX, locY, diam;
 	public boolean gameOver;
 	
@@ -43,12 +46,12 @@ public class Player {
 		keyHandler = new KeyHandler();
 		mouseHandler = new MouseHandler();
 		//
-		try{
-			    sprite = ImageIO.read(getClass().getResourceAsStream("/lib/res/Characters/Icon12.png"));
-			}
-			catch(IOException e){
-			    e.getStackTrace();
-			}
+		try {
+			sprite = ImageIO.read(new File("res\\Icon1.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -60,13 +63,13 @@ public class Player {
 			locX = mouseX - diam / 2;
 		}
 		if (keyUP)
-			locY -= 8;
+			locY -= moveSpeed;
 		if (keyDOWN)
-			locY += 8;
+			locY += moveSpeed;
 		if (keyLEFT)
-			locX -= 8;
+			locX -= moveSpeed;
 		if (keyRIGHT)
-			locX += 8;
+			locX += moveSpeed;
 
 		locX = Math.max(locX, 0);
 		locX = Math.min(locX, GameFrame.GAME_WIDTH - diam);

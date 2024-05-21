@@ -4,6 +4,7 @@ package game;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+//import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -50,7 +51,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Game rendering with triple-buffering using BufferStrategy.
 	 */
-	public void render(Player player) {
+	public void render(Player player, ArrayList<Enemy> enemies) {
 		// Get a new graphics context to render the current frame
 		// Render single frame
 		do {
@@ -61,7 +62,7 @@ public class GameFrame extends JFrame {
 				// to make sure the strategy is validated
 				Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 				try {
-					doRendering(graphics, player);
+					doRendering(graphics, player, enemies);
 				} finally {
 					// Dispose the graphics
 					graphics.dispose();
@@ -80,16 +81,19 @@ public class GameFrame extends JFrame {
 	}
 	
 	/**
-	 * Rendering all game elements based on the game state.
+	 * Rendering all game elements based on the game player.
 	 */
-	private void doRendering(Graphics2D g2d, Player state) {
+	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		// Draw ball
-		g2d.setColor(Color.BLACK);
-		g2d.fillOval(state.locX, state.locY, state.diam, state.diam);
-		//g2d.drawImage(state.sprite, null, EXIT_ON_CLOSE, ABORT);
+		// //g2d.setColor(Color.BLACK);
+		//g2d.fillOval(player.locX, player.locY, player.diam, player.diam);
+		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth()*2,player.sprite.getHeight()*2, null);
+		for(Enemy enemy : enemies){
+			g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, enemy.sprite.getWidth()*2,enemy.sprite.getHeight()*2, null);
+		}
 		// Print FPS info
 		long currentRender = System.currentTimeMillis();
 		if (lastRender > 0) {
@@ -112,13 +116,13 @@ public class GameFrame extends JFrame {
 		}
 		lastRender = currentRender;
 		// Print user guide
-		String userGuide
-				= "Use the MOUSE or ARROW KEYS to move the BALL. "
-				+ "Press ESCAPE to end the game.";
-		g2d.setFont(g2d.getFont().deriveFont(18.0f));
-		g2d.drawString(userGuide, 10, GAME_HEIGHT - 10);
+		// // String userGuide
+		// // 		= "Use the MOUSE or ARROW KEYS to move the BALL. "
+		// // 		+ "Press ESCAPE to end the game.";
+		// // g2d.setFont(g2d.getFont().deriveFont(18.0f));
+		// // g2d.drawString(userGuide, 10, GAME_HEIGHT - 10);
 		// Draw GAME OVER
-		if (state.gameOver) {
+		if (player.gameOver) {
 			String str = "GAME OVER";
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(64.0f));

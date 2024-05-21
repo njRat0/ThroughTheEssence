@@ -1,5 +1,9 @@
 /*** In The Name of Allah ***/
 package game;
+
+import java.util.ArrayList;
+//mport java.util.List;
+
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -22,6 +26,7 @@ public class GameLoop implements Runnable {
 	
 	private GameFrame canvas;
 	private Player player;
+	private ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
@@ -33,6 +38,8 @@ public class GameLoop implements Runnable {
 	public void init() {
 		// Perform all initializations ...
 		player = new Player();
+		listOfEnemies.add(new TestMob(player, 500, 200));
+		listOfEnemies.add(new TestMob(player, 0, 0));
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
@@ -46,7 +53,10 @@ public class GameLoop implements Runnable {
 				long start = System.currentTimeMillis();
 				//
 				player.update();
-				canvas.render(player);
+				for(Enemy enemy: listOfEnemies){
+					enemy.update();
+				}
+				canvas.render(player, listOfEnemies);
 				gameOver = player.gameOver;
 				//
 				long delay = (1000 / FPS) - (System.currentTimeMillis() - start);
@@ -55,6 +65,6 @@ public class GameLoop implements Runnable {
 			} catch (InterruptedException ex) {
 			}
 		}
-		canvas.render(player);
+		canvas.render(player, listOfEnemies);
 	}
 }
