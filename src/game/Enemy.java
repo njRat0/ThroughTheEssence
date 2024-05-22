@@ -29,9 +29,10 @@ public abstract class Enemy {
     public boolean isRangeAttack = false;
 
     public float delayBtwAttacks = 1f;
-    private boolean isAttacking = false;
+    public boolean isAttacking = false;
 
     private Timer timer = new Timer();
+    public TimerTask timerTask;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -66,21 +67,9 @@ public abstract class Enemy {
 
         if(isRangeAttack && isAttacking == false){
             isAttacking = true;
-            timer.schedule(new TimerTask() {
-
-                @Override
-                public void run() {
-                    try{
-
-                        SetUpOfBullet();
-                        isAttacking = false;
-                    }
-                    catch(IndexOutOfBoundsException e){
-                        e.getStackTrace();
-                    }
-                }
-            }, (long)(delayBtwAttacks*1000));
+            timer.schedule(timerTask, (long)(2*1000));
         }
+
     }
 
     public void Dead(){
@@ -88,7 +77,24 @@ public abstract class Enemy {
     }
 
     private void RangeAttack(){
+        // timer.schedule(new TimerTask() {
+            
+        //     @Override
+        //     public void run() {
+        //         // isAttacking = false;
+        //         // Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
+        //         // bullet.speed = 12f;
+        //         // bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
+        //         // bullet.sizeOfSprite = 0.04f;
+        //     }
+            
+        // }, (long)2*1000);
 
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
+        bullet.speed = 12f;
+        bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
+        bullet.sizeOfSprite = 0.04f;
+        
     }
 }
 
@@ -129,7 +135,21 @@ class GojoSatoru extends Enemy{
         super.moveSpeed = 6f;
         super.type = TypeOfEnemy.GojoSatoru;
         super.sizeOfSprite = 0.05f;
-        super.isRangeAttack = false;
+        super.isRangeAttack = true;
+        super.timerTask = new TimerTask() {
+            
+
+            @Override
+            public void run() {
+                //isAttacking = false;
+                Bullet bullet = new Bullet(super.locX,locY,player.locX,player.locY,1f);
+                bullet.speed = 12f;
+                bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
+                bullet.sizeOfSprite = 0.04f;
+            }
+            
+        };
+
     }
 
     void SetUpOfBullet() {
@@ -138,7 +158,6 @@ class GojoSatoru extends Enemy{
         bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
         bullet.sizeOfSprite = 0.04f;
 
-        //GameLoop.listOfBullets.add(bullet);
     }
     
 }
