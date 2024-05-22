@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -25,6 +27,11 @@ public abstract class Enemy {
     public float sizeOfSprite = 1f;
     public Player player;
     public boolean isRangeAttack = false;
+
+    public float delayBtwAttacks = 1f;
+    private boolean isAttacking = false;
+
+    private Timer timer = new Timer();
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -57,8 +64,22 @@ public abstract class Enemy {
         locY += moveSpeed * Math.sin( angle );
         curHP -= 0.1f;
 
-        if(isRangeAttack){
-            SetUpOfBullet();
+        if(isRangeAttack && isAttacking == false){
+            isAttacking = true;
+            timer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    try{
+
+                        SetUpOfBullet();
+                        isAttacking = false;
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        e.getStackTrace();
+                    }
+                }
+            }, (long)(delayBtwAttacks*1000));
         }
     }
 
@@ -116,6 +137,8 @@ class GojoSatoru extends Enemy{
         bullet.speed = 12f;
         bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
         bullet.sizeOfSprite = 0.04f;
+
+        //GameLoop.listOfBullets.add(bullet);
     }
     
 }

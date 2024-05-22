@@ -11,13 +11,14 @@ import javax.imageio.ImageIO;
 
 public class Bullet {
     private BufferedImage sprite;
-    private int locX, locY;
+    private float locX, locY;
     private double velocityX; private double velocityY;
     public float damage;
     public float speed;
     public float sizeOfSprite = 1f;
     public float lifeTime = 3f;
-    private int id;
+    public boolean isEnd = false;
+    private double angle;
 
     private Timer timer = new Timer();
 
@@ -28,20 +29,16 @@ public class Bullet {
 
         float deltaX = pointX - locX;
         float deltaY = pointY - locY;
-        double angle = Math.atan2( deltaY, deltaX );
-        velocityX = speed * Math.cos( angle );
-        velocityY = speed * Math.sin( angle );
+        angle = Math.atan2( deltaY, deltaX );
 
-        id = GameLoop.listOfBullets.size();
-        GameLoop.listOfBullets.add(this);
-        
+        GameLoop.listOfBullets.add(this);        
 
         timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
                 try{
-                    GameLoop.listOfBullets.remove(id);
+                    isEnd = true;
                 }
                 catch(ArrayIndexOutOfBoundsException e){
                     e.getStackTrace();
@@ -51,12 +48,14 @@ public class Bullet {
     }
 
     public void toDraw(Graphics2D g2d){
-        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+        g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
     }
 
     public void update(){
-        locX+=velocityX;
-        locY+=velocityY;
+
+        locX += speed * Math.cos( angle );
+        locY += speed * Math.sin( angle );
+
     }
 
     

@@ -74,8 +74,20 @@ public class GameLoop implements Runnable {
 					}
 				}
 				for(int i = 0; i < listOfBullets.size();i++){
+					//if()
 					Bullet bullet = listOfBullets.get(i);
-					bullet.update();
+					if(bullet.isEnd == true){
+						try{
+							listOfBullets.remove(i);
+							//continue;
+						}
+						catch(IndexOutOfBoundsException e){
+							e.getStackTrace();
+						}
+					}
+					else{
+						bullet.update();
+					}	
 				}
 				canvas.render(player, listOfEnemies, listOfBullets);
 				//gameOver = player.gameOver;
