@@ -129,7 +129,7 @@ class GojoSatoru extends Enemy{
         super.moveSpeed = 6f;
         super.type = TypeOfEnemy.GojoSatoru;
         super.sizeOfSprite = 0.05f;
-        super.isRangeAttack = true;
+        super.isRangeAttack = false;
     }
 
     void SetUpOfBullet() {
