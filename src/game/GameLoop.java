@@ -27,6 +27,7 @@ public class GameLoop implements Runnable {
 	private GameFrame canvas;
 	private Player player;
 	private ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
+	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
 
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
@@ -72,7 +73,11 @@ public class GameLoop implements Runnable {
 						enemy.update();
 					}
 				}
-				canvas.render(player, listOfEnemies);
+				for(int i = 0; i < listOfBullets.size();i++){
+					Bullet bullet = listOfBullets.get(i);
+					bullet.update();
+				}
+				canvas.render(player, listOfEnemies, listOfBullets);
 				//gameOver = player.gameOver;
 				//
 				long delay = (1000 / FPS) - (System.currentTimeMillis() - start);
@@ -81,6 +86,6 @@ public class GameLoop implements Runnable {
 			} catch (InterruptedException ex) {
 			}
 		}
-		canvas.render(player, listOfEnemies);
+		canvas.render(player, listOfEnemies, listOfBullets);
 	}
 }

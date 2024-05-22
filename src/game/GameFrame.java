@@ -51,7 +51,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Game rendering with triple-buffering using BufferStrategy.
 	 */
-	public void render(Player player, ArrayList<Enemy> enemies) {
+	public void render(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
 		// Get a new graphics context to render the current frame
 		// Render single frame
 		do {
@@ -62,7 +62,7 @@ public class GameFrame extends JFrame {
 				// to make sure the strategy is validated
 				Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 				try {
-					doRendering(graphics, player, enemies);
+					doRendering(graphics, player, enemies, bullets);
 				} finally {
 					// Dispose the graphics
 					graphics.dispose();
@@ -83,7 +83,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Rendering all game elements based on the game player.
 	 */
-	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies) {
+	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -91,11 +91,12 @@ public class GameFrame extends JFrame {
 		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth(),player.sprite.getHeight(), null);
 		if(enemies != null){
 			for(Enemy enemy : enemies){
-				if(enemy.curHP>0){
-					g2d.drawImage(enemy.sprite, enemy.locX,enemy.locY, (int)(enemy.sprite.getWidth()*enemy.sizeOfSprite),(int)(enemy.sprite.getHeight()*enemy.sizeOfSprite), null);
-					g2d.setColor(new Color((int)((1 - enemy.curHP / enemy.maxHP) * 255),(int)(enemy.curHP / enemy.maxHP*255),0));
-					g2d.fillRect(enemy.locX + (int)((32-(int)(28 * enemy.curHP / enemy.maxHP)) / 2), enemy.locY + enemy.sprite.getHeight(), (int)(28 * enemy.curHP / enemy.maxHP), 4);	
-				}
+				enemy.toDraw(g2d);
+			}
+		}
+		if(bullets != null){
+			for(Bullet bullet : bullets){
+				bullet.toDraw(g2d);
 			}
 		}
 		// Print FPS info

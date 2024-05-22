@@ -3,7 +3,7 @@ package game;
 import java.awt.*;
 
 public class Settings {
-    public static int sizeOfUI = 2;
+    public static int sizeOfUI = 1;
     public static Dimension sizeOfWindow;
     //public static final Dimension STANDART_WINDOW_SIZE = new Dimension(1920, 1080);
     public static final float COEFFICIENT_OF_DIAGANOL_MOVING = 0.8f;

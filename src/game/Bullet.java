@@ -1,32 +1,65 @@
 package game;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
 public class Bullet {
-    public BufferedImage sprite;
-    public int locX, locY;
-    private int velocityX; private int pointY;
-    private float damage;
-    private float speed;
+    private BufferedImage sprite;
+    private int locX, locY;
+    private double velocityX; private double velocityY;
+    public float damage;
+    public float speed;
+    public float sizeOfSprite = 1f;
+    public float lifeTime = 3f;
+    private int id;
 
-    public Bullet(int pointX, int pointY, float damage, float speed){
-        this.damage = damage;
-        this.speed = speed;
+    private Timer timer = new Timer();
 
-        // float deltaX = player.locX - locX;
-        // float deltaY = player.locY - locY;
-        // double angle = Math.atan2( deltaY, deltaX );
-        // locX += moveSpeed * Math.cos( angle );
-        // locY += moveSpeed * Math.sin( angle );
+    public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime){
+        this.lifeTime = lifeTime;
+        this.locX = locX;
+        this.locY = locY;
+
+        float deltaX = pointX - locX;
+        float deltaY = pointY - locY;
+        double angle = Math.atan2( deltaY, deltaX );
+        velocityX = speed * Math.cos( angle );
+        velocityY = speed * Math.sin( angle );
+
+        id = GameLoop.listOfBullets.size();
+        GameLoop.listOfBullets.add(this);
+        
+
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                try{
+                    GameLoop.listOfBullets.remove(id);
+                }
+                catch(ArrayIndexOutOfBoundsException e){
+                    e.getStackTrace();
+                }
+            }
+        }, (long)(lifeTime*1000));
+    }
+
+    public void toDraw(Graphics2D g2d){
+        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
     }
 
     public void update(){
-
+        locX+=velocityX;
+        locY+=velocityY;
     }
+
+    
     
     public void SetSprite(String source){
         try {

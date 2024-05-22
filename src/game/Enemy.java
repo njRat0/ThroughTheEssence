@@ -1,5 +1,8 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +22,20 @@ public abstract class Enemy {
     public BufferedImage sprite;
     public TypeOfEnemy type;
 
+    public float sizeOfSprite = 1f;
     public Player player;
-    private boolean isRangeAttack = false;
+    public boolean isRangeAttack = false;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
         this.locX = locX;
         this.locY = locY;
+    }
+
+    public void toDraw(Graphics2D g2d){
+        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+		g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
+		g2d.fillRect(locX + (int)((32-(int)(28 * curHP / maxHP)) / 2), locY + 32, (int)(28 * curHP / maxHP), 4);	
     }
 
     public void SetSprite(String source){
@@ -37,6 +47,8 @@ public abstract class Enemy {
 		}
     }
 
+    abstract void SetUpOfBullet();
+
     public void update(){
         float deltaX = player.locX - locX;
         float deltaY = player.locY - locY;
@@ -44,6 +56,10 @@ public abstract class Enemy {
         locX += moveSpeed * Math.cos( angle );
         locY += moveSpeed * Math.sin( angle );
         curHP -= 0.1f;
+
+        if(isRangeAttack){
+            SetUpOfBullet();
+        }
     }
 
     public void Dead(){
@@ -60,6 +76,11 @@ class TestMob extends Enemy{
         super(player, locX, locX);
         SetSprite("res\\Icon2.png");
     }
+
+    void SetUpOfBullet() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'SetUpOfBullet'");
+    }
     
 }
 
@@ -70,6 +91,12 @@ class FireLizard extends Enemy{
         super.maxHP = 30f;
         super.curHP = 30f;
     }
+
+    @Override
+    void SetUpOfBullet() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'SetUpOfBullet'");
+    }
     
 }
 class GojoSatoru extends Enemy{
@@ -78,8 +105,17 @@ class GojoSatoru extends Enemy{
         SetSprite("res\\524a84a508a5a16.png");
         super.maxHP = 100f;
         super.curHP = 100f;
-        super.moveSpeed = 12f;
+        super.moveSpeed = 6f;
         super.type = TypeOfEnemy.GojoSatoru;
+        super.sizeOfSprite = 0.05f;
+        super.isRangeAttack = true;
+    }
+
+    void SetUpOfBullet() {
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
+        bullet.speed = 12f;
+        bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
+        bullet.sizeOfSprite = 0.04f;
     }
     
 }
