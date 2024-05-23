@@ -1,6 +1,7 @@
 /*** In The Name of Allah ***/
 package game;
 
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -27,6 +28,9 @@ public class Player {
 	private MouseHandler mouseHandler;
 
 	public BufferedImage sprite;
+	
+	public Rectangle solidArea;
+    public boolean isCollision;
 	
 	public Player() {
 		locX = 100;
@@ -89,7 +93,10 @@ public class Player {
 	}
 
 
-
+	private void SetUpCollision(){
+		isCollision = true;
+		solidArea = new Rectangle(4,4,28,28);
+	}
 	/**
 	 * The keyboard handler.
 	 */

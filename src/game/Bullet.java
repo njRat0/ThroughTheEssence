@@ -1,6 +1,8 @@
 package game;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +21,8 @@ public class Bullet {
     public float lifeTime = 3f;
     public boolean isEnd = false;
     private double angle;
+
+    public Rectangle collision;
 
     private Timer timer = new Timer();
 
@@ -58,7 +62,9 @@ public class Bullet {
 
     }
 
-    
+    public void SetUpCollision(){
+        collision = new Rectangle((int)locX,(int)locY,(int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite));
+    }
     
     public void SetSprite(String source){
         try {

@@ -3,6 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,9 @@ public abstract class Enemy {
 
     public float delayBtwAttacks = 1f;
     private int timerCount = 0;
+
+    public Rectangle solidArea;
+    public boolean isCollision;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -122,7 +126,7 @@ class GojoSatoru extends Enemy{
         bullet.speed = 12f;
         bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
         bullet.sizeOfSprite = 0.04f;
-
+        bullet.SetUpCollision();
     }
     
 }
