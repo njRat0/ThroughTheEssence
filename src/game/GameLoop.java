@@ -40,15 +40,20 @@ public class GameLoop implements Runnable {
 		// Perform all initializations ...
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
+		
 		listOfEnemies.add(new TestMob(player, -100, -100));
-		listOfEnemies.add(new FireLizard(player, 700, -100));
-		listOfEnemies.add(new GojoSatoru(player, 700, 200));
-		try{
-			listOfEnemies.get(0).curHP = 10f;
-		}
-		catch(ArrayIndexOutOfBoundsException e){
-			e.getStackTrace();
-		}
+		listOfEnemies.add(new TestMob(player, 1000, 200));
+		listOfEnemies.add(new TestMob(player, -100, 700));
+		// listOfEnemies.add(new FireLizard(player, 700, -100));
+		// listOfEnemies.add(new GojoSatoru(player, 700, 200));
+		// listOfEnemies.add(new GojoSatoru(player, 200, 200));
+		// listOfEnemies.add(new GojoSatoru(player, 100, 400));
+		// try{
+		// 	listOfEnemies.get(0).curHP = 10f;
+		// }
+		// catch(ArrayIndexOutOfBoundsException e){
+		// 	e.getStackTrace();
+		// }
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());

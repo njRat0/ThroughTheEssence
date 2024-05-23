@@ -32,8 +32,8 @@ public abstract class Enemy {
     public float delayBtwAttacks = 1f;
     private int timerCount = 0;
 
-    public Rectangle solidArea;
-    public boolean isCollision;
+    public Rectangle collision;
+    //public boolean isCollision;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -56,9 +56,19 @@ public abstract class Enemy {
 		}
     }
 
+    public void SetUpCollision(){
+        collision = new Rectangle((int)locX,(int)locY,(int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite));
+    }
+
     abstract void SetUpOfBullet();
 
     public void update(){
+        collision.x = locX;
+        collision.y = locY;
+        if(collision.intersects(player.collision)){
+            player.TakeDamage(damage);
+        }
+
         float deltaX = player.locX - locX;
         float deltaY = player.locY - locY;
         double angle = Math.atan2( deltaY, deltaX );
@@ -73,6 +83,7 @@ public abstract class Enemy {
                 SetUpOfBullet();
             }
         }
+        
     }
 
     public void Dead(){
@@ -84,7 +95,10 @@ public abstract class Enemy {
 class TestMob extends Enemy{
     public TestMob(Player player, int locX, int locY) {
         super(player, locX, locX);
-        SetSprite("res\\Icon2.png");
+        SetSprite("res/Characters/Icon2.png");
+        super.damage = 2f;
+
+        SetUpCollision();
     }
 
     void SetUpOfBullet() {
@@ -97,22 +111,26 @@ class TestMob extends Enemy{
 class FireLizard extends Enemy{
     public FireLizard(Player player, int locX, int locY) {
         super(player, locX, locX);
-        SetSprite("res\\Icon28.png");
+        SetSprite("res/Characters/Icon28.png");
         super.maxHP = 30f;
         super.curHP = 30f;
+        super.isRangeAttack = true;
+        delayBtwAttacks = 3f;
     }
 
-    @Override
     void SetUpOfBullet() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'SetUpOfBullet'");
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,4f, player);
+        bullet.speed = 5f;
+        bullet.SetSprite("res\\Bullets\\Fireball1.png");
+        bullet.sizeOfSprite = 2f;
+        bullet.SetUpCollision();
     }
     
 }
 class GojoSatoru extends Enemy{
     public GojoSatoru(Player player, int locX, int locY) {
         super(player, locX, locX);
-        SetSprite("res\\524a84a508a5a16.png");
+        SetSprite("res/Characters/524a84a508a5a16.png");
         super.maxHP = 100f;
         super.curHP = 100f;
         super.moveSpeed = 6f;
@@ -122,9 +140,9 @@ class GojoSatoru extends Enemy{
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,2f);
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,2f, player);
         bullet.speed = 12f;
-        bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
+        bullet.SetSprite("res/Bullets/dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
         bullet.sizeOfSprite = 0.04f;
         bullet.SetUpCollision();
     }

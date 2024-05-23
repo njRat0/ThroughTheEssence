@@ -15,21 +15,24 @@ public class Bullet {
     private BufferedImage sprite;
     private float locX, locY;
     private double velocityX; private double velocityY;
-    public float damage;
+    public float damage = 5f;
     public float speed;
     public float sizeOfSprite = 1f;
     public float lifeTime = 3f;
     public boolean isEnd = false;
     private double angle;
 
+    private Player player;
+
     public Rectangle collision;
 
     private Timer timer = new Timer();
 
-    public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime){
+    public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
         this.lifeTime = lifeTime;
         this.locX = locX;
         this.locY = locY;
+        this.player = player;
 
         float deltaX = pointX - locX;
         float deltaY = pointY - locY;
@@ -59,6 +62,12 @@ public class Bullet {
 
         locX += speed * Math.cos( angle );
         locY += speed * Math.sin( angle );
+        collision.x = (int)locX;
+        collision.y = (int)locY;
+
+        if(collision.intersects(player.collision)){
+            player.TakeDamage(damage);
+        }
 
     }
 

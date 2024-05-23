@@ -88,7 +88,7 @@ public class GameFrame extends JFrame {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		//Draw player and enemies
-		g2d.drawImage(player.sprite, player.locX,player.locY, player.sprite.getWidth(),player.sprite.getHeight(), null);
+		player.toDraw(g2d);
 		if(enemies != null){
 			for(Enemy enemy : enemies){
 				enemy.toDraw(g2d);

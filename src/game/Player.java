@@ -1,6 +1,8 @@
 /*** In The Name of Allah ***/
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -28,9 +30,13 @@ public class Player {
 	private MouseHandler mouseHandler;
 
 	public BufferedImage sprite;
+	private float sizeOfSprite = 1f;
 	
-	public Rectangle solidArea;
+	public Rectangle collision;
     public boolean isCollision;
+
+	public float curHP = 100;
+	public float maxHP = 100;
 	
 	public Player() {
 		locX = 100;
@@ -50,8 +56,10 @@ public class Player {
 		keyHandler = new KeyHandler();
 		mouseHandler = new MouseHandler();
 		//
+		collision = new Rectangle(locX, locY, 32,32);
+		//
 		try {
-			sprite = ImageIO.read(new File("res\\Icon1.png"));
+			sprite = ImageIO.read(new File("res\\Characters\\Icon1.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +87,25 @@ public class Player {
 		locX = Math.min(locX, GameFrame.GAME_WIDTH - diam);
 		locY = Math.max(locY, 0);
 		locY = Math.min(locY, GameFrame.GAME_HEIGHT - diam);
+
+		collision.x = locX;
+		collision.y = locY;
+
+		if(curHP <= 0){
+			gameOver = true;
+		}
 	}
+
+	public void TakeDamage(float amount){
+		curHP -= amount;
+	}
+
+	public void toDraw(Graphics2D g2d){
+		g2d.drawImage(sprite, locX, locY, sprite.getWidth(), sprite.getHeight(), null);
+        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+		g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
+		g2d.fillRect(locX + (int)((32-(int)(28 * curHP / maxHP)) / 2), locY + 32, (int)(28 * curHP / maxHP), 4);	
+    }
 	
 	
 	public KeyListener getKeyListener() {
@@ -90,12 +116,6 @@ public class Player {
 	}
 	public MouseMotionListener getMouseMotionListener() {
 		return mouseHandler;
-	}
-
-
-	private void SetUpCollision(){
-		isCollision = true;
-		solidArea = new Rectangle(4,4,28,28);
 	}
 	/**
 	 * The keyboard handler.
