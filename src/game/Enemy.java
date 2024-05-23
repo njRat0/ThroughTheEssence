@@ -29,10 +29,7 @@ public abstract class Enemy {
     public boolean isRangeAttack = false;
 
     public float delayBtwAttacks = 1f;
-    public boolean isAttacking = false;
-
-    private Timer timer = new Timer();
-    public TimerTask timerTask;
+    private int timerCount = 0;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -65,37 +62,19 @@ public abstract class Enemy {
         locY += moveSpeed * Math.sin( angle );
         curHP -= 0.1f;
 
-        if(isRangeAttack && isAttacking == false){
-            isAttacking = true;
-            timer.schedule(timerTask, (long)(2*1000));
+        if(isRangeAttack){
+            timerCount++;
+            if(timerCount >= delayBtwAttacks*Settings.maxFps){
+                timerCount = 0;
+                SetUpOfBullet();
+            }
         }
-
     }
 
     public void Dead(){
         
     }
 
-    private void RangeAttack(){
-        // timer.schedule(new TimerTask() {
-            
-        //     @Override
-        //     public void run() {
-        //         // isAttacking = false;
-        //         // Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
-        //         // bullet.speed = 12f;
-        //         // bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
-        //         // bullet.sizeOfSprite = 0.04f;
-        //     }
-            
-        // }, (long)2*1000);
-
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
-        bullet.speed = 12f;
-        bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
-        bullet.sizeOfSprite = 0.04f;
-        
-    }
 }
 
 class TestMob extends Enemy{
@@ -136,24 +115,10 @@ class GojoSatoru extends Enemy{
         super.type = TypeOfEnemy.GojoSatoru;
         super.sizeOfSprite = 0.05f;
         super.isRangeAttack = true;
-        super.timerTask = new TimerTask() {
-            
-
-            @Override
-            public void run() {
-                //isAttacking = false;
-                Bullet bullet = new Bullet(super.locX,locY,player.locX,player.locY,1f);
-                bullet.speed = 12f;
-                bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
-                bullet.sizeOfSprite = 0.04f;
-            }
-            
-        };
-
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1f);
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,2f);
         bullet.speed = 12f;
         bullet.SetSprite("res\\dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
         bullet.sizeOfSprite = 0.04f;

@@ -12,7 +12,7 @@ public class Settings {
     // static final int tileSize = originalTileSize * screenScale; // <----
     // final int maxScreenCol = 16;
     // final int maxScreenRow = 32;
-    public static int maxFps = 60;
+    public static int maxFps = 30;
 
     static public void SaveData(){
         //
