@@ -71,8 +71,67 @@ public class Player {
 	 */
 	public void update() {
 		if (mousePress) {
-			locY = mouseY - diam / 2;
-			locX = mouseX - diam / 2;
+			// locY = mouseY - diam / 2;
+			// locX = mouseX - diam / 2;
+			Bullet bullet = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			bullet.speed = 12f;
+        	bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	bullet.sizeOfSprite = 1f;
+			bullet.canDamagePlayer = false;
+			bullet.canDamageEnemy = true;
+			bullet.damage = 0.5f;
+			bullet.AddAngle(0.30f);
+        	bullet.SetUpCollision();
+
+			Bullet bullet1 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			bullet1.speed = 12f;
+        	bullet1.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	bullet1.sizeOfSprite = 1f;
+			bullet1.canDamagePlayer = false;
+			bullet1.canDamageEnemy = true;
+			bullet1.damage = 0.5f;
+			bullet1.AddAngle(-0.30f);
+        	bullet1.SetUpCollision();
+
+			// Bullet bullet = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			// bullet.speed = 12f;
+        	// bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	// bullet.sizeOfSprite = 1f;
+			// bullet.canDamagePlayer = false;
+			// bullet.canDamageEnemy = true;
+			// bullet.damage = 0.5f;
+			// bullet.SetCustomAngle(-1.56f);
+        	// bullet.SetUpCollision();
+
+			// Bullet bullet1 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			// bullet1.speed = 12f;
+        	// bullet1.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	// bullet1.sizeOfSprite = 1f;
+			// bullet1.canDamagePlayer = false;
+			// bullet1.canDamageEnemy = true;
+			// bullet1.damage = 0.5f;
+			// bullet1.SetCustomAngle(1.56f);
+        	// bullet1.SetUpCollision();
+
+			// Bullet bullet2 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			// bullet2.speed = 12f;
+        	// bullet2.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	// bullet2.sizeOfSprite = 1f;
+			// bullet2.canDamagePlayer = false;
+			// bullet2.canDamageEnemy = true;
+			// bullet2.damage = 0.5f;
+			// bullet2.SetCustomAngle(0);
+        	// bullet2.SetUpCollision();
+
+			// Bullet bullet3 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
+			// bullet3.speed = 12f;
+        	// bullet3.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        	// bullet3.sizeOfSprite = 1f;
+			// bullet3.canDamagePlayer = false;
+			// bullet3.canDamageEnemy = true;
+			// bullet3.damage = 0.5f;
+			// bullet3.SetCustomAngle(3.14f);
+        	// bullet3.SetUpCollision();
 		}
 		if (keyUP)
 			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;

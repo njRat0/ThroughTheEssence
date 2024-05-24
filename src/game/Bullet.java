@@ -26,6 +26,13 @@ public class Bullet {
 
     public Rectangle collision;
 
+    public boolean specialLogic = false;
+
+    public boolean canDamagePlayer = true;
+    public boolean canDamageEnemy = false;
+
+    public float additionalAngle = 0f;
+
     private Timer timer = new Timer();
 
     public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
@@ -33,10 +40,11 @@ public class Bullet {
         this.locX = locX;
         this.locY = locY;
         this.player = player;
-
+        
         float deltaX = pointX - locX;
         float deltaY = pointY - locY;
         angle = Math.atan2( deltaY, deltaX );
+        System.out.println(angle);
 
         GameLoop.listOfBullets.add(this);        
 
@@ -54,18 +62,36 @@ public class Bullet {
         }, (long)(lifeTime*1000));
     }
 
+    public void SetCustomAngle(float angle){
+        this.angle = angle;
+    }
+
+    public void AddAngle(float value){
+        this.angle += value;
+    }
+
     public void toDraw(Graphics2D g2d){
         g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
     }
 
     public void update(){
 
-        locX += speed * Math.cos( angle );
-        locY += speed * Math.sin( angle );
-        collision.x = (int)locX;
-        collision.y = (int)locY;
+        if(specialLogic == false){
+            locX += speed * Math.cos( angle );
+            locY += speed * Math.sin( angle );
+            collision.x = (int)locX;
+            collision.y = (int)locY;
+        }
 
-        if(collision.intersects(player.collision)){
+        if(canDamageEnemy){
+            for(Enemy enemy : GameLoop.listOfEnemies){
+                if(collision.intersects(enemy.collision)){
+                    enemy.TakeDamage(damage);
+                    break;
+                }
+            }
+        }
+        if(canDamagePlayer && collision.intersects(player.collision)){
             player.TakeDamage(damage);
         }
 

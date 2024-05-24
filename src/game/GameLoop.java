@@ -30,10 +30,6 @@ public class GameLoop implements Runnable {
 	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
 
-	public ArrayList<int[]> xCorPool = new ArrayList<int[]>();
-	public ArrayList<int[]> yCorPool = new ArrayList<int[]>();
-
-
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
 	}
@@ -46,9 +42,10 @@ public class GameLoop implements Runnable {
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		for(int i = 0; i<50;i++){
-			listOfEnemies.add(new FireLizard(player, 10*i, 500));
+		for(int i = 0; i<20;i++){
+			listOfEnemies.add(new GoblinWizard(player, 10*i, 500));
 		}
+		
 		
 		//listOfEnemies.add(new FireLizard(player, 700, -100));
 		//listOfEnemies.add(new GojoSatoru(player, 700, 200));
@@ -65,6 +62,10 @@ public class GameLoop implements Runnable {
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
 	}
 
+	public static void DeleteEnemy(int id){
+		listOfEnemies.remove(id);
+	}
+
 	@Override
 	public void run() {
 		boolean gameOver = false;
@@ -75,8 +76,7 @@ public class GameLoop implements Runnable {
 				player.update();
 				for(int i = 0; i < listOfEnemies.size();i++){
 					Enemy enemy = listOfEnemies.get(i);
-					if(enemy.curHP<=0){
-						enemy.Dead();
+					if(enemy.isDead){
 						listOfEnemies.remove(i);
 						continue;
 					}

@@ -35,7 +35,7 @@ public abstract class Enemy {
     private int timerCountForCheckingCollision = 0;
 
     public Rectangle collision;
-    //public boolean isCollision;
+    public boolean isDead = false;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -44,9 +44,14 @@ public abstract class Enemy {
     }
 
     public void toDraw(Graphics2D g2d){
-        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
-		g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
-		g2d.fillRect(locX + (int)((32-(int)(28 * curHP / maxHP)) / 2), locY + 32, (int)(28 * curHP / maxHP), 4);	
+        if(curHP <=0){
+            isDead = true;
+        }
+        if(isDead == false){
+            g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+		    g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
+		    g2d.fillRect(locX + (int)((32-(int)(28 * curHP / maxHP)) / 2), locY + 32, (int)(28 * curHP / maxHP), 4);
+        } 	
     }
 
     public void SetSprite(String source){
@@ -65,47 +70,55 @@ public abstract class Enemy {
     abstract void SetUpOfBullet();
 
     public void update(){
-        collision.x = locX;
-        collision.y = locY;
+        if(isDead == false){
+            collision.x = locX;
+            collision.y = locY;
         
-        if(collision.intersects(player.collision)){
-            player.TakeDamage(damage);
-        }
+            if(collision.intersects(player.collision)){
+                player.TakeDamage(damage);
+            }
 
-        float deltaX = player.locX - locX;
-        float deltaY = player.locY - locY;
-        double angle = Math.atan2( deltaY, deltaX );
-        locX += moveSpeed * Math.cos( angle );
-        locY += moveSpeed * Math.sin( angle );
-        timerCountForCheckingCollision++;
-        curHP -= 0.02f;
-        if(timerCountForCheckingCollision >= 1){
-            timerCountForCheckingCollision = 0;
-            for(Enemy enemy : GameLoop.listOfEnemies){
-                if(collision.intersects(enemy.collision) && collision != enemy.collision){
-                    deltaX = enemy.locX - locX;
-                    deltaY = enemy.locY - locY;
-                    angle = Math.atan2( deltaY, deltaX );
-                    locX -= moveSpeed * Math.cos( angle );
-                    locY -= moveSpeed * Math.sin( angle );
-                    break;
+            float deltaX = player.locX - locX;
+            float deltaY = player.locY - locY;
+            double angle = Math.atan2( deltaY, deltaX );
+            locX += moveSpeed * Math.cos( angle );
+            locY += moveSpeed * Math.sin( angle );
+            timerCountForCheckingCollision++;
+            curHP -= 0.02f;
+            if(timerCountForCheckingCollision >= 1){
+                timerCountForCheckingCollision = 0;
+                for(Enemy enemy : GameLoop.listOfEnemies){
+                    if(collision.intersects(enemy.collision) && collision != enemy.collision){
+                        deltaX = enemy.locX - locX;
+                        deltaY = enemy.locY - locY;
+                        angle = Math.atan2( deltaY, deltaX );
+                        locX -= moveSpeed * Math.cos( angle );
+                        locY -= moveSpeed * Math.sin( angle );
+                        break;
+                    }
                 }
             }
-        }
 
 
-        if(isRangeAttack){
-            timerCount++;
-            if(timerCount >= delayBtwAttacks*Settings.maxFps){
-                timerCount = 0;
-                SetUpOfBullet();
+            if(isRangeAttack){
+                timerCount++;
+                if(timerCount >= delayBtwAttacks*Settings.maxFps){
+                    timerCount = 0;
+                    SetUpOfBullet();
+                }
             }
-        }
-        
+        }    
     }
 
+    public void TakeDamage(float amount){
+        curHP -= amount;
+        if(curHP <= 0){
+            Dead();
+        }
+	}
+
     public void Dead(){
-        
+        isDead = true;
     }
 
 }
@@ -115,6 +128,9 @@ class TestMob extends Enemy{
         super(player, locX, locX);
         SetSprite("res/Characters/Icon2.png");
         super.damage = 2f;
+        super.moveSpeed = 6f;
+        super.maxHP = 800f;
+        super.curHP = 800f;
 
         SetUpCollision();
     }
@@ -167,6 +183,38 @@ class GojoSatoru extends Enemy{
         bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
         bullet.sizeOfSprite = 1f;
         bullet.SetUpCollision();
+    }
+    
+}
+
+class GoblinWizard extends Enemy{
+    public GoblinWizard(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res\\Characters\\GoblinWizard.png");
+        super.maxHP = 50f;
+        super.curHP = 50f;
+        super.moveSpeed = 3f;
+        //super.sizeOfSprite = 1f;
+        super.isRangeAttack = true;
+        super.damage = 1f;
+
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1.5f, player);
+        bullet.speed = 16f;
+        bullet.SetSprite("res\\Effects\\FireEffect.png");
+        bullet.sizeOfSprite = 1f;
+        bullet.canDamageEnemy = false;
+        bullet.SetUpCollision();
+
+        Bullet bullet1 = new Bullet(locX,locY,player.locX,player.locY,2f, player);
+        bullet1.speed = 14f;
+        bullet1.SetSprite("res\\Effects\\FireEffect.png");
+        bullet1.sizeOfSprite = 1f;
+        bullet1.canDamageEnemy = false;
+        bullet1.SetUpCollision();
     }
     
 }
