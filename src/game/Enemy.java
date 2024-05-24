@@ -65,6 +65,7 @@ public abstract class Enemy {
     public void update(){
         collision.x = locX;
         collision.y = locY;
+        
         if(collision.intersects(player.collision)){
             player.TakeDamage(damage);
         }
@@ -116,6 +117,8 @@ class FireLizard extends Enemy{
         super.curHP = 30f;
         super.isRangeAttack = true;
         delayBtwAttacks = 3f;
+
+        SetUpCollision();
     }
 
     void SetUpOfBullet() {
@@ -137,13 +140,15 @@ class GojoSatoru extends Enemy{
         super.type = TypeOfEnemy.GojoSatoru;
         super.sizeOfSprite = 0.05f;
         super.isRangeAttack = true;
+
+        SetUpCollision();
     }
 
     void SetUpOfBullet() {
         Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,2f, player);
         bullet.speed = 12f;
-        bullet.SetSprite("res/Bullets/dcuz40l-3dfd983d-4019-482d-ac00-ba651038ef3e.png");
-        bullet.sizeOfSprite = 0.04f;
+        bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        bullet.sizeOfSprite = 1f;
         bullet.SetUpCollision();
     }
     

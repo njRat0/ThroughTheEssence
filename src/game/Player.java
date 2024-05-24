@@ -35,8 +35,8 @@ public class Player {
 	public Rectangle collision;
     public boolean isCollision;
 
-	public float curHP = 100;
-	public float maxHP = 100;
+	public float curHP = 300;
+	public float maxHP = 300;
 	
 	public Player() {
 		locX = 100;

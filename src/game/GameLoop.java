@@ -41,11 +41,12 @@ public class GameLoop implements Runnable {
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		listOfEnemies.add(new TestMob(player, -100, -100));
-		listOfEnemies.add(new TestMob(player, 1000, 200));
-		listOfEnemies.add(new TestMob(player, -100, 700));
-		// listOfEnemies.add(new FireLizard(player, 700, -100));
-		// listOfEnemies.add(new GojoSatoru(player, 700, 200));
+		// for(int i = 0; i<30;i++){
+		// 	listOfEnemies.add(new GojoSatoru(player, i*30, 500));
+		// }
+		
+		listOfEnemies.add(new FireLizard(player, 700, -100));
+		listOfEnemies.add(new GojoSatoru(player, 700, 200));
 		// listOfEnemies.add(new GojoSatoru(player, 200, 200));
 		// listOfEnemies.add(new GojoSatoru(player, 100, 400));
 		// try{
