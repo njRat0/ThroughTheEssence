@@ -3,6 +3,7 @@ package game;
 
 import java.util.ArrayList;
 //mport java.util.List;
+import java.util.List;
 
 /**
  * A very simple structure for the main game loop.
@@ -26,8 +27,12 @@ public class GameLoop implements Runnable {
 	
 	private GameFrame canvas;
 	private Player player;
-	private ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
+	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
+
+	public ArrayList<int[]> xCorPool = new ArrayList<int[]>();
+	public ArrayList<int[]> yCorPool = new ArrayList<int[]>();
+
 
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
@@ -41,12 +46,12 @@ public class GameLoop implements Runnable {
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		// for(int i = 0; i<30;i++){
-		// 	listOfEnemies.add(new GojoSatoru(player, i*30, 500));
-		// }
+		for(int i = 0; i<50;i++){
+			listOfEnemies.add(new FireLizard(player, 10*i, 500));
+		}
 		
-		listOfEnemies.add(new FireLizard(player, 700, -100));
-		listOfEnemies.add(new GojoSatoru(player, 700, 200));
+		//listOfEnemies.add(new FireLizard(player, 700, -100));
+		//listOfEnemies.add(new GojoSatoru(player, 700, 200));
 		// listOfEnemies.add(new GojoSatoru(player, 200, 200));
 		// listOfEnemies.add(new GojoSatoru(player, 100, 400));
 		// try{

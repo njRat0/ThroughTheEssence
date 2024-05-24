@@ -39,8 +39,8 @@ public class Player {
 	public float maxHP = 300;
 	
 	public Player() {
-		locX = 100;
-		locY = 100;
+		locX = 1000;
+		locY = 1000;
 		diam = 32;
 		gameOver = false;
 		//

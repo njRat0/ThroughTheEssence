@@ -32,6 +32,8 @@ public abstract class Enemy {
     public float delayBtwAttacks = 1f;
     private int timerCount = 0;
 
+    private int timerCountForCheckingCollision = 0;
+
     public Rectangle collision;
     //public boolean isCollision;
 
@@ -75,7 +77,22 @@ public abstract class Enemy {
         double angle = Math.atan2( deltaY, deltaX );
         locX += moveSpeed * Math.cos( angle );
         locY += moveSpeed * Math.sin( angle );
-        curHP -= 0.1f;
+        timerCountForCheckingCollision++;
+        curHP -= 0.02f;
+        if(timerCountForCheckingCollision >= 1){
+            timerCountForCheckingCollision = 0;
+            for(Enemy enemy : GameLoop.listOfEnemies){
+                if(collision.intersects(enemy.collision) && collision != enemy.collision){
+                    deltaX = enemy.locX - locX;
+                    deltaY = enemy.locY - locY;
+                    angle = Math.atan2( deltaY, deltaX );
+                    locX -= moveSpeed * Math.cos( angle );
+                    locY -= moveSpeed * Math.sin( angle );
+                    break;
+                }
+            }
+        }
+
 
         if(isRangeAttack){
             timerCount++;
