@@ -26,8 +26,10 @@ public abstract class Enemy {
     public Player player;
     public boolean isRangeAttack = false;
 
-    public float delayBtwAttacks = 1f;
-    private int timerCount = 0;
+    public float delayBtwRangeAttacks = 1f;
+    public float delayBtwMeleeAttacks = 0.2f;
+    private int timerCountRangeAttack = 0;
+    private int timerCountMeleeAttack = 0;
 
     private int timerCountForCheckingCollision = 0;
 
@@ -68,13 +70,7 @@ public abstract class Enemy {
 
     public void update(){
         if(isDead == false){
-            collision.x = locX;
-            collision.y = locY;
-        
-            if(collision.intersects(player.collision)){
-                player.TakeDamage(damage);
-            }
-
+            
             float deltaX = player.locX - locX;
             float deltaY = player.locY - locY;
             double angle = Math.atan2( deltaY, deltaX );
@@ -82,6 +78,18 @@ public abstract class Enemy {
             locY += moveSpeed * Math.sin( angle );
             timerCountForCheckingCollision++;
             curHP -= 0.02f;
+
+            collision.x = locX;
+            collision.y = locY;
+
+            timerCountMeleeAttack++;
+            if(collision.intersects(player.collision) && timerCountMeleeAttack >= delayBtwMeleeAttacks*Settings.maxFps){
+                timerCountMeleeAttack=0;
+                player.TakeDamage(damage);
+                locX -= moveSpeed * Math.cos( angle ) * 4;
+                locY -= moveSpeed * Math.sin( angle ) * 4;  
+            }
+            
             if(timerCountForCheckingCollision >= 1){
                 timerCountForCheckingCollision = 0;
                 for(Enemy enemy : GameLoop.listOfEnemies){
@@ -99,9 +107,9 @@ public abstract class Enemy {
 
             if(isRangeAttack){
                 if(hasOwnTimerSystem == true){
-                    timerCount++;
-                    if(timerCount >= delayBtwAttacks*Settings.maxFps){
-                        timerCount = 0;
+                    timerCountRangeAttack++;
+                    if(timerCountRangeAttack >= delayBtwRangeAttacks*Settings.maxFps){
+                        timerCountRangeAttack = 0;
                         SetUpOfBullet();
                     }
                 }
@@ -135,8 +143,8 @@ class TestMob extends Enemy{
         super.moveSpeed = 6f;
         super.maxHP = 800f;
         super.curHP = 800f;
-        super.isRangeAttack = true;
-        super.delayBtwAttacks = 2f;
+        //super.isRangeAttack = true;
+        super.delayBtwRangeAttacks = 2f;
         super.hasOwnTimerSystem = false;
 
         skillSystem = new SkillSystem();
@@ -157,7 +165,7 @@ class FireLizard extends Enemy{
         super.maxHP = 30f;
         super.curHP = 30f;
         super.isRangeAttack = true;
-        delayBtwAttacks = 3f;
+        delayBtwRangeAttacks = 3f;
 
         SetUpCollision();
     }

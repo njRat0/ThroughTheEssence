@@ -27,6 +27,8 @@ public class GameLoop implements Runnable {
 	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
 
+	public static boolean isPause = false;
+
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
 	}
@@ -40,7 +42,7 @@ public class GameLoop implements Runnable {
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
 		for(int i = 0; i<20;i++){
-			listOfEnemies.add(new GoblinWizard(player, 10*i, 500));
+			listOfEnemies.add(new TestMob(player, 10*i, 500));
 		}
 		
 		
@@ -70,32 +72,34 @@ public class GameLoop implements Runnable {
 			try {
 				long start = System.currentTimeMillis();
 				//
-				player.update();
-				for(int i = 0; i < listOfEnemies.size();i++){
-					Enemy enemy = listOfEnemies.get(i);
-					if(enemy.isDead){
-						listOfEnemies.remove(i);
-						continue;
-					}
-					else{
-						enemy.update();
-					}
-				}
-				for(int i = 0; i < listOfBullets.size();i++){
-					//if()
-					Bullet bullet = listOfBullets.get(i);
-					if(bullet.isEnd == true){
-						try{
-							listOfBullets.remove(i);
-							//continue;
+				if(isPause == false){
+					player.update();
+					for(int i = 0; i < listOfEnemies.size();i++){
+						Enemy enemy = listOfEnemies.get(i);
+						if(enemy.isDead){
+							listOfEnemies.remove(i);
+							continue;
 						}
-						catch(IndexOutOfBoundsException e){
-							e.getStackTrace();
+						else{
+							enemy.update();
 						}
 					}
-					else{
-						bullet.update();
-					}	
+					for(int i = 0; i < listOfBullets.size();i++){
+						//if()
+						Bullet bullet = listOfBullets.get(i);
+						if(bullet.isEnd == true){
+							try{
+								listOfBullets.remove(i);
+								//continue;
+							}
+							catch(IndexOutOfBoundsException e){
+								e.getStackTrace();
+							}
+						}
+						else{
+							bullet.update();
+						}	
+					}
 				}
 				canvas.render(player, listOfEnemies, listOfBullets);
 				//gameOver = player.gameOver;

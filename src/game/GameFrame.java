@@ -6,6 +6,7 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 //import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 /**
@@ -26,6 +27,8 @@ public class GameFrame extends JFrame {
 	private long lastRender;
 	private ArrayList<Float> fpsHistory;
 
+	//private JButton restartButton = new JButton("restart"); 
+
 	private BufferStrategy bufferStrategy;
 	
 	public GameFrame(String title) {
@@ -34,6 +37,11 @@ public class GameFrame extends JFrame {
 		setSize(GAME_WIDTH, GAME_HEIGHT);
 		lastRender = -1;
 		fpsHistory = new ArrayList<>(100);
+
+		//restartButton.addActionListener(null);
+		//restartButton.setLayout(null);
+		//restartButton.setBounds(0,0,100,50);
+		//this.add(restartButton);
 	}
 	
 	/**

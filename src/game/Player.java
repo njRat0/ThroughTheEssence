@@ -19,7 +19,10 @@ import java.io.IOException;
  */
 public class Player{
 	
-	public float moveSpeed = 8;
+	//parameters
+	public float moveSpeed = 5f;
+
+
 	public int locX, locY, diam;
 	public boolean isDead;
 	
@@ -77,9 +80,15 @@ public class Player{
 		if (mousePress) {
 			// locY = mouseY - diam / 2;
 			// locX = mouseX - diam / 2;
-			skillSystem.Skill2(locX,locY,mouseX,mouseY,this);
+			StandartBullet bullet = new StandartBullet(locX,locY,mouseX,mouseY,2f,this);
+			bullet.speed = 12f;
+            bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+            bullet.sizeOfSprite = 1f;
+            bullet.canDamagePlayer = false;
+            bullet.canDamageEnemy = true;
+            bullet.damage = 4f;
 
-			
+			bullet.SetUpCollision();
 		}
 		if (keyUP)
 			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
@@ -145,7 +154,7 @@ public class Player{
 					keyRIGHT = true;
 					break;
 				case KeyEvent.VK_ESCAPE:
-					isDead = true;
+					GameLoop.isPause = (GameLoop.isPause == true)? false:true;
 					break;
 			}
 		}
