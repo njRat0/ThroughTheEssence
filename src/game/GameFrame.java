@@ -88,46 +88,41 @@ public class GameFrame extends JFrame {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		//Draw player and enemies
-		player.toDraw(g2d);
-		if(enemies != null){
-			for(Enemy enemy : enemies){
-				enemy.toDraw(g2d);
+		if(!player.isDead){
+			player.toDraw(g2d);
+			if(enemies != null){
+				for(Enemy enemy : enemies){
+					enemy.toDraw(g2d);
+				}
 			}
+			if(bullets != null){
+				for(Bullet bullet : bullets){
+					bullet.toDraw(g2d);
+				}
+			}
+			// Print FPS info
+			long currentRender = System.currentTimeMillis();
+			if (lastRender > 0) {
+				fpsHistory.add(1000.0f / (currentRender - lastRender));
+				if (fpsHistory.size() > 100) {
+					fpsHistory.remove(0); // remove oldest
+				}
+				float avg = 0.0f;
+				for (float fps : fpsHistory) {
+					avg += fps;
+				}
+				avg /= fpsHistory.size();
+				String str = String.format("Average FPS = %.1f , Last Interval = %d ms",
+						avg, (currentRender - lastRender));
+				g2d.setColor(Color.CYAN);
+				g2d.setFont(g2d.getFont().deriveFont(18.0f));
+				int strWidth = g2d.getFontMetrics().stringWidth(str);
+				int strHeight = g2d.getFontMetrics().getHeight();
+				g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, strHeight);
+			}
+			lastRender = currentRender;
 		}
-		if(bullets != null){
-			for(Bullet bullet : bullets){
-				bullet.toDraw(g2d);
-			}
-		}
-		// Print FPS info
-		long currentRender = System.currentTimeMillis();
-		if (lastRender > 0) {
-			fpsHistory.add(1000.0f / (currentRender - lastRender));
-			if (fpsHistory.size() > 100) {
-				fpsHistory.remove(0); // remove oldest
-			}
-			float avg = 0.0f;
-			for (float fps : fpsHistory) {
-				avg += fps;
-			}
-			avg /= fpsHistory.size();
-			String str = String.format("Average FPS = %.1f , Last Interval = %d ms",
-					avg, (currentRender - lastRender));
-			g2d.setColor(Color.CYAN);
-			g2d.setFont(g2d.getFont().deriveFont(18.0f));
-			int strWidth = g2d.getFontMetrics().stringWidth(str);
-			int strHeight = g2d.getFontMetrics().getHeight();
-			g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, strHeight);
-		}
-		lastRender = currentRender;
-		// Print user guide
-		// // String userGuide
-		// // 		= "Use the MOUSE or ARROW KEYS to move the BALL. "
-		// // 		+ "Press ESCAPE to end the game.";
-		// // g2d.setFont(g2d.getFont().deriveFont(18.0f));
-		// // g2d.drawString(userGuide, 10, GAME_HEIGHT - 10);
-		// Draw GAME OVER
-		if (player.gameOver) {
+		else{
 			String str = "GAME OVER";
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(64.0f));

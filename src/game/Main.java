@@ -10,7 +10,7 @@ public class Main {
 		
 		// Show the game menu ...
 		
-		// After the palyer clicks 'PLAY' ...
+		// After the palyer clicks 'PLAY' ...dd
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {

@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -11,29 +10,33 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
-public class Bullet {
-    private BufferedImage sprite;
-    private float locX, locY;
-    private double velocityX; private double velocityY;
+public abstract class Bullet {
+    public BufferedImage sprite;
+    public float locX, locY;
+    // private double velocityX; private double velocityY;
     public float damage = 5f;
     public float speed;
     public float sizeOfSprite = 1f;
     public float lifeTime = 3f;
     public boolean isEnd = false;
-    private double angle;
+    public double angle;
+    
+    public float delayBeforeStart = 0;
+    public int counterBeforeStart =0;
+    public boolean showBeforeStart = true;
 
-    private Player player;
+    public Player player;
 
     public Rectangle collision;
 
-    public boolean specialLogic = false;
+    public boolean stayInTheEndPosition = false;
 
     public boolean canDamagePlayer = true;
     public boolean canDamageEnemy = false;
 
     public float additionalAngle = 0f;
 
-    private Timer timer = new Timer();
+    public Timer timer = new Timer();
 
     public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
         this.lifeTime = lifeTime;
@@ -71,31 +74,12 @@ public class Bullet {
     }
 
     public void toDraw(Graphics2D g2d){
-        g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+        if(showBeforeStart == true || counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+            g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+        }
     }
 
-    public void update(){
-
-        if(specialLogic == false){
-            locX += speed * Math.cos( angle );
-            locY += speed * Math.sin( angle );
-            collision.x = (int)locX;
-            collision.y = (int)locY;
-        }
-
-        if(canDamageEnemy){
-            for(Enemy enemy : GameLoop.listOfEnemies){
-                if(collision.intersects(enemy.collision)){
-                    enemy.TakeDamage(damage);
-                    break;
-                }
-            }
-        }
-        if(canDamagePlayer && collision.intersects(player.collision)){
-            player.TakeDamage(damage);
-        }
-
-    }
+    public abstract void update();
 
     public void SetUpCollision(){
         collision = new Rectangle((int)locX,(int)locY,(int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite));
@@ -105,8 +89,39 @@ public class Bullet {
         try {
 			sprite = ImageIO.read(new File(source));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
+}
+
+class StandartBullet extends Bullet{
+
+    public StandartBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
+        super(locX, locY, pointX, pointY, lifeTime, player);
+    }
+
+    @Override
+    public void update() {
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+            locX += speed * Math.cos( angle );
+            locY += speed * Math.sin( angle );
+            collision.x = (int)locX;
+            collision.y = (int)locY;
+    
+            if(canDamageEnemy){
+                for(Enemy enemy : GameLoop.listOfEnemies){
+                    if(collision.intersects(enemy.collision)){
+                        enemy.TakeDamage(damage);
+                        break;
+                    }
+                }
+            }
+            if(canDamagePlayer && collision.intersects(player.collision)){
+                player.TakeDamage(damage);
+            }
+        }
+        else{
+            counterBeforeStart++;
+        }
+    }    
 }

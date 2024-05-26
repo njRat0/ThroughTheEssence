@@ -17,11 +17,11 @@ import java.io.IOException;
  * 
  * @author Seyed Mohammad Ghaffarian
  */
-public class Player {
+public class Player{
 	
 	public float moveSpeed = 8;
 	public int locX, locY, diam;
-	public boolean gameOver;
+	public boolean isDead;
 	
 	private boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
 	private boolean mousePress;
@@ -37,12 +37,14 @@ public class Player {
 
 	public float curHP = 300;
 	public float maxHP = 300;
+
+	private SkillSystem skillSystem;
 	
 	public Player() {
 		locX = 1000;
 		locY = 1000;
 		diam = 32;
-		gameOver = false;
+		isDead = false;
 		//
 		keyUP = false;
 		keyDOWN = false;
@@ -61,9 +63,11 @@ public class Player {
 		try {
 			sprite = ImageIO.read(new File("res\\Characters\\Icon1.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//
+		skillSystem = new SkillSystem();
+		skillSystem.canDamageEnemy = true;
 	}
 	
 	/**
@@ -73,65 +77,9 @@ public class Player {
 		if (mousePress) {
 			// locY = mouseY - diam / 2;
 			// locX = mouseX - diam / 2;
-			Bullet bullet = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			bullet.speed = 12f;
-        	bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	bullet.sizeOfSprite = 1f;
-			bullet.canDamagePlayer = false;
-			bullet.canDamageEnemy = true;
-			bullet.damage = 0.5f;
-			bullet.AddAngle(0.30f);
-        	bullet.SetUpCollision();
+			skillSystem.Skill2(locX,locY,mouseX,mouseY,this);
 
-			Bullet bullet1 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			bullet1.speed = 12f;
-        	bullet1.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	bullet1.sizeOfSprite = 1f;
-			bullet1.canDamagePlayer = false;
-			bullet1.canDamageEnemy = true;
-			bullet1.damage = 0.5f;
-			bullet1.AddAngle(-0.30f);
-        	bullet1.SetUpCollision();
-
-			// Bullet bullet = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			// bullet.speed = 12f;
-        	// bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	// bullet.sizeOfSprite = 1f;
-			// bullet.canDamagePlayer = false;
-			// bullet.canDamageEnemy = true;
-			// bullet.damage = 0.5f;
-			// bullet.SetCustomAngle(-1.56f);
-        	// bullet.SetUpCollision();
-
-			// Bullet bullet1 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			// bullet1.speed = 12f;
-        	// bullet1.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	// bullet1.sizeOfSprite = 1f;
-			// bullet1.canDamagePlayer = false;
-			// bullet1.canDamageEnemy = true;
-			// bullet1.damage = 0.5f;
-			// bullet1.SetCustomAngle(1.56f);
-        	// bullet1.SetUpCollision();
-
-			// Bullet bullet2 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			// bullet2.speed = 12f;
-        	// bullet2.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	// bullet2.sizeOfSprite = 1f;
-			// bullet2.canDamagePlayer = false;
-			// bullet2.canDamageEnemy = true;
-			// bullet2.damage = 0.5f;
-			// bullet2.SetCustomAngle(0);
-        	// bullet2.SetUpCollision();
-
-			// Bullet bullet3 = new Bullet(locX,locY,mouseX,mouseY,2f,this);
-			// bullet3.speed = 12f;
-        	// bullet3.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-        	// bullet3.sizeOfSprite = 1f;
-			// bullet3.canDamagePlayer = false;
-			// bullet3.canDamageEnemy = true;
-			// bullet3.damage = 0.5f;
-			// bullet3.SetCustomAngle(3.14f);
-        	// bullet3.SetUpCollision();
+			
 		}
 		if (keyUP)
 			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
@@ -149,14 +97,13 @@ public class Player {
 
 		collision.x = locX;
 		collision.y = locY;
-
-		if(curHP <= 0){
-			gameOver = true;
-		}
 	}
 
 	public void TakeDamage(float amount){
 		curHP -= amount;
+		if(curHP <= 0){
+			isDead = true;
+		}
 	}
 
 	public void toDraw(Graphics2D g2d){
@@ -185,20 +132,20 @@ public class Player {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode())
 			{
-				case KeyEvent.VK_UP:
+				case KeyEvent.VK_W:
 					keyUP = true;
 					break;
-				case KeyEvent.VK_DOWN:
+				case KeyEvent.VK_S:
 					keyDOWN = true;
 					break;
-				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
 					keyLEFT = true;
 					break;
-				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
 					keyRIGHT = true;
 					break;
 				case KeyEvent.VK_ESCAPE:
-					gameOver = true;
+					isDead = true;
 					break;
 			}
 		}
@@ -207,16 +154,16 @@ public class Player {
 		public void keyReleased(KeyEvent e) {
 			switch (e.getKeyCode())
 			{
-				case KeyEvent.VK_UP:
+				case KeyEvent.VK_W:
 					keyUP = false;
 					break;
-				case KeyEvent.VK_DOWN:
+				case KeyEvent.VK_S:
 					keyDOWN = false;
 					break;
-				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
 					keyLEFT = false;
 					break;
-				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
 					keyRIGHT = false;
 					break;
 			}

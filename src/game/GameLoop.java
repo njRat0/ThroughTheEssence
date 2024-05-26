@@ -2,9 +2,6 @@
 package game;
 
 import java.util.ArrayList;
-//mport java.util.List;
-import java.util.List;
-
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.

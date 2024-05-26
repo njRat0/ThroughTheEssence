@@ -1,14 +1,11 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -36,6 +33,7 @@ public abstract class Enemy {
 
     public Rectangle collision;
     public boolean isDead = false;
+    public boolean hasOwnTimerSystem = true;
 
     public Enemy(Player player, int locX, int locY){
         this.player = player;
@@ -58,7 +56,6 @@ public abstract class Enemy {
         try {
 			sprite = ImageIO.read(new File(source));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -101,9 +98,14 @@ public abstract class Enemy {
 
 
             if(isRangeAttack){
-                timerCount++;
-                if(timerCount >= delayBtwAttacks*Settings.maxFps){
-                    timerCount = 0;
+                if(hasOwnTimerSystem == true){
+                    timerCount++;
+                    if(timerCount >= delayBtwAttacks*Settings.maxFps){
+                        timerCount = 0;
+                        SetUpOfBullet();
+                    }
+                }
+                else{
                     SetUpOfBullet();
                 }
             }
@@ -124,6 +126,8 @@ public abstract class Enemy {
 }
 
 class TestMob extends Enemy{
+    private SkillSystem skillSystem;
+
     public TestMob(Player player, int locX, int locY) {
         super(player, locX, locX);
         SetSprite("res/Characters/Icon2.png");
@@ -131,13 +135,17 @@ class TestMob extends Enemy{
         super.moveSpeed = 6f;
         super.maxHP = 800f;
         super.curHP = 800f;
+        super.isRangeAttack = true;
+        super.delayBtwAttacks = 2f;
+        super.hasOwnTimerSystem = false;
 
+        skillSystem = new SkillSystem();
+        skillSystem.canDamagePlayer = true;
         SetUpCollision();
     }
 
     void SetUpOfBullet() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'SetUpOfBullet'");
+        skillSystem.Skill1(locX,locY,player.locX,player.locY,player);
     }
     
 }
@@ -155,7 +163,7 @@ class FireLizard extends Enemy{
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,4f, player);
+        Bullet bullet = new StandartBullet(locX,locY,player.locX,player.locY,4f, player);
         bullet.speed = 5f;
         bullet.SetSprite("res\\Bullets\\Fireball1.png");
         bullet.sizeOfSprite = 2f;
@@ -178,7 +186,7 @@ class GojoSatoru extends Enemy{
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,2f, player);
+        Bullet bullet = new StandartBullet(locX,locY,player.locX,player.locY,2f, player);
         bullet.speed = 12f;
         bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
         bullet.sizeOfSprite = 1f;
@@ -202,14 +210,14 @@ class GoblinWizard extends Enemy{
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new Bullet(locX,locY,player.locX,player.locY,1.5f, player);
+        Bullet bullet = new StandartBullet(locX,locY,player.locX,player.locY,1.5f, player);
         bullet.speed = 16f;
         bullet.SetSprite("res\\Effects\\FireEffect.png");
         bullet.sizeOfSprite = 1f;
         bullet.canDamageEnemy = false;
         bullet.SetUpCollision();
 
-        Bullet bullet1 = new Bullet(locX,locY,player.locX,player.locY,2f, player);
+        Bullet bullet1 = new StandartBullet(locX,locY,player.locX,player.locY,2f, player);
         bullet1.speed = 14f;
         bullet1.SetSprite("res\\Effects\\FireEffect.png");
         bullet1.sizeOfSprite = 1f;
