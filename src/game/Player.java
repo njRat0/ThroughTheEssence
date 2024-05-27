@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * This class holds the state of game and all of its elements.
@@ -22,14 +21,6 @@ public class Player{
 	
 	//parameters
 	public float moveSpeed = 5f;
-	public Random r = new Random();
-
-	public int maxNumberOfActiveSkills = 2;
-	public int maxNumberOfPassiveSkills = 6;
-	public int countChoosingSlotsForAS = 4; //-->For active skills
-	public int countChoosingSlotsForPS = 3; //-->for passive skills
-	//private int maxNumberOfUpgratingParameters = 2;
-	public boolean isChoosingSkills = true;
 
 	public int locX, locY, diam;
 	public boolean isDead;
@@ -123,11 +114,7 @@ public class Player{
 	public void LevelUp(){
 		curEXP = 0;
 		expForLevelUp = (100+level*10) * level;
-		ChooseSkills();
-	}
-
-	public void ChooseSkills(){
-		isChoosingSkills = true;
+		GameLoop.ChooseSkills();
 	}
 
 	public void TakeDamage(float amount){

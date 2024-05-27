@@ -4,7 +4,7 @@ public class SkillSystem{
     public boolean canDamagePlayer = false;
     public boolean canDamageEnemy = false;
     public float multiplierCD = 1f;
-    public float multiplierDamage = 1f;
+    public float multiplierDamage = 4f;
     //public float multiplierCD = 1f;
 
     private int timerCounter = 0;
