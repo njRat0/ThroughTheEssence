@@ -23,7 +23,9 @@ public class GameFrame extends JFrame {
 	
 	public static final int GAME_HEIGHT = 720;                  // 720p game resolution
 	public static final int GAME_WIDTH = 16 * GAME_HEIGHT / 9;  // wide aspect ratio
-	
+	public static final int GAME_CENTER_Y = GAME_HEIGHT/2;
+	public static final int GAME_CENTER_X = GAME_WIDTH/2;
+
 	private long lastRender;
 	private ArrayList<Float> fpsHistory;
 
@@ -97,6 +99,12 @@ public class GameFrame extends JFrame {
 		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 		//Draw player and enemies
 		if(!player.isDead){
+			if(player.isChoosingSkills == true){
+				g2d.setColor(Color.BLACK);
+				for(int i = 0; i < player.countChoosingSlotsForAS; i++){
+					g2d.fillRect((GAME_CENTER_X - player.countChoosingSlotsForAS*100 / 2) + i*100, GAME_CENTER_Y - 50, 98, 100);
+				}
+			}
 			player.toDraw(g2d);
 			if(enemies != null){
 				for(Enemy enemy : enemies){
