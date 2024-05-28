@@ -112,7 +112,7 @@ public class GameFrame extends JFrame {
 			}
 			if(GameLoop.isChoosingSkills == true){
 				GameLoop.ChooseSkills();
-				for(Button button : GameLoop.chooseSkillButtons){
+				for(MyButton button : GameLoop.chooseSkillButtons){
 					button.toDraw(g2d);
 				}
 			}

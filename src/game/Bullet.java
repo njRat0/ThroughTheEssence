@@ -47,7 +47,7 @@ public abstract class Bullet {
         float deltaX = pointX - locX;
         float deltaY = pointY - locY;
         angle = Math.atan2( deltaY, deltaX );
-        System.out.println(angle);
+        //System.out.println(angle);
 
         GameLoop.listOfBullets.add(this);        
 

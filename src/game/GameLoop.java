@@ -34,10 +34,10 @@ public class GameLoop implements Runnable {
 	public static boolean isPause = false;
 
 	//ChoosingSkill system
-	public static ArrayList<Button> chooseSkillButtons = new ArrayList<Button>();
+	public static ArrayList<MyButton> chooseSkillButtons = new ArrayList<MyButton>();
 	public static int maxNumberOfActiveSkills = 2;
 	public static int maxNumberOfPassiveSkills = 6;
-	public static int countChoosingSlotsForAS = 4; //-->For active skills
+	public static int countChoosingSlotsForAS = 2; //-->For active skills
 	public static int countChoosingSlotsForPS = 3; //-->for passive skills
 	//private int maxNumberOfUpgratingParameters = 2;
 	public static boolean isChoosingSkills = true;
@@ -47,11 +47,14 @@ public class GameLoop implements Runnable {
 	}
 	public static void SetUp_ChooseSkillButtons(){
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
-			chooseSkillButtons.add(new Button());
-			chooseSkillButtons.get(i).setSizeOfButton(98, 100);
-			chooseSkillButtons.get(i).setPositionOfButton((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y);
-			chooseSkillButtons.get(i).addMouseListener(null);
-			chooseSkillButtons.get(i).addActionListener(null);
+			chooseSkillButtons.add(new MyButton());
+			chooseSkillButtons.get(i).SetSize(98, 100);
+			chooseSkillButtons.get(i).SetLocation((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y - 50);
+			chooseSkillButtons.get(i).SetUp();
+			//chooseSkillButtons.get(i).addMouseListener(null);
+			//chooseSkillButtons.get(i).addMouseListener(null);
+			// chooseSkillButtons.get(i).addMouseListener(null);
+			// chooseSkillButtons.get(i).addActionListener(null);
 			//chooseSkillButtons.get(i).set
 		}
 	}
