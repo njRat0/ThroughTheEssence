@@ -51,6 +51,7 @@ public class GameLoop implements Runnable {
 			chooseSkillButtons.get(i).SetSize(98, 100);
 			chooseSkillButtons.get(i).SetLocation((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y - 50);
 			chooseSkillButtons.get(i).SetUp();
+			GameFrame.panelOfButtons.add(chooseSkillButtons.get(i));
 			//chooseSkillButtons.get(i).addMouseListener(null);
 			//chooseSkillButtons.get(i).addMouseListener(null);
 			// chooseSkillButtons.get(i).addMouseListener(null);
@@ -71,9 +72,9 @@ public class GameLoop implements Runnable {
 		player = new Player();
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		for(int i = 0; i<20;i++){
-			listOfEnemies.add(new TestMob(player, 10*i, 500));
-		}
+		// for(int i = 0; i<20;i++){
+		// 	listOfEnemies.add(new TestMob(player, 10*i, 500));
+		// }
 		
 		
 		//listOfEnemies.add(new FireLizard(player, 700, -100));

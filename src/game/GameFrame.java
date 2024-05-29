@@ -2,12 +2,15 @@
 package game;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 //import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * The window on which the rendering is performed.
@@ -19,7 +22,7 @@ import javax.swing.JFrame;
  * 
  * @author Seyed Mohammad Ghaffarian
  */
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements ActionListener {
 	
 	public static final int GAME_HEIGHT = 720;                  // 720p game resolution
 	public static final int GAME_WIDTH = 16 * GAME_HEIGHT / 9;  // wide aspect ratio
@@ -28,6 +31,8 @@ public class GameFrame extends JFrame {
 
 	private long lastRender;
 	private ArrayList<Float> fpsHistory;
+
+	public static JPanel panelOfButtons = new JPanel();
 
 	//private JButton restartButton = new JButton("restart"); 
 
@@ -40,10 +45,15 @@ public class GameFrame extends JFrame {
 		lastRender = -1;
 		fpsHistory = new ArrayList<>(100);
 
+		add(panelOfButtons);
+
 		//restartButton.addActionListener(null);
 		//restartButton.setLayout(null);
 		//restartButton.setBounds(0,0,100,50);
 		//this.add(restartButton);
+	}
+
+	public static void addButton(MyButton button){
 	}
 	
 	/**
@@ -116,6 +126,7 @@ public class GameFrame extends JFrame {
 					button.toDraw(g2d);
 				}
 			}
+
 			// Print FPS info
 			long currentRender = System.currentTimeMillis();
 			if (lastRender > 0) {
@@ -145,6 +156,12 @@ public class GameFrame extends JFrame {
 			int strWidth = g2d.getFontMetrics().stringWidth(str);
 			g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, GAME_HEIGHT / 2);
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
 	}
 	
 }
