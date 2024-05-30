@@ -27,7 +27,7 @@ public class GameLoop implements Runnable {
 	public Random r = new Random();
 
 	private GameFrame canvas;
-	private Player player;
+	private static Player player;
 	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
 
@@ -41,23 +41,19 @@ public class GameLoop implements Runnable {
 	public static int countChoosingSlotsForPS = 3; //-->for passive skills
 	//private int maxNumberOfUpgratingParameters = 2;
 	public static boolean isChoosingSkills = true;
-	public static void ChooseSkills(){
-		//isChoosingSkills = true;
+	public static void ChoosingSkills(){
+		isPause = true;
 		SetUp_ChooseSkillButtons();
 	}
 	public static void SetUp_ChooseSkillButtons(){
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
-			chooseSkillButtons.add(new MyButton());
-			chooseSkillButtons.get(i).SetSize(98, 100);
-			chooseSkillButtons.get(i).SetLocation((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y - 50);
-			chooseSkillButtons.get(i).SetUp();
-			GameFrame.panelOfButtons.add(chooseSkillButtons.get(i));
-			//chooseSkillButtons.get(i).addMouseListener(null);
-			//chooseSkillButtons.get(i).addMouseListener(null);
-			// chooseSkillButtons.get(i).addMouseListener(null);
-			// chooseSkillButtons.get(i).addActionListener(null);
-			//chooseSkillButtons.get(i).set
+			MyButton button = new MyButton(player);
+			button.SetSize(98, 100);
+			button.SetLocation((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y - 50);
+			
+			chooseSkillButtons.add(button);
 		}
+		isChoosingSkills = true;
 	}
 
 	public GameLoop(GameFrame frame) {
@@ -70,6 +66,8 @@ public class GameLoop implements Runnable {
 	public void init() {
 		// Perform all initializations ...
 		player = new Player();
+
+		//>>Creating test enemies
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
 		// for(int i = 0; i<20;i++){
@@ -90,6 +88,8 @@ public class GameLoop implements Runnable {
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
+
+		ChoosingSkills(); 
 	}
 
 	public static void DeleteEnemy(int id){
@@ -102,7 +102,13 @@ public class GameLoop implements Runnable {
 		while (!gameOver) {
 			try {
 				long start = System.currentTimeMillis();
+				System.out.println(player.mouseX + ", " + player.mouseY);
 				//
+				if(isChoosingSkills == true){
+					for(MyButton button : chooseSkillButtons){
+						button.update();
+					}
+				}
 				if(isPause == false){
 					player.update();
 					for(int i = 0; i < listOfEnemies.size();i++){

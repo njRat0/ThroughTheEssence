@@ -1,19 +1,14 @@
 package game;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-
-import java.awt.event.MouseListener;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 
 
-class MyButton extends JButton implements MouseListener {
+
+
+class MyButton{
     private boolean isMouseOver =  false;
 
     private Color curColor = new Color(0,0,0);
@@ -24,6 +19,7 @@ class MyButton extends JButton implements MouseListener {
     public int borderSize = 2;
     // public int locX = 0;
     // public int locY = 0;
+    private Player player;
 
     private Rectangle rectangleOfButton = new Rectangle();
 
@@ -36,78 +32,48 @@ class MyButton extends JButton implements MouseListener {
         rectangleOfButton.width = x;
         rectangleOfButton.height = y;
     }
+    //rectangleOfButton.x <= player.mouseX && player.mouseX <= rectangleOfButton.x + rectangleOfButton.width && rectangleOfButton.y <= GameLoop.mouseY && GameLoop.mouseY <= rectangleOfButton.y + rectangleOfButton.height
+    public void update(){
+        if(rectangleOfButton.contains(player.mouseX, player.mouseY)) {
+            if(isMouseOver == false){
+                isMouseOver = true;
+                curColor = colorOver;
+            }
+        }
+        else{
+            if(isMouseOver == true){
+                isMouseOver = false;
+                curColor = colorBackground;
+            }
+        }
 
-    public void SetUp(){
-        //this.setBounds(rectangleOfButton);
-        //this.setLocation(rectangleOfButton.x,rectangleOfButton.y);
-        //this.setSize(rectangleOfButton.width,rectangleOfButton.height);
-        this.setBounds(rectangleOfButton);
-        addMouseListener(this);
+        if(player.mousePress == true && isMouseOver == true ){
+            curColor = colorClick;
+            GameLoop.EndChoosingSkills();
+        }
+        else{
+            if(isMouseOver == true){
+                curColor = colorOver;
+            }
+            else{
+                curColor = colorBackground;
+            }
+        }
     }
 
     
-    public MyButton(){
+    public MyButton(Player player){
+        this.player = player;
         //this.setLayout(new FlowLayout());
-        this.addMouseListener(null);
-        this.setVisible(false);
-        this.setEnabled(true);
         GameFrame.addButton(this);
+        curColor = colorBackground;
         //GameFrame.add(this);
     }
 
     public void toDraw(Graphics2D g2d){
-        this.setLayout(new FlowLayout());
         g2d.setColor(colorBorders);
         g2d.fillRect(rectangleOfButton.x, rectangleOfButton.y, rectangleOfButton.width, rectangleOfButton.height);
         g2d.setColor(curColor);
         g2d.fillRect(rectangleOfButton.x + borderSize, rectangleOfButton.y + borderSize, rectangleOfButton.width - borderSize * 2 , rectangleOfButton.height - borderSize *2);
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        if(e.getSource() == this){
-            System.out.println(1);
-            curColor = colorOver;
-            isMouseOver = true;
-        }
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        if(e.getSource() == this){
-            System.out.println(2);
-            curColor = colorOver;
-            isMouseOver = false;
-        }
-    
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if(e.getSource() == this){
-            System.out.println(3);
-            curColor = colorClick;
-        }
-        
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if(e.getSource() == this){
-            System.out.println(4);
-            if (isMouseOver) {
-                curColor = colorOver;
-            } else {
-                curColor = colorBackground;
-            }
-        }   
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if(e.getSource() == this){
-            System.out.println(5);
-        }
     }
 }

@@ -26,8 +26,8 @@ public class Player{
 	public boolean isDead;
 	
 	private boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
-	private boolean mousePress;
-	private int mouseX, mouseY;	
+	public boolean mousePress;
+	public int mouseX, mouseY;	
 	private KeyHandler keyHandler;
 	private MouseHandler mouseHandler;
 
@@ -114,7 +114,6 @@ public class Player{
 	public void LevelUp(){
 		curEXP = 0;
 		expForLevelUp = (100+level*10) * level;
-		GameLoop.ChooseSkills();
 	}
 
 	public void TakeDamage(float amount){
@@ -207,7 +206,7 @@ public class Player{
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent e) {
+		public void mouseMoved(MouseEvent e) {
 			mouseX = e.getX();
 			mouseY = e.getY();
 		}

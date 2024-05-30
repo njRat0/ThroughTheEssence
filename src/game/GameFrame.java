@@ -8,7 +8,7 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 //import java.util.List;
 
-import javax.swing.JButton;
+//import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -121,7 +121,6 @@ public class GameFrame extends JFrame implements ActionListener {
 				}
 			}
 			if(GameLoop.isChoosingSkills == true){
-				GameLoop.ChooseSkills();
 				for(MyButton button : GameLoop.chooseSkillButtons){
 					button.toDraw(g2d);
 				}
