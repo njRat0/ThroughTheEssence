@@ -3,7 +3,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.awt.event.*;
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.

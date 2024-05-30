@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  * 
  * @author Seyed Mohammad Ghaffarian
  */
-public class GameFrame extends JFrame implements ActionListener {
+public class GameFrame extends JFrame {
 	
 	public static final int GAME_HEIGHT = 720;                  // 720p game resolution
 	public static final int GAME_WIDTH = 16 * GAME_HEIGHT / 9;  // wide aspect ratio
@@ -156,11 +156,4 @@ public class GameFrame extends JFrame implements ActionListener {
 			g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, GAME_HEIGHT / 2);
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
-	}
-	
 }
