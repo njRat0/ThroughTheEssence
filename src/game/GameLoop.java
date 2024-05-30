@@ -56,6 +56,11 @@ public class GameLoop implements Runnable {
 		isChoosingSkills = true;
 	}
 
+	public static void EndChoosingSkills(){
+		isChoosingSkills = false;
+		isPause = false;
+	}
+
 	public GameLoop(GameFrame frame) {
 		canvas = frame;
 	}
