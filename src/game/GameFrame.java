@@ -2,15 +2,12 @@
 package game;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 //import java.util.List;
 
 //import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  * The window on which the rendering is performed.
@@ -24,33 +21,46 @@ import javax.swing.JPanel;
  */
 public class GameFrame extends JFrame {
 	
-	public static final int GAME_HEIGHT = 720;                  // 720p game resolution
-	public static final int GAME_WIDTH = 16 * GAME_HEIGHT / 9;  // wide aspect ratio
-	public static final int GAME_CENTER_Y = GAME_HEIGHT/2;
-	public static final int GAME_CENTER_X = GAME_WIDTH/2;
+	public static int gameHeight;                  // 720p game resolution
+	public static int gameWidth;  // wide aspect ratio
+	public static int gameCenterY;
+	public static int gameCenterX;
+	public static float coeficient;
+	//public static float coeficientY;
 
 	private long lastRender;
 	private ArrayList<Float> fpsHistory;
-
-	public static JPanel panelOfButtons = new JPanel();
-
-	//private JButton restartButton = new JButton("restart"); 
 
 	private BufferStrategy bufferStrategy;
 	
 	public GameFrame(String title) {
 		super(title);
 		setResizable(false);
-		setSize(GAME_WIDTH, GAME_HEIGHT);
+		//setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		SetUp_WindowSizeParameters();
+		setSize(gameWidth, gameHeight);
 		lastRender = -1;
 		fpsHistory = new ArrayList<>(100);
 
-		add(panelOfButtons);
+		System.out.println(gameWidth);
+		System.out.println(gameWidth);
+		System.out.println(gameHeight);
+		//System.out.println(gameHeight);//1024
+		System.out.println(gameCenterX);
+		System.out.println(gameCenterY);
+		//System.out.println(gameCenterY); // 512
+		System.out.println(coeficient);
+		//System.out.println(coeficientY);
+	}
 
-		//restartButton.addActionListener(null);
-		//restartButton.setLayout(null);
-		//restartButton.setBounds(0,0,100,50);
-		//this.add(restartButton);
+	public static void SetUp_WindowSizeParameters(){
+		gameWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		gameHeight = (int)((float)gameWidth / 16 * 9);      
+		gameCenterY = gameHeight/2;
+		gameCenterX = gameWidth/2;
+		coeficient = (float)gameWidth / (float)Settings.STANDART_WINDOW_SIZE_X;
+		//coeficientY = (float)gameHeight / (float)Settings.STANDART_WINDOW_SIZE_Y;
+		
 	}
 
 	public static void addButton(MyButton button){
@@ -106,7 +116,7 @@ public class GameFrame extends JFrame {
 	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
-		g2d.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+		g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
 		//Draw player and enemies
 		if(!player.isDead){
 			player.toDraw(g2d);
@@ -144,7 +154,7 @@ public class GameFrame extends JFrame {
 				g2d.setFont(g2d.getFont().deriveFont(18.0f));
 				int strWidth = g2d.getFontMetrics().stringWidth(str);
 				int strHeight = g2d.getFontMetrics().getHeight();
-				g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, strHeight);
+				g2d.drawString(str, (gameWidth - strWidth) / 2, strHeight);
 			}
 			lastRender = currentRender;
 		}
@@ -153,7 +163,7 @@ public class GameFrame extends JFrame {
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(64.0f));
 			int strWidth = g2d.getFontMetrics().stringWidth(str);
-			g2d.drawString(str, (GAME_WIDTH - strWidth) / 2, GAME_HEIGHT / 2);
+			g2d.drawString(str, (gameWidth - strWidth) / 2, gameHeight / 2);
 		}
 	}
 }

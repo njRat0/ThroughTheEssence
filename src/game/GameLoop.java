@@ -48,7 +48,7 @@ public class GameLoop implements Runnable {
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
 			MyButton button = new MyButton(player);
 			button.SetSize(98, 100);
-			button.SetLocation((GameFrame.GAME_CENTER_X - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.GAME_CENTER_Y - 50);
+			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.gameCenterY - 50);
 			
 			chooseSkillButtons.add(button);
 		}
@@ -106,7 +106,7 @@ public class GameLoop implements Runnable {
 		while (!gameOver) {
 			try {
 				long start = System.currentTimeMillis();
-				System.out.println(player.mouseX + ", " + player.mouseY);
+				//System.out.println(player.mouseX + ", " + player.mouseY);
 				//
 				if(isChoosingSkills == true){
 					for(MyButton button : chooseSkillButtons){
