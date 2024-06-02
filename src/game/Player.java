@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class holds the state of game and all of its elements.
@@ -17,12 +18,11 @@ import java.io.IOException;
  * 
  * @author Seyed Mohammad Ghaffarian
  */
-public class Player{
+public class Player extends Character{
 	
 	//parameters
 	public float moveSpeed = 5f;
 
-	public int locX, locY, diam;
 	public boolean isDead;
 	
 	private boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
@@ -31,8 +31,6 @@ public class Player{
 	private KeyHandler keyHandler;
 	private MouseHandler mouseHandler;
 
-	public BufferedImage sprite;
-	private float sizeOfSprite = 1f;
 	
 	public Rectangle collision;
     public boolean isCollision;
@@ -47,11 +45,11 @@ public class Player{
 	//private int remainingEXP = 0;
 
 	private SkillSystem skillSystem;
+	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public Player() {
 		locX = 0;
 		locY = 0;
-		diam = 32;
 		isDead = false;
 		//
 		keyUP = false;
@@ -76,18 +74,29 @@ public class Player{
 		//
 		skillSystem = new SkillSystem();
 		skillSystem.canDamageEnemy = true;
+
+		SplashOfFire skill = new SplashOfFire(null, this);
+		skill.canDamageEnemy = true;
+		skill.canDamagePlayer = false;
+		BlueCross skill1 = new BlueCross(null, this);
+		skill1.canDamageEnemy = true;
+		skill1.canDamagePlayer = false;
+		skills.add(skill);
+		skills.add(skill1);
 	}
 	
 	/**
 	 * The method which updates the game state.
 	 */
 	public void update() {
-		System.out.println(curEXP);
 		if(curEXP >= expForLevelUp){
 			LevelUp();
 		}
 		if(curHP <= maxHP){
 			curHP+=hpRegen;
+		}
+		for(Skill skill : skills){
+			skill.update();
 		}
 		if (mousePress) {
 			// locY = mouseY - diam / 2;
@@ -112,12 +121,14 @@ public class Player{
 			locX += (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 
 		locX = Math.max(locX, 0);
-		locX = Math.min(locX, GameFrame.gameWidth - diam);
+		locX = Math.min(locX, GameFrame.gameWidth);
 		locY = Math.max(locY, 0);
-		locY = Math.min(locY, GameFrame.gameHeight - diam);
+		locY = Math.min(locY, GameFrame.gameHeight);
 
 		collision.x = locX;
 		collision.y = locY;
+
+
 	}
 
 	public void LevelUp(){

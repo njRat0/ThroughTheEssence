@@ -13,16 +13,13 @@ enum TypeOfEnemy{
     GojoSatoru
 }
 
-public abstract class Enemy {
+public abstract class Enemy extends Character {
     public float moveSpeed = 4;
     public float damage = 1.5f;
     public float curHP = 20;
     public float maxHP = 20;
-    public int locX, locY;
-    public BufferedImage sprite;
     public TypeOfEnemy type;
-
-    public float sizeOfSprite = 1f;
+    
     public Player player;
     public boolean isRangeAttack = false;
 
@@ -172,10 +169,13 @@ class FireLizard extends Enemy{
     }
 
     void SetUpOfBullet() {
-        Bullet bullet = new StandartBullet(locX,locY,player.locX,player.locY,4f, player);
+        PushingBullet bullet = new PushingBullet(locX,locY,player.locX,player.locY,4f, player, 15f);
         bullet.speed = 5f;
+        bullet.canDamagePlayer = true;
         bullet.SetSprite("res\\Bullets\\Fireball1.png");
         bullet.sizeOfSprite = 2f;
+        bullet.delayBtwDealingDamage = 0.1f;
+        //bullet.pushingVelocity = 2f;
         bullet.SetUpCollision();
     }
     

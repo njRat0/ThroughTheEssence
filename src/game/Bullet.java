@@ -24,6 +24,8 @@ public abstract class Bullet {
     public float delayBeforeStart = 0;
     public int counterBeforeStart =0;
     public boolean showBeforeStart = true;
+    public float delayBtwDealingDamage = 0;
+    public int counterBtwDealingDamage =0;
 
     public Player player;
 
@@ -40,8 +42,8 @@ public abstract class Bullet {
 
     public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
         this.lifeTime = lifeTime;
-        this.locX = locX;
-        this.locY = locY;
+        this.locX = locX + 16 * sizeOfSprite;
+        this.locY = locY + 16 * sizeOfSprite;
         this.player = player;
         
         float deltaX = pointX - locX;
@@ -107,17 +109,73 @@ class StandartBullet extends Bullet{
             locY += speed * Math.sin( angle );
             collision.x = (int)locX;
             collision.y = (int)locY;
-    
-            if(canDamageEnemy){
-                for(Enemy enemy : GameLoop.listOfEnemies){
-                    if(collision.intersects(enemy.collision)){
-                        enemy.TakeDamage(damage);
-                        break;
+            
+            if(counterBtwDealingDamage >= (int)(delayBtwDealingDamage * Settings.maxFps)){
+                counterBtwDealingDamage = 0;
+                if(canDamageEnemy){
+                    for(Enemy enemy : GameLoop.listOfEnemies){
+                        if(collision.intersects(enemy.collision)){
+                            enemy.TakeDamage(damage);
+                            break;
+                        }
                     }
                 }
+                if(canDamagePlayer && collision.intersects(player.collision)){
+                    player.TakeDamage(damage);
+                }
             }
-            if(canDamagePlayer && collision.intersects(player.collision)){
-                player.TakeDamage(damage);
+            else{
+                counterBtwDealingDamage++;
+            }
+        }
+        else{
+            counterBeforeStart++;
+        }
+    }  
+}    
+
+
+class PushingBullet extends Bullet{
+    public float pushingVelocity = 1f;
+    public PushingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player, float pushingVelocity) {
+        super(locX, locY, pointX, pointY, lifeTime, player);
+        this.pushingVelocity = pushingVelocity;
+    }
+
+    @Override
+    public void update() {
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+            locX += speed * Math.cos( angle );
+            locY += speed * Math.sin( angle );
+            collision.x = (int)locX;
+            collision.y = (int)locY;
+            
+            if(counterBtwDealingDamage >= (int)(delayBtwDealingDamage * Settings.maxFps)){
+                counterBtwDealingDamage = 0;
+                if(canDamageEnemy){
+                    for(Enemy enemy : GameLoop.listOfEnemies){
+                        if(collision.intersects(enemy.collision)){
+                            float deltaX = enemy.locX - locX;
+                            float deltaY = enemy.locY - locY;
+                            double angle = Math.atan2( deltaY, deltaX );
+                            enemy.locX += pushingVelocity * Math.cos( angle );
+                            enemy.locY += pushingVelocity * Math.sin( angle );
+                            enemy.TakeDamage(damage);
+                            break;
+                        }
+                    }
+                }
+                if(canDamagePlayer && collision.intersects(player.collision)){
+                    float deltaX = player.locX - locX;
+                    float deltaY = player.locY - locY;
+                    double angle = Math.atan2( deltaY, deltaX );
+                    player.locX += pushingVelocity* Math.cos( angle );
+                    player.locY += pushingVelocity * Math.sin( angle );
+                    player.TakeDamage(damage);
+                }
+            }
+            else{
+                counterBtwDealingDamage++;
             }
         }
         else{

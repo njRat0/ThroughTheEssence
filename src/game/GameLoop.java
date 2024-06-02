@@ -76,7 +76,7 @@ public class GameLoop implements Runnable {
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
 		for(int i = 0; i<20;i++){
-			listOfEnemies.add(new FireLizard(player, 200+ 10*i, 500));
+			listOfEnemies.add(new FireLizard(player, 10*i, 500));
 		}
 		// try{
 		// 	listOfEnemies.get(0).curHP = 10f;
