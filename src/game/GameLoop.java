@@ -29,6 +29,7 @@ public class GameLoop implements Runnable {
 	private static Player player;
 	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
+	public static ArrayList<InteractingObject> listOfInteractingObjects = new ArrayList<InteractingObject>();
 
 	public static boolean isPause = false;
 
@@ -74,15 +75,9 @@ public class GameLoop implements Runnable {
 		//>>Creating test enemies
 		listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		// for(int i = 0; i<20;i++){
-		// 	listOfEnemies.add(new TestMob(player, 10*i, 500));
-		// }
-		
-		
-		//listOfEnemies.add(new FireLizard(player, 700, -100));
-		//listOfEnemies.add(new GojoSatoru(player, 700, 200));
-		// listOfEnemies.add(new GojoSatoru(player, 200, 200));
-		// listOfEnemies.add(new GojoSatoru(player, 100, 400));
+		for(int i = 0; i<20;i++){
+			listOfEnemies.add(new FireLizard(player, 200+ 10*i, 500));
+		}
 		// try{
 		// 	listOfEnemies.get(0).curHP = 10f;
 		// }
@@ -94,10 +89,6 @@ public class GameLoop implements Runnable {
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
 
 		ChoosingSkills(); 
-	}
-
-	public static void DeleteEnemy(int id){
-		listOfEnemies.remove(id);
 	}
 
 	@Override
@@ -125,6 +116,16 @@ public class GameLoop implements Runnable {
 							enemy.update();
 						}
 					}
+					for(int i = 0; i < listOfInteractingObjects.size();i++){
+						InteractingObject object = listOfInteractingObjects.get(i);
+						if(object.isActivated){
+							listOfInteractingObjects.remove(i);
+							continue;
+						}
+						else{
+							object.update();
+						}
+					}
 					for(int i = 0; i < listOfBullets.size();i++){
 						//if()
 						Bullet bullet = listOfBullets.get(i);
@@ -142,7 +143,7 @@ public class GameLoop implements Runnable {
 						}	
 					}
 				}
-				canvas.render(player, listOfEnemies, listOfBullets);
+				canvas.render(player, listOfEnemies, listOfBullets, listOfInteractingObjects);
 				//gameOver = player.gameOver;
 				//
 				long delay = (1000 / FPS) - (System.currentTimeMillis() - start);
@@ -151,6 +152,6 @@ public class GameLoop implements Runnable {
 			} catch (InterruptedException ex) {
 			}
 		}
-		canvas.render(player, listOfEnemies, listOfBullets);
+		canvas.render(player, listOfEnemies, listOfBullets, listOfInteractingObjects);
 	}
 }

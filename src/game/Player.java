@@ -39,10 +39,12 @@ public class Player{
 
 	public float curHP = 300;
 	public float maxHP = 300;
+	private float hpRegen = 0.05f;
 
 	public int level = 1;
 	public int curEXP = 0;
-	public int expForLevelUp = 100;
+	public int expForLevelUp = 5;
+	//private int remainingEXP = 0;
 
 	private SkillSystem skillSystem;
 	
@@ -80,6 +82,13 @@ public class Player{
 	 * The method which updates the game state.
 	 */
 	public void update() {
+		System.out.println(curEXP);
+		if(curEXP >= expForLevelUp){
+			LevelUp();
+		}
+		if(curHP <= maxHP){
+			curHP+=hpRegen;
+		}
 		if (mousePress) {
 			// locY = mouseY - diam / 2;
 			// locX = mouseX - diam / 2;
@@ -112,8 +121,10 @@ public class Player{
 	}
 
 	public void LevelUp(){
-		curEXP = 0;
-		expForLevelUp = (100+level*10) * level;
+		curEXP = curEXP - expForLevelUp;
+		expForLevelUp = (5+level*5) * level;
+		level++;
+		GameLoop.ChoosingSkills();
 	}
 
 	public void TakeDamage(float amount){

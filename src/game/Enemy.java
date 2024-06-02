@@ -77,7 +77,7 @@ public abstract class Enemy {
             locX += moveSpeed * Math.cos( angle );
             locY += moveSpeed * Math.sin( angle );
             timerCountForCheckingCollision++;
-            curHP -= 0.02f;
+            //curHP -= 0.02f;
 
             collision.x = locX;
             collision.y = locY;
@@ -129,6 +129,7 @@ public abstract class Enemy {
 
     public void Dead(){
         isDead = true;
+        new ExpStone_lvl1(locX, locY, player);
     }
 
 }

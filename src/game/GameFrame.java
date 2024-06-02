@@ -54,7 +54,8 @@ public class GameFrame extends JFrame {
 	}
 
 	public static void SetUp_WindowSizeParameters(){
-		gameWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		//gameWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		gameWidth = (int) 1280;
 		gameHeight = (int)((float)gameWidth / 16 * 9);      
 		gameCenterY = gameHeight/2;
 		gameCenterX = gameWidth/2;
@@ -81,7 +82,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Game rendering with triple-buffering using BufferStrategy.
 	 */
-	public void render(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
+	public void render(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects) {
 		// Get a new graphics context to render the current frame
 		// Render single frame
 		do {
@@ -92,7 +93,7 @@ public class GameFrame extends JFrame {
 				// to make sure the strategy is validated
 				Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 				try {
-					doRendering(graphics, player, enemies, bullets);
+					doRendering(graphics, player, enemies, bullets , interactingObjects);
 				} finally {
 					// Dispose the graphics
 					graphics.dispose();
@@ -113,7 +114,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Rendering all game elements based on the game player.
 	 */
-	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
+	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
@@ -130,12 +131,34 @@ public class GameFrame extends JFrame {
 					bullet.toDraw(g2d);
 				}
 			}
+			if(interactingObjects != null){
+				for(InteractingObject object : interactingObjects){
+					object.toDraw(g2d);
+				}
+			}
 			if(GameLoop.isChoosingSkills == true){
 				for(MyButton button : GameLoop.chooseSkillButtons){
 					button.toDraw(g2d);
 				}
 			}
-
+			//>>>>UI rendering
+				//hp bar
+			g2d.setColor(Color.black);
+			g2d.fillRect(8, 31, (int)(player.maxHP + 0.5f)  + 5, 25);
+			g2d.setColor(Color.red);
+			g2d.fillRect(8, 34, (int)(player.curHP + 0.5f), 19);
+				//level indicator
+			String str1 = "Level: " + player.level;
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(12.0f));
+			//int strWidth = g2d.getFontMetrics().stringWidth(str);
+			g2d.drawString(str1, 18, 75);
+				//exp bar
+			g2d.setColor(Color.black);
+			g2d.fillRect(0, gameHeight - 30, gameWidth, 30);
+			g2d.setColor(Color.BLUE);
+			g2d.fillRect(0, gameHeight - 27, (int)((float)(player.curEXP) / player.expForLevelUp  * gameWidth), 16);
+			//<<<
 			// Print FPS info
 			long currentRender = System.currentTimeMillis();
 			if (lastRender > 0) {
@@ -149,7 +172,7 @@ public class GameFrame extends JFrame {
 				}
 				avg /= fpsHistory.size();
 				String str = String.format("Average FPS = %.1f , Last Interval = %d ms",
-						avg, (currentRender - lastRender));
+				avg, (currentRender - lastRender));
 				g2d.setColor(Color.CYAN);
 				g2d.setFont(g2d.getFont().deriveFont(18.0f));
 				int strWidth = g2d.getFontMetrics().stringWidth(str);
