@@ -65,7 +65,6 @@ class MyButton{
     public MyButton(Player player){
         this.player = player;
         //this.setLayout(new FlowLayout());
-        GameFrame.addButton(this);
         curColor = colorBackground;
         //GameFrame.add(this);
     }

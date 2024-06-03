@@ -63,9 +63,6 @@ public class GameFrame extends JFrame {
 		//coeficientY = (float)gameHeight / (float)Settings.STANDART_WINDOW_SIZE_Y;
 		
 	}
-
-	public static void addButton(MyButton button){
-	}
 	
 	/**
 	 * This must be called once after the JFrame is shown:
@@ -82,7 +79,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Game rendering with triple-buffering using BufferStrategy.
 	 */
-	public void render(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects) {
+	public void render(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects, Skill weapon) {
 		// Get a new graphics context to render the current frame
 		// Render single frame
 		do {
@@ -93,7 +90,7 @@ public class GameFrame extends JFrame {
 				// to make sure the strategy is validated
 				Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 				try {
-					doRendering(graphics, player, enemies, bullets , interactingObjects);
+					doRendering(graphics, player, enemies, bullets , interactingObjects, weapon);
 				} finally {
 					// Dispose the graphics
 					graphics.dispose();
@@ -114,26 +111,35 @@ public class GameFrame extends JFrame {
 	/**
 	 * Rendering all game elements based on the game player.
 	 */
-	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects) {
+	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects, Skill weapon) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
 		//Draw player and enemies
 		if(!player.isDead){
 			player.toDraw(g2d);
+			if(interactingObjects != null){
+				for(InteractingObject object : interactingObjects){
+					object.toDraw(g2d);
+				}
+			}
 			if(enemies != null){
 				for(Enemy enemy : enemies){
 					enemy.toDraw(g2d);
 				}
 			}
+			if(weapon != null){
+				try{
+					//g2d.rotate(1.5f, 100,100);
+					g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
+				}
+				catch(NullPointerException e){
+
+				}
+			}
 			if(bullets != null){
 				for(Bullet bullet : bullets){
 					bullet.toDraw(g2d);
-				}
-			}
-			if(interactingObjects != null){
-				for(InteractingObject object : interactingObjects){
-					object.toDraw(g2d);
 				}
 			}
 			if(GameLoop.isChoosingSkills == true){
@@ -177,7 +183,7 @@ public class GameFrame extends JFrame {
 				g2d.setFont(g2d.getFont().deriveFont(18.0f));
 				int strWidth = g2d.getFontMetrics().stringWidth(str);
 				int strHeight = g2d.getFontMetrics().getHeight();
-				g2d.drawString(str, (gameWidth - strWidth) / 2, strHeight);
+				g2d.drawString(str, (gameWidth - strWidth) / 2, strHeight + 25);
 			}
 			lastRender = currentRender;
 		}

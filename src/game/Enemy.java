@@ -132,8 +132,6 @@ public abstract class Enemy extends Character {
 }
 
 class TestMob extends Enemy{
-    private SkillSystem skillSystem;
-
     public TestMob(Player player, int locX, int locY) {
         super(player, locX, locX);
         SetSprite("res/Characters/Icon2.png");
@@ -144,14 +142,10 @@ class TestMob extends Enemy{
         //super.isRangeAttack = true;
         super.delayBtwRangeAttacks = 2f;
         super.hasOwnTimerSystem = false;
-
-        skillSystem = new SkillSystem();
-        skillSystem.canDamagePlayer = true;
         SetUpCollision();
     }
 
     void SetUpOfBullet() {
-        skillSystem.Skill1(locX,locY,player.locX,player.locY,player);
     }
     
 }

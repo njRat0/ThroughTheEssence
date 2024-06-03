@@ -26,6 +26,7 @@ public abstract class Bullet {
     public boolean showBeforeStart = true;
     public float delayBtwDealingDamage = 0;
     public int counterBtwDealingDamage =0;
+    public boolean isAliveAfterDealingDamage = true;
 
     public Player player;
 
@@ -42,8 +43,8 @@ public abstract class Bullet {
 
     public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
         this.lifeTime = lifeTime;
-        this.locX = locX + 16 * sizeOfSprite;
-        this.locY = locY + 16 * sizeOfSprite;
+        this.locX = locX + 16;
+        this.locY = locY + 16;
         this.player = player;
         
         float deltaX = pointX - locX;
@@ -116,12 +117,18 @@ class StandartBullet extends Bullet{
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
                             enemy.TakeDamage(damage);
-                            break;
+                            if(isAliveAfterDealingDamage == false){
+                                isEnd = true;
+                            }
+                            //break;
                         }
                     }
                 }
                 if(canDamagePlayer && collision.intersects(player.collision)){
                     player.TakeDamage(damage);
+                    if(isAliveAfterDealingDamage == false){
+                        isEnd = true;
+                    }
                 }
             }
             else{
@@ -161,7 +168,10 @@ class PushingBullet extends Bullet{
                             enemy.locX += pushingVelocity * Math.cos( angle );
                             enemy.locY += pushingVelocity * Math.sin( angle );
                             enemy.TakeDamage(damage);
-                            break;
+                            if(isAliveAfterDealingDamage == false){
+                                isEnd = true;
+                            }
+                            //break;
                         }
                     }
                 }
@@ -172,6 +182,9 @@ class PushingBullet extends Bullet{
                     player.locX += pushingVelocity* Math.cos( angle );
                     player.locY += pushingVelocity * Math.sin( angle );
                     player.TakeDamage(damage);
+                    if(isAliveAfterDealingDamage == false){
+                        isEnd = true;
+                    }
                 }
             }
             else{
@@ -183,3 +196,4 @@ class PushingBullet extends Bullet{
         }
     }    
 }
+

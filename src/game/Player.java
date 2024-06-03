@@ -31,7 +31,7 @@ public class Player extends Character{
 	private KeyHandler keyHandler;
 	private MouseHandler mouseHandler;
 
-	
+	public Skill curWeapon;
 	public Rectangle collision;
     public boolean isCollision;
 
@@ -44,7 +44,6 @@ public class Player extends Character{
 	public int expForLevelUp = 5;
 	//private int remainingEXP = 0;
 
-	private SkillSystem skillSystem;
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public Player() {
@@ -71,9 +70,6 @@ public class Player extends Character{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//
-		skillSystem = new SkillSystem();
-		skillSystem.canDamageEnemy = true;
 
 		SplashOfFire skill = new SplashOfFire(null, this);
 		skill.canDamageEnemy = true;
@@ -81,8 +77,11 @@ public class Player extends Character{
 		BlueCross skill1 = new BlueCross(null, this);
 		skill1.canDamageEnemy = true;
 		skill1.canDamagePlayer = false;
+		FireGun testWeapon = new FireGun(this);
 		skills.add(skill);
 		skills.add(skill1);
+		skills.add(testWeapon);
+		curWeapon = testWeapon;
 	}
 	
 	/**
@@ -98,19 +97,19 @@ public class Player extends Character{
 		for(Skill skill : skills){
 			skill.update();
 		}
-		if (mousePress) {
-			// locY = mouseY - diam / 2;
-			// locX = mouseX - diam / 2;
-			StandartBullet bullet = new StandartBullet(locX,locY,mouseX,mouseY,2f,this);
-			bullet.speed = 12f;
-            bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
-            bullet.sizeOfSprite = 1f;
-            bullet.canDamagePlayer = false;
-            bullet.canDamageEnemy = true;
-            bullet.damage = 4f;
+		// if (mousePress) {
+		// 	// locY = mouseY - diam / 2;
+		// 	// locX = mouseX - diam / 2;
+		// 	StandartBullet bullet = new StandartBullet(locX,locY,mouseX,mouseY,2f,this);
+		// 	bullet.speed = 12f;
+        //     bullet.SetSprite("res\\Bullets\\GojoSatoru(BLUE).png");
+        //     bullet.sizeOfSprite = 1f;
+        //     bullet.canDamagePlayer = false;
+        //     bullet.canDamageEnemy = true;
+        //     bullet.damage = 4f;
 
-			bullet.SetUpCollision();
-		}
+		// 	bullet.SetUpCollision();
+		// }
 		if (keyUP)
 			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
 		if (keyDOWN)
@@ -127,7 +126,6 @@ public class Player extends Character{
 
 		collision.x = locX;
 		collision.y = locY;
-
 
 	}
 
