@@ -25,7 +25,7 @@ public class Player extends Character{
 
 	public boolean isDead;
 	
-	private boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
+	public boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
 	public boolean mousePress;
 	public int mouseX, mouseY;	
 	private KeyHandler keyHandler;

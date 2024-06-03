@@ -2,6 +2,7 @@
 package game;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 //import java.util.List;
@@ -26,6 +27,7 @@ public class GameFrame extends JFrame {
 	public static int gameCenterY;
 	public static int gameCenterX;
 	public static float coeficient;
+	private int weaponFlipIndex = 1;
 	//public static float coeficientY;
 
 	private long lastRender;
@@ -111,6 +113,7 @@ public class GameFrame extends JFrame {
 	/**
 	 * Rendering all game elements based on the game player.
 	 */
+
 	private void doRendering(Graphics2D g2d, Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets, ArrayList<InteractingObject> interactingObjects, Skill weapon) {
 		// Draw background
 		g2d.setColor(Color.GRAY);
@@ -130,8 +133,23 @@ public class GameFrame extends JFrame {
 			}
 			if(weapon != null){
 				try{
-					//g2d.rotate(1.5f, 100,100);
-					g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
+					g2d.rotate(1.5f, 100,100);
+					if(player.keyLEFT){
+						weaponFlipIndex = -1;
+					}
+					if(player.keyRIGHT){
+						weaponFlipIndex = 1;
+					}
+
+					// AffineTransform at = new AffineTransform();
+					// at.translate(gameWidth/2, gameHeight/2);
+					// at.rotate(1.5f);
+					// at.scale(1,1);
+					// at.translate(-weapon.sprite.getWidth(this) / 2, -weapon.sprite.getHeight(this) / 2);
+					// g2d.drawImage(weapon.sprite, at, null);
+					g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weaponFlipIndex * weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
+					
+					g2d.rotate(-1.5f, 100,100);
 				}
 				catch(NullPointerException e){
 
