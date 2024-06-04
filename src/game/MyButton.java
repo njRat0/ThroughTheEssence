@@ -28,6 +28,14 @@ class MyButton{
         rectangleOfButton.y = y;
     }
 
+    public int GetLocationX(){
+        return rectangleOfButton.x;
+    }
+
+    public int GetLocationY(){
+        return rectangleOfButton.y;
+    }
+
     public void SetSize(int x, int y){
         rectangleOfButton.width = x;
         rectangleOfButton.height = y;

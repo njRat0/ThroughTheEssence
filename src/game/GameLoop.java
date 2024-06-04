@@ -1,8 +1,12 @@
 /*** In The Name of Allah ***/
 package game;
 
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -23,7 +27,7 @@ public class GameLoop implements Runnable {
 	 */
 	public static final int FPS = 30;
 	
-	public Random r = new Random();
+	public static Random r = new Random();
 
 	private GameFrame canvas;
 	private static Player player;
@@ -34,23 +38,41 @@ public class GameLoop implements Runnable {
 	public static boolean isPause = false;
 
 	//ChoosingSkill system
+	public static Skill[] listOfAllSkills = new Skill[]{
+		new FireGun(player),
+		new BlueCross(null, player),
+		new SplashOfFire(null, player)
+	};
+	public static int probabilityOfAllSkills;
 	public static ArrayList<MyButton> chooseSkillButtons = new ArrayList<MyButton>();
+	public static ArrayList<Skill> choosingSkillsOnButtons = new ArrayList<Skill>();
 	public static int maxNumberOfActiveSkills = 2;
 	public static int maxNumberOfPassiveSkills = 6;
 	public static int countChoosingSlotsForAS = 2; //-->For active skills
 	public static int countChoosingSlotsForPS = 3; //-->for passive skills
 	//private int maxNumberOfUpgratingParameters = 2;
 	public static boolean isChoosingSkills = true;
+	
 	public static void ChoosingSkills(){
 		isPause = true;
 		SetUp_ChooseSkillButtons();
 	}
 	public static void SetUp_ChooseSkillButtons(){
+		
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
 			MyButton button = new MyButton(player);
 			button.SetSize(98, 100);
 			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.gameCenterY - 50);
 			
+			int num = r.nextInt(probabilityOfAllSkills);
+			for(Skill skill : listOfAllSkills){
+				num -= skill.chanceOfDrop;
+				if(num <= 0){
+					choosingSkillsOnButtons.add(skill);
+					break;
+				}
+			}
+
 			chooseSkillButtons.add(button);
 		}
 		isChoosingSkills = true;
@@ -88,6 +110,9 @@ public class GameLoop implements Runnable {
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
 
+		for(Skill skill : listOfAllSkills){
+			probabilityOfAllSkills += skill.chanceOfDrop;
+		}
 		ChoosingSkills(); 
 	}
 

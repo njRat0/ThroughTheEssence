@@ -28,6 +28,8 @@ public abstract class Bullet {
     public int counterBtwDealingDamage =0;
     public boolean isAliveAfterDealingDamage = true;
 
+    public boolean isRotatable = false;
+
     public Player player;
 
     public Rectangle collision;
@@ -78,7 +80,14 @@ public abstract class Bullet {
 
     public void toDraw(Graphics2D g2d){
         if(showBeforeStart == true || counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
-            g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+            if(isRotatable == true){
+                g2d.rotate(angle, locX,locY);
+                g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+                g2d.rotate(-angle, locX,locY);
+            }
+            else{
+                g2d.drawImage(sprite, (int)locX,(int)locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
+            }
         }
     }
 

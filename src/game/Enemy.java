@@ -158,11 +158,24 @@ class TestMob extends Enemy{
         super.curHP = 800f;
         //super.isRangeAttack = true;
         super.delayBtwRangeAttacks = 2f;
-        super.hasOwnTimerSystem = false;
+        super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        
         SetUpCollision();
     }
 
     void SetUpOfBullet() {
+        StandartBullet bullet = new StandartBullet(locX,locY,player.locX,player.locY,4f, player);
+        bullet.speed = 14f;
+        bullet.canDamagePlayer = true;
+        bullet.SetSprite("res\\Bullets\\FireFlash.png");
+        bullet.sizeOfSprite = 2f;
+        bullet.delayBtwDealingDamage = 0.1f;
+        //bullet.pushingVelocity = 2f;
+        bullet.isRotatable = true;
+        bullet.damage = 8f;
+        bullet.isAliveAfterDealingDamage = false;
+        bullet.SetUpCollision();
     }
     
 }

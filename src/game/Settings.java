@@ -1,6 +1,9 @@
 package game;
 
 import java.awt.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 public class Settings {
     public static int sizeOfUI = 1;

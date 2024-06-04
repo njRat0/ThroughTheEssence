@@ -18,6 +18,8 @@ public abstract class Skill {
     public Character holderCharacter;
     public TypeOfSkill type;
     public BufferedImage sprite;
+    public String name = "null";
+    public int chanceOfDrop = 15;
 
     public Skill(Character focusCharacter, Character holdeCharacter , TypeOfSkill type){
         this.focusCharacter = focusCharacter;
@@ -41,6 +43,8 @@ class SplashOfFire extends Skill{
 
     public SplashOfFire(Character focusCharacter, Character holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
+        name = "SplashOfFire";
+        chanceOfDrop = 15;
     }
 
     @Override
@@ -78,6 +82,8 @@ class BlueCross extends Skill{
 
     public BlueCross(Character focusCharacter, Character holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
+        name = "BlueCross";
+        chanceOfDrop = 5;
     }
 
     @Override
@@ -119,6 +125,8 @@ class FireGun extends Skill{
     public FireGun(Player player) {
         super(null, player, TypeOfSkill.weapon);
         this.player = player;
+        name = "FireGun";
+        chanceOfDrop = 15;
 
         try {
 			sprite = ImageIO.read(new File("res\\GunsAssets\\1px\\1.png"));
@@ -134,12 +142,12 @@ class FireGun extends Skill{
                 counter = 0;
                 for(int i = 0; i < amountBullets; i++){
                     StandartBullet bullet = new StandartBullet(player.locX, player.locY, player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
-                    // bullet.AddAngle((float)(r.nextFloat() - 0.5 * 2 * dispersion));
-                    // bullet.SetSprite("res\\Effects\\FireEffect.png");
-                    // bullet.speed = speed * player.modificator_SpeedOfSkills * (float)(r.nextFloat() *0.4f + 0.8f);
-                    bullet.AddAngle(r.nextFloat(-dispersion,dispersion));
+                    bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
                     bullet.SetSprite("res\\Effects\\FireEffect.png");
-                    bullet.speed = speed * player.modificator_SpeedOfSkills * r.nextFloat(0.8f, 1.2f);
+                    bullet.speed = speed * player.modificator_SpeedOfSkills * (float)(r.nextFloat() *0.4f + 0.8f);
+                    // bullet.AddAngle(r.nextFloat(-dispersion,dispersion));
+                    // bullet.SetSprite("res\\Effects\\FireEffect.png");
+                    // bullet.speed = speed * player.modificator_SpeedOfSkills * r.nextFloat(0.8f, 1.2f);
                     bullet.damage = damage * player.modificator_Damage;
                     bullet.canDamagePlayer = false;
                     bullet.canDamageEnemy = true;
