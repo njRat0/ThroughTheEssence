@@ -157,15 +157,14 @@ public class GameFrame extends JFrame {
 				}
 			}
 			if(GameLoop.isChoosingSkills == true){
-				for(MyButton button : GameLoop.chooseSkillButtons){
+				for(int i = 0; i < GameLoop.chooseSkillButtons.size(); i++){
+					MyButton button = GameLoop.chooseSkillButtons.get(i);
 					button.toDraw(g2d);
-					for(Skill skill : GameLoop.choosingSkillsOnButtons){
-						String str = skill.name;
-						g2d.setColor(Color.WHITE);
-						g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(15.0f));
-						//int strWidth = g2d.getFontMetrics().stringWidth(str);
-						g2d.drawString(str, button.GetLocationX(), button.GetLocationY());
-					}
+					String str = GameLoop.choosingSkillsOnButtons.get(i).name;
+					g2d.setColor(Color.WHITE);
+					g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(15.0f));
+					//int strWidth = g2d.getFontMetrics().stringWidth(str);
+					g2d.drawString(str, button.GetLocationX(), button.GetLocationY());
 				}
 			}
 			//>>>>UI rendering

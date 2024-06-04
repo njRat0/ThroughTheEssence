@@ -83,7 +83,7 @@ class BlueCross extends Skill{
     public BlueCross(Character focusCharacter, Character holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         name = "BlueCross";
-        chanceOfDrop = 5;
+        chanceOfDrop = 0;
     }
 
     @Override

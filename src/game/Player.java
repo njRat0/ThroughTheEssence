@@ -71,17 +71,17 @@ public class Player extends Character{
 			e.printStackTrace();
 		}
 
-		SplashOfFire skill = new SplashOfFire(null, this);
-		skill.canDamageEnemy = true;
-		skill.canDamagePlayer = false;
-		BlueCross skill1 = new BlueCross(null, this);
-		skill1.canDamageEnemy = true;
-		skill1.canDamagePlayer = false;
-		FireGun testWeapon = new FireGun(this);
-		skills.add(skill);
-		skills.add(skill1);
-		skills.add(testWeapon);
-		curWeapon = testWeapon;
+		//SplashOfFire skill = new SplashOfFire(null, this);
+		//skill.canDamageEnemy = true;
+		//skill.canDamagePlayer = false;
+		// BlueCross skill1 = new BlueCross(null, this);
+		// skill1.canDamageEnemy = true;
+		// skill1.canDamagePlayer = false;
+		// FireGun testWeapon = new FireGun(this);
+		//skills.add(skill);
+		// skills.add(skill1);
+		// skills.add(testWeapon);
+		// curWeapon = testWeapon;
 	}
 	
 	/**

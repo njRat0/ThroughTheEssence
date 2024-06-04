@@ -1,12 +1,8 @@
 /*** In The Name of Allah ***/
 package game;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -38,11 +34,7 @@ public class GameLoop implements Runnable {
 	public static boolean isPause = false;
 
 	//ChoosingSkill system
-	public static Skill[] listOfAllSkills = new Skill[]{
-		new FireGun(player),
-		new BlueCross(null, player),
-		new SplashOfFire(null, player)
-	};
+	public static ArrayList<Skill> listOfAllSkills = new ArrayList<Skill>();
 	public static int probabilityOfAllSkills;
 	public static ArrayList<MyButton> chooseSkillButtons = new ArrayList<MyButton>();
 	public static ArrayList<Skill> choosingSkillsOnButtons = new ArrayList<Skill>();
@@ -59,11 +51,13 @@ public class GameLoop implements Runnable {
 	}
 	public static void SetUp_ChooseSkillButtons(){
 		
+		chooseSkillButtons.clear();
+		choosingSkillsOnButtons.clear();
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
 			MyButton button = new MyButton(player);
 			button.SetSize(98, 100);
 			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.gameCenterY - 50);
-			
+			button.id = i;
 			int num = r.nextInt(probabilityOfAllSkills);
 			for(Skill skill : listOfAllSkills){
 				num -= skill.chanceOfDrop;
@@ -78,9 +72,15 @@ public class GameLoop implements Runnable {
 		isChoosingSkills = true;
 	}
 
-	public static void EndChoosingSkills(){
+	public static void EndChoosingSkills(int id){
 		isChoosingSkills = false;
 		isPause = false;
+		player.skills.add(choosingSkillsOnButtons.get(id));
+		if(choosingSkillsOnButtons.get(id).type == TypeOfSkill.weapon){
+			player.curWeapon = choosingSkillsOnButtons.get(id);
+		}
+		//choosingSkillsOnButtons.clear();
+		//chooseSkillButtons.clear();
 	}
 
 	public GameLoop(GameFrame frame) {
@@ -110,6 +110,9 @@ public class GameLoop implements Runnable {
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
 
+		listOfAllSkills.add(new FireGun(player));
+		listOfAllSkills.add(new BlueCross(null , player));
+		listOfAllSkills.add(new SplashOfFire(null, player));
 		for(Skill skill : listOfAllSkills){
 			probabilityOfAllSkills += skill.chanceOfDrop;
 		}
@@ -179,4 +182,5 @@ public class GameLoop implements Runnable {
 		}
 		canvas.render(player, listOfEnemies, listOfBullets, listOfInteractingObjects, player.curWeapon);
 	}
+
 }

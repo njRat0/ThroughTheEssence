@@ -17,6 +17,7 @@ class MyButton{
     public Color colorBackground = new Color(30, 136, 56);
     public Color colorBorders = new Color(30, 136, 56);
     public int borderSize = 2;
+    public int id;
     // public int locX = 0;
     // public int locY = 0;
     private Player player;
@@ -57,7 +58,7 @@ class MyButton{
 
         if(player.mousePress == true && isMouseOver == true ){
             curColor = colorClick;
-            GameLoop.EndChoosingSkills();
+            GameLoop.EndChoosingSkills(id);
         }
         else{
             if(isMouseOver == true){
