@@ -112,7 +112,7 @@ class FireGun extends Skill{
     public float damage = 2f;
     public float speed  = 7f;
     private int counter = 0;
-    private float dispersion = 0.05f;
+    private float dispersion = 0.14f;
     private Random r = new Random();
 
     private Player player;
@@ -135,12 +135,12 @@ class FireGun extends Skill{
                 counter = 0;
                 for(int i = 0; i < amountBullets; i++){
                     StandartBullet bullet = new StandartBullet(player.locX, player.locY, player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
-                    bullet.AddAngle((float)(r.nextFloat() - 0.5 * 2 * dispersion));
-                    bullet.SetSprite("res\\Effects\\FireEffect.png");
-                    bullet.speed = speed * player.modificator_SpeedOfSkills * (float)(r.nextFloat() *0.4f + 0.8f);
-                    // bullet.AddAngle(r.nextFloat(-dispersion,dispersion));
+                    // bullet.AddAngle((float)(r.nextFloat() - 0.5 * 2 * dispersion));
                     // bullet.SetSprite("res\\Effects\\FireEffect.png");
-                    // bullet.speed = speed * player.modificator_SpeedOfSkills * r.nextFloat(0.8f, 1.2f);
+                    // bullet.speed = speed * player.modificator_SpeedOfSkills * (float)(r.nextFloat() *0.4f + 0.8f);
+                    bullet.AddAngle(r.nextFloat(-dispersion,dispersion));
+                    bullet.SetSprite("res\\Effects\\FireEffect.png");
+                    bullet.speed = speed * player.modificator_SpeedOfSkills * r.nextFloat(0.8f, 1.2f);
                     bullet.damage = damage * player.modificator_Damage;
                     bullet.canDamagePlayer = false;
                     bullet.canDamageEnemy = true;

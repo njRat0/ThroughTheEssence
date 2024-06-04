@@ -133,23 +133,19 @@ public class GameFrame extends JFrame {
 			}
 			if(weapon != null){
 				try{
-					g2d.rotate(1.5f, player.locX + 16,player.locY + 16);
-					if(player.keyLEFT){
-						weaponFlipIndex = -1;
-					}
-					if(player.keyRIGHT){
-						weaponFlipIndex = 1;
-					}
-
-					// AffineTransform at = new AffineTransform();
-					// at.translate(gameWidth/2, gameHeight/2);
-					// at.rotate(1.5f);
-					// at.scale(1,1);
-					// at.translate(-weapon.sprite.getWidth(this) / 2, -weapon.sprite.getHeight(this) / 2);
-					// g2d.drawImage(weapon.sprite, at, null);
-					g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weaponFlipIndex * weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
+					float deltaX = player.mouseX - player.locX;
+					float deltaY = player.mouseY - player.locY;
+					double angle = Math.atan2( deltaY, deltaX );
 					
-					g2d.rotate(-1.5f,player.locX+ 16,player.locY + 16);
+					g2d.rotate(angle, player.locX + 16,player.locY + 8);
+					if(player.locX > player.mouseX){
+						g2d.drawImage(weapon.sprite, player.locX + 16,player.locY + 8, weapon.sprite.getWidth(),-weapon.sprite.getHeight(), null);
+					}
+					else{
+						g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
+					}
+					g2d.rotate(-angle,player.locX+ 16,player.locY + 8);
+					
 				}
 				catch(NullPointerException e){
 
