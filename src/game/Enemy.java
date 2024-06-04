@@ -34,6 +34,8 @@ public abstract class Enemy extends Character {
     public boolean isDead = false;
     public boolean hasOwnTimerSystem = true;
 
+    public int lootType = 1;
+
     public Enemy(Player player, int locX, int locY){
         this.player = player;
         this.locX = locX;
@@ -125,8 +127,23 @@ public abstract class Enemy extends Character {
 	}
 
     public void Dead(){
-        isDead = true;
-        new ExpStone_lvl1(locX, locY, player);
+        if(isDead==false){
+            isDead = true;
+            switch (lootType) {
+                case 1:
+                    new ExpStone_lvl1(locX, locY, player);
+                    break;
+                case 2:
+                    new ExpStone_lvl2(locX, locY, player);
+                    break;
+                case 3:
+                    new ExpStone_lvl3(locX, locY, player);
+                    break;
+                
+                default:
+                    break;
+            }
+        }
     }
 
 }

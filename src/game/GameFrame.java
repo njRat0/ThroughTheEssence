@@ -133,7 +133,7 @@ public class GameFrame extends JFrame {
 			}
 			if(weapon != null){
 				try{
-					g2d.rotate(1.5f, 100,100);
+					g2d.rotate(1.5f, player.locX + 16,player.locY + 16);
 					if(player.keyLEFT){
 						weaponFlipIndex = -1;
 					}
@@ -149,7 +149,7 @@ public class GameFrame extends JFrame {
 					// g2d.drawImage(weapon.sprite, at, null);
 					g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, weaponFlipIndex * weapon.sprite.getWidth(),weapon.sprite.getHeight(), null);
 					
-					g2d.rotate(-1.5f, 100,100);
+					g2d.rotate(-1.5f,player.locX+ 16,player.locY + 16);
 				}
 				catch(NullPointerException e){
 
