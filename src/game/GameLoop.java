@@ -66,6 +66,14 @@ public class GameLoop implements Runnable {
 					choosingSkillsOnButtons.add(skill);
 					break;
 				}
+				for(Skill playerSkill : player.skills){
+					if(playerSkill.name == skill.name){
+						int chooseRandomUpgrate = r.nextInt(playerSkill.numberOfUpgradePoints);
+						if(playerSkill.GetPointsOfUpgrateSkill(chooseRandomUpgrate) == true){
+							
+						}
+					}
+				}
 			}
 
 			chooseSkillButtons.add(button);
@@ -81,7 +89,7 @@ public class GameLoop implements Runnable {
 			player.curWeapon = choosingSkillsOnButtons.get(id);
 		}
 
-		player.isLevelingUping = false;
+		player.isLevelingUpping = false;
 		//choosingSkillsOnButtons.clear();
 		//chooseSkillButtons.clear();
 	}

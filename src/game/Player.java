@@ -89,7 +89,7 @@ public class Player extends Character{
 	 * The method which updates the game state.
 	 */
 	public void update() {
-		if( isLevelingUping == false&& curEXP >= expForLevelUp){
+		if( isLevelingUping == false && curEXP >= expForLevelUp){
 			LevelUp();
 		}
 		if(curHP <= maxHP){
