@@ -42,7 +42,7 @@ public class Player extends Character{
 	public int level = 1;
 	public int curEXP = 0;
 	public int expForLevelUp = 5;
-	public boolean isLevelingUping = false;
+	public boolean isLevelingUpping = false;
 	//private int remainingEXP = 0;
 
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
@@ -89,7 +89,7 @@ public class Player extends Character{
 	 * The method which updates the game state.
 	 */
 	public void update() {
-		if( isLevelingUping == false && curEXP >= expForLevelUp){
+		if( isLevelingUpping == false && curEXP >= expForLevelUp){
 			LevelUp();
 		}
 		if(curHP <= maxHP){
@@ -135,7 +135,7 @@ public class Player extends Character{
 	}
 
 	public void LevelUp(){
-		isLevelingUping = true;
+		isLevelingUpping = true;
 		curEXP = curEXP - expForLevelUp;
 		System.out.println(curEXP);
 		expForLevelUp = (5+level*5) * level;
