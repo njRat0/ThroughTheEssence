@@ -188,6 +188,7 @@ class FireLizard extends Enemy{
         super.curHP = 30f;
         super.isRangeAttack = true;
         delayBtwRangeAttacks = 3f;
+        super.lootType = 3;
 
         SetUpCollision();
     }

@@ -30,6 +30,40 @@ public abstract class Skill {
     public abstract void update();
 }
 
+class UpgrateSkill_damage extends Skill{
+    private Player player;
+
+    public  UpgrateSkill_damage(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+damage";
+        chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.modificator_Damage += 0.15f;
+        player.skills.remove(this.getClass());
+    }
+}
+class UpgrateSkill_amountOfCasts extends Skill{
+    private Player player;
+
+    public  UpgrateSkill_amountOfCasts(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+amount of casts";
+        chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.modificator_amountsOfCastSkill += 1;
+        System.out.println(player.modificator_amountsOfCastSkill);
+        player.skills.remove(this.getClass()); // <--- fix
+    }
+}
+
 class SplashOfFire extends Skill{
     public int amountBullets = 14;
     public float speed  = 12f;
@@ -41,6 +75,9 @@ class SplashOfFire extends Skill{
     public boolean canDamageEnemy = false;
     public float damage = 12f;
 
+    private int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
     public SplashOfFire(Character focusCharacter, Character holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         name = "SplashOfFire";
@@ -50,7 +87,12 @@ class SplashOfFire extends Skill{
     @Override
     public void update() {
         if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
-            counter =0 ;
+            counterForSkillCast++;
+            if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                counter =0 ;
+                counterForSkillCast = 0;
+            }
+            
             for(int i = 0; i < amountBullets; i++){
                 PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null, 10f);
                 bullet.canDamagePlayer = false;
@@ -80,16 +122,23 @@ class BlueCross extends Skill{
     public boolean canDamagePlayer = false;
     public boolean canDamageEnemy = false;
 
+    private int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
     public BlueCross(Character focusCharacter, Character holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         name = "BlueCross";
-        chanceOfDrop = 0;
+        chanceOfDrop = 5;
     }
 
     @Override
     public void update() {
         if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
-            counter = 0;
+            counterForSkillCast++;
+            if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                counter =0 ;
+                counterForSkillCast = 0;
+            }
             for(int i = 0; i < amountBullets; i++){
                 PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets *2  * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets *2 * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null, -20f);
                 bullet.canDamagePlayer = false;
@@ -122,6 +171,9 @@ class FireGun extends Skill{
 
     private Player player;
 
+    public int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
     public FireGun(Player player) {
         super(null, player, TypeOfSkill.weapon);
         this.player = player;
@@ -139,7 +191,11 @@ class FireGun extends Skill{
     public void update() {
         if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
             if(player.mousePress){
-                counter = 0;
+                counterForSkillCast++;
+                if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                    counter =0 ;
+                    counterForSkillCast = 0;
+                }
                 for(int i = 0; i < amountBullets; i++){
                     StandartBullet bullet = new StandartBullet(player.locX, player.locY, player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
                     bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));

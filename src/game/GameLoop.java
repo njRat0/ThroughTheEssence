@@ -58,6 +58,7 @@ public class GameLoop implements Runnable {
 			button.SetSize(98, 100);
 			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.gameCenterY - 50);
 			button.id = i;
+			//int num = 0;
 			int num = r.nextInt(probabilityOfAllSkills);
 			for(Skill skill : listOfAllSkills){
 				num -= skill.chanceOfDrop;
@@ -79,6 +80,8 @@ public class GameLoop implements Runnable {
 		if(choosingSkillsOnButtons.get(id).type == TypeOfSkill.weapon){
 			player.curWeapon = choosingSkillsOnButtons.get(id);
 		}
+
+		player.isLevelingUping = false;
 		//choosingSkillsOnButtons.clear();
 		//chooseSkillButtons.clear();
 	}
@@ -109,14 +112,21 @@ public class GameLoop implements Runnable {
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
+		
+		SetUp_listOfSkills();
+		
+		ChoosingSkills(); 
+	}
 
+	public void SetUp_listOfSkills(){
 		listOfAllSkills.add(new FireGun(player));
+		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
+		listOfAllSkills.add(new UpgrateSkill_damage(player));
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
 		for(Skill skill : listOfAllSkills){
 			probabilityOfAllSkills += skill.chanceOfDrop;
 		}
-		ChoosingSkills(); 
 	}
 
 	@Override
