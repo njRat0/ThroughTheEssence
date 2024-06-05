@@ -43,7 +43,6 @@ class UpgrateSkill_damage extends Skill{
     @Override
     public void update() {
         player.modificator_Damage += 0.15f;
-        player.skills.remove(this.getClass());
     }
 }
 class UpgrateSkill_amountOfCasts extends Skill{
@@ -59,8 +58,6 @@ class UpgrateSkill_amountOfCasts extends Skill{
     @Override
     public void update() {
         player.modificator_amountsOfCastSkill += 1;
-        System.out.println(player.modificator_amountsOfCastSkill);
-        player.skills.remove(this.getClass()); // <--- fix
     }
 }
 

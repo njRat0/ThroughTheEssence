@@ -95,8 +95,12 @@ public class Player extends Character{
 		if(curHP <= maxHP){
 			curHP+=hpRegen;
 		}
-		for(Skill skill : skills){
+		for(int i = 0 ; i < skills.size(); i++){
+			Skill skill = skills.get(i);
 			skill.update();
+			if(skill.type == TypeOfSkill.passive){
+				skills.remove(i);
+			}
 		}
 		// if (mousePress) {
 		// 	// locY = mouseY - diam / 2;

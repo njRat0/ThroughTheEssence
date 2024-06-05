@@ -40,7 +40,7 @@ public class GameLoop implements Runnable {
 	public static ArrayList<Skill> choosingSkillsOnButtons = new ArrayList<Skill>();
 	public static int maxNumberOfActiveSkills = 2;
 	public static int maxNumberOfPassiveSkills = 6;
-	public static int countChoosingSlotsForAS = 2; //-->For active skills
+	public static int countChoosingSlotsForAS = 3; //-->For active skills
 	public static int countChoosingSlotsForPS = 3; //-->for passive skills
 	//private int maxNumberOfUpgratingParameters = 2;
 	public static boolean isChoosingSkills = true;
