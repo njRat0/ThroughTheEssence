@@ -1,15 +1,10 @@
 /*** In The Name of Allah ***/
 package game;
 
-import java.awt.Window.Type;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Random;
 
-import javax.naming.directory.DirContext;
+
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -110,8 +105,15 @@ public class GameLoop implements Runnable {
 			if(skill.type != TypeOfSkill.passive){
 				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
 				skill.chanceOfDrop = 50;
+				if(player.curWeapon  != null){
+					probabilityOfAllSkills = probabilityOfAllSkills - 15 + 50; //<----need fix
+					player.curWeapon.chanceOfDrop = 15;
+				}
+				player.curWeapon = skill;
 			}
-			player.skills.add(skill);
+			else{
+				player.skills.add(skill);
+			}
 		}
 		for(Skill skill1 : choosingSkillsOnButtons){
 			skill1.numberOfChoosedUpgrade.clear();
@@ -156,17 +158,23 @@ public class GameLoop implements Runnable {
 		
 		SetUp_listOfSkills();
 
-		Skill gun = listOfAllSkills.get(0);
-		gun.chanceOfDrop = 50;
-		player.skills.add(gun);
+		probabilityOfAllSkills =  probabilityOfAllSkills - listOfAllSkills.get(0).chanceOfDrop + 50;
+		listOfAllSkills.get(0).chanceOfDrop = 50;
+		player.skills.add(listOfAllSkills.get(0));
+		player.curWeapon = listOfAllSkills.get(0);
 		
 		//ChoosingSkills(); 
 	}
 
 	public void SetUp_listOfSkills(){
+		listOfAllSkills.add(new BasicGun(player));
 		listOfAllSkills.add(new FireGun(player));
 		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
 		listOfAllSkills.add(new UpgrateSkill_damage(player));
+		listOfAllSkills.add(new UpgrateSkill_Speed(player));
+		listOfAllSkills.add(new UpgrateSkill_HPregen(player));
+		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player));
+		listOfAllSkills.add(new UpgrateSkill_HPpoints(player));
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
 		for(Skill skill : listOfAllSkills){
@@ -177,26 +185,26 @@ public class GameLoop implements Runnable {
 	private int timer = 0;
 	public void SpawnEnemies(){
 		if(timer % (5*30) == 0){
-			int hardLevel = timer / (60*30) + 1;
+			int levelOfDificulty = timer / (60*30) + 1;
 
-			for(int i = 0; i < hardLevel * 100;){
-				int choosedEnemy = r.nextInt(hardLevel)+1;
+			for(int i = 0; i < levelOfDificulty * 5;){
+				int choosedEnemy = r.nextInt(levelOfDificulty)+1;
 				i+= choosedEnemy;
 				switch (choosedEnemy) {
 					case 1:
 						listOfEnemies.add(new Slime_lvl1(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
 						break;
 					case 2:
-					listOfEnemies.add(new Slime_lvl2(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new Slime_lvl2(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
 						break;
 					case 3:
-					listOfEnemies.add(new FireLizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new FireLizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
 						break;
 					case 4:
-					listOfEnemies.add(new Slime_lvl3(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new Slime_lvl3(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
 						break;
 					case 5:
-					listOfEnemies.add(new GoblinWizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new GoblinWizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
 						break;
 					default:
 						break;

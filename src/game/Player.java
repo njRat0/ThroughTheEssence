@@ -134,10 +134,11 @@ public class Player extends Character{
 	}
 
 	public void LevelUp(){
+		mousePress = false;
 		isLevelingUpping = true;
 		curEXP = curEXP - expForLevelUp;
 		//System.out.println(curEXP);
-		expForLevelUp = (int)(0.2*level+4);
+		expForLevelUp = (int)(1.2*level+4);
 		level++;
 		GameLoop.ChoosingSkills();
 	}

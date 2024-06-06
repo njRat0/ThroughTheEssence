@@ -21,6 +21,7 @@ public abstract class Skill {
     public BufferedImage sprite;
     public String name = "null";
     public int chanceOfDrop = 15;
+    public float sizeOfSprite = 1;
 
     public Skill(Character focusCharacter, Character holdeCharacter , TypeOfSkill type){
         this.focusCharacter = focusCharacter;
@@ -52,7 +53,6 @@ class UpgrateSkill_damage extends Skill{
     @Override
     public void update() {
         player.modificator_Damage += 0.15f;
-        chanceOfDrop = 15;
     }
 
     @Override
@@ -73,6 +73,7 @@ class UpgrateSkill_amountOfCasts extends Skill{
         super(null, player, TypeOfSkill.passive);
         name = "+amount of casts";
         numberOfUpgradePoints = 0;
+        chanceOfDrop = 5;
         //chanceOfDrop = 15;
         this.player = player;
     }
@@ -128,7 +129,7 @@ class UpgrateSkill_Speed extends Skill{
 
     public  UpgrateSkill_Speed(Player player) {
         super(null, player, TypeOfSkill.passive);
-        name = "+20% of max movement speed";
+        name = "+10% of max movement speed";
         numberOfUpgradePoints = 0;
         //chanceOfDrop = 15;
         this.player = player;
@@ -136,7 +137,7 @@ class UpgrateSkill_Speed extends Skill{
 
     @Override
     public void update() {
-        player.moveSpeed += 1;
+        player.moveSpeed += 0.5f;
     }
 
     @Override
@@ -186,7 +187,7 @@ class UpgrateSkill_ReduceCDofSkills extends Skill{
         super(null, player, TypeOfSkill.passive);
         name = "-10% skill cooldown";
         numberOfUpgradePoints = 0;
-        //chanceOfDrop = 15;
+        chanceOfDrop = 5;
         this.player = player;
     }
 
@@ -300,7 +301,7 @@ class SplashOfFire extends Skill{
                 }
                 break;
             case 4:
-                nameOfChoosingParameter = "+10% speed of skill";
+                nameOfChoosingParameter = "+10% radius of skill";
                 if(speed >= 24f){
                     return false;
                 }
@@ -327,7 +328,7 @@ class BlueCross extends Skill{
     public float sizeOfBullets = 2f;
     private float delayBtwCast = 3f;
     public float speed  = 7f;
-    public float damage = 2f;
+    public float damage = 1f;
     public float lifeTime = 2f;
     private int counter = 0;
     public boolean canDamagePlayer = false;
@@ -385,7 +386,7 @@ class BlueCross extends Skill{
                 lifeTime += 0.5f;
                 break;
             case 5:
-                damage += 0.5f;
+                damage += 0.25f;
                 break;
             case 6:
                 speed += 0.7f;
@@ -576,6 +577,146 @@ class FireGun extends Skill{
             case 7:
                 nameOfChoosingParameter = "+1 amount of cast of skill";
                 if(amountOfCast >= 12){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
+
+//weapon >>>>
+class BasicGun extends Skill{
+    public int amountBullets = 1;
+    public float sizeOfBullets = 1f;
+    private float delayBtwCast = 0.5f;
+    public float lifeTime = 2f;
+    public float damage = 2f;
+    public float speed  = 7f;
+    private int counter = 0;
+    //private float dispersion = 0.14f;
+    private Random r = new Random();
+
+    private Player player;
+
+    public int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
+    public BasicGun(Player player) {
+        super(null, player, TypeOfSkill.weapon);
+        this.player = player;
+        name = "BasicGun";
+        chanceOfDrop = 15;
+        numberOfUpgradePoints = 7;
+
+        try {
+			sprite = ImageIO.read(new File("res\\GunsAssets\\1px\\17b.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        sizeOfSprite = 2f;
+    }
+
+    @Override
+    public void update() {
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            if(player.mousePress){
+                counterForSkillCast++;
+                if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                    counter =0 ;
+                    counterForSkillCast = 0;
+                }
+                for(int i = 0; i < amountBullets; i++){
+                    StandartBullet bullet = new StandartBullet(player.locX, player.locY, player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
+                    //bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
+                    bullet.SetSprite("res\\Bullets\\BasicGun_bullet.png");
+                    bullet.speed = speed * player.modificator_SpeedOfSkills * (float)(r.nextFloat() *0.2f + 0.4f);
+                    // bullet.AddAngle(r.nextFloat(-dispersion,dispersion));
+                    // bullet.SetSprite("res\\Effects\\FireEffect.png");
+                    // bullet.speed = speed * player.modificator_SpeedOfSkills * r.nextFloat(0.8f, 1.2f);
+                    bullet.damage = damage * player.modificator_Damage;
+                    bullet.canDamagePlayer = false;
+                    bullet.canDamageEnemy = true;
+                    bullet.isAliveAfterDealingDamage = false;
+                    bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                    bullet.SetUpCollision();
+                }
+            }         
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                amountBullets++;
+                break;
+            case 2:
+                sizeOfBullets += 0.2f;
+                break;
+            case 3:
+                delayBtwCast -= 0.05f;
+                break;
+            case 4:
+                lifeTime += 0.5f;
+                break;
+            case 5:
+                damage += 1f;
+                break;
+            case 6:
+                speed += 0.7f;
+                break;
+            case 7:
+                amountOfCast += 1f;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+1 amount of bullet";
+                if(amountBullets >= 6){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "+20% area of skill";
+                if(sizeOfBullets >= 5f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "-10% delayBtwCast";
+                if(delayBtwCast <= 0.1f){
+                    return false;
+                }
+                break;
+            case 4:
+                nameOfChoosingParameter = "+0.5 sec duration of skill";
+                if(lifeTime >= 6f){
+                    return false;
+                }
+                break;
+            case 5:
+                nameOfChoosingParameter = "+50% damage of skill";
+                if(damage >= 10f){
+                    return false;
+                }
+                break;
+            case 6:
+                nameOfChoosingParameter = "+10 speed of skill";
+                if(speed >= 10f){
+                    return false;
+                }
+                break;
+            case 7:
+                nameOfChoosingParameter = "+1 amount of cast of skill";
+                if(amountOfCast >= 6){
                     return false;
                 }
                 break;
