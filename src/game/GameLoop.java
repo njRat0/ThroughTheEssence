@@ -102,11 +102,11 @@ public class GameLoop implements Runnable {
 			skill.UpgrateSkill(skill.numberOfChoosedUpgrade.get(id));
 		}
 		else{
-			if(skill.type != TypeOfSkill.passive){
+			if(skill.type == TypeOfSkill.weapon){
 				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
 				skill.chanceOfDrop = 50;
 				if(player.curWeapon  != null){
-					probabilityOfAllSkills = probabilityOfAllSkills - 15 + 50; //<----need fix
+					probabilityOfAllSkills = probabilityOfAllSkills - 50 + 15; //<----need fix
 					player.curWeapon.chanceOfDrop = 15;
 				}
 				player.curWeapon = skill;
@@ -160,7 +160,7 @@ public class GameLoop implements Runnable {
 
 		probabilityOfAllSkills =  probabilityOfAllSkills - listOfAllSkills.get(0).chanceOfDrop + 50;
 		listOfAllSkills.get(0).chanceOfDrop = 50;
-		player.skills.add(listOfAllSkills.get(0));
+		//player.skills.add(listOfAllSkills.get(0));
 		player.curWeapon = listOfAllSkills.get(0);
 		
 		//ChoosingSkills(); 
@@ -185,7 +185,7 @@ public class GameLoop implements Runnable {
 	private int timer = 0;
 	public void SpawnEnemies(){
 		if(timer % (5*30) == 0){
-			int levelOfDificulty = timer / (60*30) + 1;
+			int levelOfDificulty = timer / (30*30) + 1;
 
 			for(int i = 0; i < levelOfDificulty * 5;){
 				int choosedEnemy = r.nextInt(levelOfDificulty)+1;

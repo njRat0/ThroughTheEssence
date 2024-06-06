@@ -101,6 +101,9 @@ public class Player extends Character{
 				skills.remove(i);
 			}
 		}
+		if(curWeapon != null){
+			curWeapon.update();
+		}
 		// if (mousePress) {
 		// 	// locY = mouseY - diam / 2;
 		// 	// locX = mouseX - diam / 2;

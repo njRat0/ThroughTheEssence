@@ -452,7 +452,7 @@ class FireGun extends Skill{
     public float sizeOfBullets = 1f;
     private float delayBtwCast = 0.3f;
     public float lifeTime = 2f;
-    public float damage = 2f;
+    public float damage = 1f;
     public float speed  = 7f;
     private int counter = 0;
     private float dispersion = 0.14f;
@@ -524,7 +524,7 @@ class FireGun extends Skill{
                 lifeTime += 0.5f;
                 break;
             case 5:
-                damage += 1f;
+                damage += 0.5f;
                 break;
             case 6:
                 speed += 0.7f;
@@ -592,7 +592,7 @@ class BasicGun extends Skill{
     private float delayBtwCast = 0.5f;
     public float lifeTime = 2f;
     public float damage = 2f;
-    public float speed  = 7f;
+    public float speed  = 14f;
     private int counter = 0;
     //private float dispersion = 0.14f;
     private Random r = new Random();
@@ -667,7 +667,7 @@ class BasicGun extends Skill{
                 damage += 1f;
                 break;
             case 6:
-                speed += 0.7f;
+                speed += 1.4f;
                 break;
             case 7:
                 amountOfCast += 1f;
