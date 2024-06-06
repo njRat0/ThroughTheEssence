@@ -35,12 +35,12 @@ public class Player extends Character{
 	public Rectangle collision;
     public boolean isCollision;
 
-	public float curHP = 300;
-	public float maxHP = 300;
-	private float hpRegen = 0.05f;
+	public float curHP = 100;
+	public float maxHP = 100;
+	public float hpRegen = 0.05f;
 
 	public int level = 1;
-	public int curEXP = 100;
+	public int curEXP = 0;
 	public int expForLevelUp = 5;
 	public boolean isLevelingUpping = false;
 	//private int remainingEXP = 0;
@@ -48,8 +48,8 @@ public class Player extends Character{
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public Player() {
-		locX = 0;
-		locY = 0;
+		locX = 500;
+		locY = 500;
 		isDead = false;
 		//
 		keyUP = false;
@@ -78,7 +78,6 @@ public class Player extends Character{
 		// BlueCross skill1 = new BlueCross(null, this);
 		// skill1.canDamageEnemy = true;
 		// skill1.canDamagePlayer = false;
-		// FireGun testWeapon = new FireGun(this);
 		//skills.add(skill);
 		// skills.add(skill1);
 		// skills.add(testWeapon);
@@ -138,7 +137,7 @@ public class Player extends Character{
 		isLevelingUpping = true;
 		curEXP = curEXP - expForLevelUp;
 		//System.out.println(curEXP);
-		expForLevelUp = (5+level*5) * level;
+		expForLevelUp = (int)(0.2*level+4);
 		level++;
 		GameLoop.ChoosingSkills();
 	}

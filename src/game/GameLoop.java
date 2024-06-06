@@ -3,7 +3,13 @@ package game;
 
 import java.awt.Window.Type;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Random;
+
+import javax.naming.directory.DirContext;
 /**
  * A very simple structure for the main game loop.
  * THIS IS NOT PERFECT, but works for most situations.
@@ -71,7 +77,8 @@ public class GameLoop implements Runnable {
 					if(skill.chanceOfDrop == 50){
 						boolean isChoosed = false;
 						for(int j = 0; j< 50; j++){
-							int chooseUpgrate = r.nextInt(1, skill.numberOfUpgradePoints + 1);
+							int chooseUpgrate = r.nextInt(skill.numberOfUpgradePoints) + 1;
+							//int chooseUpgrate = r.nextInt(1, skill.numberOfUpgradePoints + 1);
 							//System.out.println(chooseUpgrate);
 							if(skill.GetPointsOfUpgrateSkill(chooseUpgrate)){
 								isChoosed = true;
@@ -148,8 +155,12 @@ public class GameLoop implements Runnable {
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
 		
 		SetUp_listOfSkills();
+
+		Skill gun = listOfAllSkills.get(0);
+		gun.chanceOfDrop = 50;
+		player.skills.add(gun);
 		
-		ChoosingSkills(); 
+		//ChoosingSkills(); 
 	}
 
 	public void SetUp_listOfSkills(){
@@ -160,6 +171,37 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new SplashOfFire(null, player));
 		for(Skill skill : listOfAllSkills){
 			probabilityOfAllSkills += skill.chanceOfDrop;
+		}
+	}
+
+	private int timer = 0;
+	public void SpawnEnemies(){
+		if(timer % (5*30) == 0){
+			int hardLevel = timer / (60*30) + 1;
+
+			for(int i = 0; i < hardLevel * 100;){
+				int choosedEnemy = r.nextInt(hardLevel)+1;
+				i+= choosedEnemy;
+				switch (choosedEnemy) {
+					case 1:
+						listOfEnemies.add(new Slime_lvl1(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						break;
+					case 2:
+					listOfEnemies.add(new Slime_lvl2(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						break;
+					case 3:
+					listOfEnemies.add(new FireLizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						break;
+					case 4:
+					listOfEnemies.add(new Slime_lvl3(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						break;
+					case 5:
+					listOfEnemies.add(new GoblinWizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						break;
+					default:
+						break;
+				}
+			}
 		}
 	}
 
@@ -177,6 +219,8 @@ public class GameLoop implements Runnable {
 					}
 				}
 				if(isPause == false){
+					timer++;
+					SpawnEnemies();
 					player.update();
 					for(int i = 0; i < listOfEnemies.size();i++){
 						Enemy enemy = listOfEnemies.get(i);

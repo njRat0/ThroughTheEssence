@@ -80,7 +80,119 @@ class UpgrateSkill_amountOfCasts extends Skill{
     @Override
     public void update() {
         player.modificator_amountsOfCastSkill += 1;
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
+    }
+}
+
+class UpgrateSkill_HPpoints extends Skill{
+    private Player player;
+
+    public  UpgrateSkill_HPpoints(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+20% max hp";
+        numberOfUpgradePoints = 0;
         //chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.maxHP += 20;
+        player.curHP += 10;
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
+    }
+}
+
+class UpgrateSkill_Speed extends Skill{
+    private Player player;
+
+    public  UpgrateSkill_Speed(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+20% of max movement speed";
+        numberOfUpgradePoints = 0;
+        //chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.moveSpeed += 1;
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
+    }
+}
+
+class UpgrateSkill_HPregen extends Skill{
+    private Player player;
+
+    public UpgrateSkill_HPregen(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+20% of hp regen";
+        numberOfUpgradePoints = 0;
+        //chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.hpRegen += 0.01f;
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
+    }
+}
+
+class UpgrateSkill_ReduceCDofSkills extends Skill{
+    private Player player;
+
+    public UpgrateSkill_ReduceCDofSkills(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "-10% skill cooldown";
+        numberOfUpgradePoints = 0;
+        //chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.modificator_CoolDownOfSkills -= 0.1;
     }
 
     @Override
@@ -264,16 +376,16 @@ class BlueCross extends Skill{
                 amountBullets++;
                 break;
             case 2:
-                sizeOfBullets += 0.2f;
+                sizeOfBullets += 0.4f;
                 break;
             case 3:
-                delayBtwCast -= 0.03f;
+                delayBtwCast -= 0.3f;
                 break;
             case 4:
                 lifeTime += 0.5f;
                 break;
             case 5:
-                damage += 1f;
+                damage += 0.5f;
                 break;
             case 6:
                 speed += 0.7f;
@@ -295,7 +407,7 @@ class BlueCross extends Skill{
                 break;
             case 2:
                 nameOfChoosingParameter = "+20% area of skill";
-                if(sizeOfBullets >= 5f){
+                if(sizeOfBullets >= 8f){
                     return false;
                 }
                 break;
@@ -312,20 +424,20 @@ class BlueCross extends Skill{
                 }
                 break;
             case 5:
-                nameOfChoosingParameter = "+50% damage of skill";
+                nameOfChoosingParameter = "+25% damage of skill";
                 if(damage >= 10f){
                     return false;
                 }
                 break;
             case 6:
                 nameOfChoosingParameter = "+10 speed of skill";
-                if(speed >= 10f){
+                if(speed >= 14f){
                     return false;
                 }
                 break;
             case 7:
                 nameOfChoosingParameter = "+1 amount of cast of skill";
-                if(amountOfCast >= 12){
+                if(amountOfCast >= 8){
                     return false;
                 }
                 break;

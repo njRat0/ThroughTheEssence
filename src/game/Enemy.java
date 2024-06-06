@@ -188,7 +188,7 @@ class FireLizard extends Enemy{
         super.curHP = 30f;
         super.isRangeAttack = true;
         delayBtwRangeAttacks = 3f;
-        super.lootType = 3;
+        super.lootType = 1;
 
         SetUpCollision();
     }
@@ -238,7 +238,8 @@ class GoblinWizard extends Enemy{
         super.moveSpeed = 3f;
         //super.sizeOfSprite = 1f;
         super.isRangeAttack = true;
-        super.damage = 1f;
+        super.damage = 2f;
+        super.lootType = 2;
 
         SetUpCollision();
     }
@@ -257,6 +258,68 @@ class GoblinWizard extends Enemy{
         bullet1.sizeOfSprite = 1f;
         bullet1.canDamageEnemy = false;
         bullet1.SetUpCollision();
+    }
+    
+}
+
+class Slime_lvl1 extends Enemy{
+    public Slime_lvl1(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res/Characters/Icon9.png");
+        super.damage = 1f;
+        super.moveSpeed = 2f;
+        super.maxHP = 10f;
+        super.curHP = 10f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = false;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class Slime_lvl2 extends Enemy{
+    public Slime_lvl2(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res/Characters/Icon20.png");
+        super.damage = 3f;
+        super.moveSpeed = 2f;
+        super.maxHP = 30f;
+        super.curHP = 30f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = false;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class Slime_lvl3 extends Enemy{
+    public Slime_lvl3(Player player, int locX, int locY) {
+        super(player, locX, locX);
+        SetSprite("res/Characters/Icon20.png");
+        super.sizeOfSprite = 2f;
+        super.damage = 10f;
+        super.moveSpeed = 1f;
+        super.maxHP = 100f;
+        super.curHP = 100f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = false;
+        super.lootType = 2;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
     }
     
 }
