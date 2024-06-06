@@ -44,15 +44,15 @@ public class GameFrame extends JFrame {
 		lastRender = -1;
 		fpsHistory = new ArrayList<>(100);
 
-		System.out.println(gameWidth);
-		System.out.println(gameWidth);
-		System.out.println(gameHeight);
-		//System.out.println(gameHeight);//1024
-		System.out.println(gameCenterX);
-		System.out.println(gameCenterY);
-		//System.out.println(gameCenterY); // 512
-		System.out.println(coeficient);
-		//System.out.println(coeficientY);
+		// System.out.println(gameWidth);
+		// System.out.println(gameWidth);
+		// System.out.println(gameHeight);
+		// //System.out.println(gameHeight);//1024
+		// System.out.println(gameCenterX);
+		// System.out.println(gameCenterY);
+		// //System.out.println(gameCenterY); // 512
+		// System.out.println(coeficient);
+		// //System.out.println(coeficientY);
 	}
 
 	public static void SetUp_WindowSizeParameters(){
@@ -165,6 +165,14 @@ public class GameFrame extends JFrame {
 					g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(15.0f));
 					//int strWidth = g2d.getFontMetrics().stringWidth(str);
 					g2d.drawString(str, button.GetLocationX(), button.GetLocationY());
+					if(GameLoop.choosingSkillsOnButtons.get(i).numberOfChoosedUpgrade.get(i) != 0){
+						GameLoop.choosingSkillsOnButtons.get(i).GetPointsOfUpgrateSkill(GameLoop.choosingSkillsOnButtons.get(i).numberOfChoosedUpgrade.get(i));
+						str = GameLoop.choosingSkillsOnButtons.get(i).nameOfChoosingParameter;
+						g2d.setColor(Color.WHITE);
+						g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(12.0f));
+						//int strWidth = g2d.getFontMetrics().stringWidth(str);
+						g2d.drawString(str, button.GetLocationX(), button.GetLocationY() + 50);
+					}
 				}
 			}
 			//>>>>UI rendering

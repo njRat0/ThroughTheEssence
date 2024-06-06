@@ -40,7 +40,7 @@ public class Player extends Character{
 	private float hpRegen = 0.05f;
 
 	public int level = 1;
-	public int curEXP = 0;
+	public int curEXP = 100;
 	public int expForLevelUp = 5;
 	public boolean isLevelingUpping = false;
 	//private int remainingEXP = 0;
@@ -137,7 +137,7 @@ public class Player extends Character{
 	public void LevelUp(){
 		isLevelingUpping = true;
 		curEXP = curEXP - expForLevelUp;
-		System.out.println(curEXP);
+		//System.out.println(curEXP);
 		expForLevelUp = (5+level*5) * level;
 		level++;
 		GameLoop.ChoosingSkills();

@@ -1,6 +1,7 @@
 /*** In The Name of Allah ***/
 package game;
 
+import java.awt.Window.Type;
 import java.util.ArrayList;
 import java.util.Random;
 /**
@@ -64,16 +65,26 @@ public class GameLoop implements Runnable {
 				num -= skill.chanceOfDrop;
 				if(num <= 0){
 					choosingSkillsOnButtons.add(skill);
-					break;
-				}
-				for(Skill playerSkill : player.skills){
-					if(playerSkill.name == skill.name){
-						int chooseRandomUpgrate = r.nextInt(playerSkill.numberOfUpgradePoints);
-						if(playerSkill.GetPointsOfUpgrateSkill(chooseRandomUpgrate) == true){
-							
+					skill.numberOfChoosedUpgrade.add(0);
+					skill.numberOfChoosedUpgrade.add(0);
+					skill.numberOfChoosedUpgrade.add(0);
+					if(skill.chanceOfDrop == 50){
+						boolean isChoosed = false;
+						for(int j = 0; j< 50; j++){
+							int chooseUpgrate = r.nextInt(1, skill.numberOfUpgradePoints + 1);
+							//System.out.println(chooseUpgrate);
+							if(skill.GetPointsOfUpgrateSkill(chooseUpgrate)){
+								isChoosed = true;
+								skill.numberOfChoosedUpgrade.set(i,chooseUpgrate);
+								break;
+							}
+						}
+						if(isChoosed == false){
+							continue;
 						}
 					}
-				}
+					break;
+				}	
 			}
 
 			chooseSkillButtons.add(button);
@@ -84,12 +95,27 @@ public class GameLoop implements Runnable {
 	public static void EndChoosingSkills(int id){
 		isChoosingSkills = false;
 		isPause = false;
-		player.skills.add(choosingSkillsOnButtons.get(id));
+		Skill skill = choosingSkillsOnButtons.get(id);
+		if(skill.chanceOfDrop == 50){
+			skill.UpgrateSkill(skill.numberOfChoosedUpgrade.get(id));
+		}
+		else{
+			if(skill.type != TypeOfSkill.passive){
+				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
+				skill.chanceOfDrop = 50;
+			}
+			player.skills.add(skill);
+		}
+		for(Skill skill1 : choosingSkillsOnButtons){
+			skill1.numberOfChoosedUpgrade.clear();
+		}
 		if(choosingSkillsOnButtons.get(id).type == TypeOfSkill.weapon){
 			player.curWeapon = choosingSkillsOnButtons.get(id);
 		}
-
+		System.out.println(skill.chanceOfDrop);
 		player.isLevelingUpping = false;
+		player.mousePress = false;
+		System.out.println("player skills: " + player.skills.size());
 		//choosingSkillsOnButtons.clear();
 		//chooseSkillButtons.clear();
 	}
@@ -106,11 +132,11 @@ public class GameLoop implements Runnable {
 		player = new Player();
 
 		//>>Creating test enemies
-		listOfEnemies.add(new TestMob(player, 500, 200));
+		// listOfEnemies.add(new TestMob(player, 500, 200));
 		
-		for(int i = 0; i<20;i++){
-			listOfEnemies.add(new FireLizard(player, 10*i, 500));
-		}
+		// for(int i = 0; i<20;i++){
+		// 	listOfEnemies.add(new FireLizard(player, 10*i, 500));
+		// }
 		// try{
 		// 	listOfEnemies.get(0).curHP = 10f;
 		// }

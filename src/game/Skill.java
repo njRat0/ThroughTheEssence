@@ -3,6 +3,7 @@ package game;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -31,6 +32,7 @@ public abstract class Skill {
 
     public int numberOfUpgradePoints;
     public String nameOfChoosingParameter;
+    public ArrayList<Integer> numberOfChoosedUpgrade = new ArrayList<Integer>();
     public abstract void UpgrateSkill(int point);
     public abstract boolean GetPointsOfUpgrateSkill(int point);
 
@@ -43,12 +45,14 @@ class UpgrateSkill_damage extends Skill{
         super(null, player, TypeOfSkill.passive);
         name = "+damage";
         chanceOfDrop = 15;
+        numberOfUpgradePoints = 0;
         this.player = player;
     }
 
     @Override
     public void update() {
         player.modificator_Damage += 0.15f;
+        chanceOfDrop = 15;
     }
 
     @Override
@@ -68,13 +72,15 @@ class UpgrateSkill_amountOfCasts extends Skill{
     public  UpgrateSkill_amountOfCasts(Player player) {
         super(null, player, TypeOfSkill.passive);
         name = "+amount of casts";
-        chanceOfDrop = 15;
+        numberOfUpgradePoints = 0;
+        //chanceOfDrop = 15;
         this.player = player;
     }
 
     @Override
     public void update() {
         player.modificator_amountsOfCastSkill += 1;
+        //chanceOfDrop = 15;
     }
 
     @Override
@@ -98,7 +104,7 @@ class SplashOfFire extends Skill{
     private int counter = 0;
     public boolean canDamagePlayer = false;
     public boolean canDamageEnemy = false;
-    public float damage = 12f;
+    public float damage = 6f;
 
     private int amountOfCast = 1;
     private int counterForSkillCast = 0;
@@ -107,6 +113,7 @@ class SplashOfFire extends Skill{
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         name = "SplashOfFire";
         chanceOfDrop = 15;
+        numberOfUpgradePoints = 6;
     }
 
     @Override
@@ -145,18 +152,15 @@ class SplashOfFire extends Skill{
                 sizeOfBullets += 0.2f;
                 break;
             case 3:
-                delayBtwCast -= 0.03f;
+                delayBtwCast -= 0.15f;
                 break;
             case 4:
-                lifeTime += 0.5f;
+                speed += 1.2f;
                 break;
             case 5:
-                damage += 1f;
+                damage += 0.6f;
                 break;
             case 6:
-                speed += 0.7f;
-                break;
-            case 7:
                 amountOfCast += 1f;
                 break;
         }
@@ -179,29 +183,23 @@ class SplashOfFire extends Skill{
                 break;
             case 3:
                 nameOfChoosingParameter = "-10% delayBtwCast";
-                if(delayBtwCast <= 0.1f){
+                if(delayBtwCast <= 0.5f){
                     return false;
                 }
                 break;
             case 4:
-                nameOfChoosingParameter = "+0.5 sec duration of skill";
-                if(lifeTime >= 6f){
+                nameOfChoosingParameter = "+10% speed of skill";
+                if(speed >= 24f){
                     return false;
                 }
                 break;
             case 5:
-                nameOfChoosingParameter = "+50% damage of skill";
-                if(damage >= 10f){
+                nameOfChoosingParameter = "+10% damage of skill";
+                if(damage >= 12f){
                     return false;
                 }
                 break;
             case 6:
-                nameOfChoosingParameter = "+10 speed of skill";
-                if(speed >= 10f){
-                    return false;
-                }
-                break;
-            case 7:
                 nameOfChoosingParameter = "+1 amount of cast of skill";
                 if(amountOfCast >= 12){
                     return false;
@@ -230,6 +228,7 @@ class BlueCross extends Skill{
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         name = "BlueCross";
         chanceOfDrop = 5;
+        numberOfUpgradePoints = 7;
     }
 
     @Override
@@ -334,7 +333,6 @@ class BlueCross extends Skill{
         return true;
     }
 }
-}
 
 class FireGun extends Skill{
     public int amountBullets = 3;
@@ -357,6 +355,7 @@ class FireGun extends Skill{
         this.player = player;
         name = "FireGun";
         chanceOfDrop = 15;
+        numberOfUpgradePoints = 7;
 
         try {
 			sprite = ImageIO.read(new File("res\\GunsAssets\\1px\\1.png"));
