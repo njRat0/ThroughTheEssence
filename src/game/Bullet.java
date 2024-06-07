@@ -153,9 +153,8 @@ class StandartBullet extends Bullet{
 
 class PushingBullet extends Bullet{
     public float pushingVelocity = 1f;
-    public PushingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player, float pushingVelocity) {
+    public PushingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
         super(locX, locY, pointX, pointY, lifeTime, player);
-        this.pushingVelocity = pushingVelocity;
     }
 
     @Override
@@ -206,13 +205,11 @@ class PushingBullet extends Bullet{
     }    
 }
 
-class BombingBullet extends Bullet{
-    public float pushingVelocity = 1f;
-    
+class CastingBullet extends Bullet{
+    public Bullet bullet;
 
-    public BombingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
+    public CastingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
         super(locX, locY, pointX, pointY, lifeTime, player);
-        this.pushingVelocity = pushingVelocity;
     }
 
     @Override
@@ -228,28 +225,20 @@ class BombingBullet extends Bullet{
                 if(canDamageEnemy){
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
-                            float deltaX = enemy.locX - locX;
-                            float deltaY = enemy.locY - locY;
-                            double angle = Math.atan2( deltaY, deltaX );
-                            enemy.locX += pushingVelocity * Math.cos( angle );
-                            enemy.locY += pushingVelocity * Math.sin( angle );
                             enemy.TakeDamage(damage);
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
+                                CastBullet();
                             }
                             //break;
                         }
                     }
                 }
                 if(canDamagePlayer && collision.intersects(player.collision)){
-                    float deltaX = player.locX - locX;
-                    float deltaY = player.locY - locY;
-                    double angle = Math.atan2( deltaY, deltaX );
-                    player.locX += pushingVelocity* Math.cos( angle );
-                    player.locY += pushingVelocity * Math.sin( angle );
                     player.TakeDamage(damage);
                     if(isAliveAfterDealingDamage == false){
                         isEnd = true;
+                        CastBullet();
                     }
                 }
             }
@@ -260,6 +249,11 @@ class BombingBullet extends Bullet{
         else{
             counterBeforeStart++;
         }
-    }    
-}
+    } 
 
+    public void CastBullet(){
+        bullet.delayBeforeStart = 0;
+        bullet.locX = locX;
+        bullet.locY = locY;
+    }
+}    

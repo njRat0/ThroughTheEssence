@@ -207,6 +207,140 @@ class UpgrateSkill_ReduceCDofSkills extends Skill{
         throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
     }
 }
+class AtomicPudge extends Skill{
+    public int amountBullets = 1;
+    public float sizeOfBullets = 10f;
+    private float delayBtwCast = 20f;
+    public float speed  = 2f;
+    public float damage = 20f;
+    public float lifeTime = 10f;
+    private int counter = 0;
+    public boolean canDamagePlayer = false;
+    public boolean canDamageEnemy = false;
+    private Random r = new Random();
+
+    private int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
+    public AtomicPudge(Character focusCharacter, Character holderCharacter) {
+        super(focusCharacter, holderCharacter, TypeOfSkill.active);
+        name = "AtomicPudge";
+        chanceOfDrop = 25;
+        numberOfUpgradePoints = 7;
+    }
+
+    @Override
+    public void update() {
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            counterForSkillCast++;
+            if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                counter =0 ;
+                counterForSkillCast = 0;
+            }
+            for(int i = 0; i < amountBullets; i++){
+                CastingBullet bullet = new CastingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets *2  * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets *2 * holderCharacter.modificator_AreaOfSkills), 0, 0, 10f, null);
+                bullet.canDamagePlayer = false;
+                bullet.canDamageEnemy = true;
+                bullet.isAliveAfterDealingDamage = false;
+                bullet.bullet = new PushingBullet(0, 0, 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null);
+                bullet.bullet.damage = damage * holderCharacter.modificator_Damage;
+                bullet.speed = speed * holderCharacter.modificator_SpeedOfSkills;
+                bullet.sizeOfSprite = 1f;
+                bullet.bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                bullet.bullet.delayBtwDealingDamage = 0.1f;
+                bullet.SetCustomAngle((float)(r.nextFloat() * 6.28f - 3.14f));
+                bullet.SetSprite("res\\Bullets\\AtomicBomb.png");
+                bullet.SetUpCollision();
+                bullet.bullet.delayBeforeStart = 40f;
+                bullet.bullet.isAliveAfterDealingDamage = true;
+                bullet.bullet.showBeforeStart = false;
+                bullet.bullet.canDamagePlayer = false;
+                bullet.bullet.SetSprite("res\\Effects\\pudge bombing effect.png");
+                bullet.bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                bullet.bullet.SetUpCollision();
+            }
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                amountBullets++;
+                break;
+            case 2:
+                sizeOfBullets += 0.4f;
+                break;
+            case 3:
+                delayBtwCast -= 0.3f;
+                break;
+            case 4:
+                lifeTime += 0.5f;
+                break;
+            case 5:
+                damage += 0.25f;
+                break;
+            case 6:
+                speed += 0.7f;
+                break;
+            case 7:
+                amountOfCast += 1f;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+1 amount of bullet";
+                if(amountBullets >= 15){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "+20% area of skill";
+                if(sizeOfBullets >= 8f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "-10% delayBtwCast";
+                if(delayBtwCast <= 0.1f){
+                    return false;
+                }
+                break;
+            case 4:
+                nameOfChoosingParameter = "+0.5 sec duration of skill";
+                if(lifeTime >= 6f){
+                    return false;
+                }
+                break;
+            case 5:
+                nameOfChoosingParameter = "+25% damage of skill";
+                if(damage >= 10f){
+                    return false;
+                }
+                break;
+            case 6:
+                nameOfChoosingParameter = "+10 speed of skill";
+                if(speed >= 14f){
+                    return false;
+                }
+                break;
+            case 7:
+                nameOfChoosingParameter = "+1 amount of cast of skill";
+                if(amountOfCast >= 8){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
 
 class SplashOfFire extends Skill{
     public int amountBullets = 14;
@@ -239,7 +373,8 @@ class SplashOfFire extends Skill{
             }
             
             for(int i = 0; i < amountBullets; i++){
-                PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null, 10f);
+                PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null);
+                bullet.pushingVelocity = 10f;
                 bullet.canDamagePlayer = false;
                 bullet.canDamageEnemy = true;
                 bullet.damage = damage * holderCharacter.modificator_Damage;
@@ -353,7 +488,8 @@ class BlueCross extends Skill{
                 counterForSkillCast = 0;
             }
             for(int i = 0; i < amountBullets; i++){
-                PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets *2  * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets *2 * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null, -20f);
+                PushingBullet bullet = new PushingBullet((int)(holderCharacter.locX - 8 * sizeOfBullets *2  * holderCharacter.modificator_AreaOfSkills),(int)(holderCharacter.locY - 8 * sizeOfBullets *2 * holderCharacter.modificator_AreaOfSkills), 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null);
+                bullet.pushingVelocity = -20f;
                 bullet.canDamagePlayer = false;
                 bullet.canDamageEnemy = true;
                 bullet.damage = damage * holderCharacter.modificator_Damage;

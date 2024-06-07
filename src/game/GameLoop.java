@@ -177,6 +177,7 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new UpgrateSkill_HPregen(player));
 		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player));
 		listOfAllSkills.add(new UpgrateSkill_HPpoints(player));
+		listOfAllSkills.add(new AtomicPudge(null, player));
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
 		for(Skill skill : listOfAllSkills){

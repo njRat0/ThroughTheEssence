@@ -194,7 +194,8 @@ class FireLizard extends Enemy{
     }
 
     void SetUpOfBullet() {
-        PushingBullet bullet = new PushingBullet(locX,locY,player.locX,player.locY,4f, player, 15f);
+        PushingBullet bullet = new PushingBullet(locX,locY,player.locX,player.locY,4f, player);
+        bullet.pushingVelocity = 15f;
         bullet.speed = 5f;
         bullet.canDamagePlayer = true;
         bullet.SetSprite("res\\Bullets\\Fireball1.png");
