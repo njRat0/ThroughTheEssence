@@ -591,7 +591,7 @@ class BasicGun extends Skill{
     public float sizeOfBullets = 1f;
     private float delayBtwCast = 0.5f;
     public float lifeTime = 2f;
-    public float damage = 2f;
+    public float damage = 4f;
     public float speed  = 14f;
     private int counter = 0;
     //private float dispersion = 0.14f;
@@ -664,7 +664,7 @@ class BasicGun extends Skill{
                 lifeTime += 0.5f;
                 break;
             case 5:
-                damage += 1f;
+                damage += 2f;
                 break;
             case 6:
                 speed += 1.4f;

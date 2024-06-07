@@ -150,7 +150,7 @@ public abstract class Enemy extends Character {
 
 class TestMob extends Enemy{
     public TestMob(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/Icon2.png");
         super.damage = 2f;
         super.moveSpeed = 6f;
@@ -182,7 +182,7 @@ class TestMob extends Enemy{
 
 class FireLizard extends Enemy{
     public FireLizard(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/Icon28.png");
         super.maxHP = 30f;
         super.curHP = 30f;
@@ -207,7 +207,7 @@ class FireLizard extends Enemy{
 }
 class GojoSatoru extends Enemy{
     public GojoSatoru(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/524a84a508a5a16.png");
         super.maxHP = 100f;
         super.curHP = 100f;
@@ -231,7 +231,7 @@ class GojoSatoru extends Enemy{
 
 class GoblinWizard extends Enemy{
     public GoblinWizard(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res\\Characters\\GoblinWizard.png");
         super.maxHP = 50f;
         super.curHP = 50f;
@@ -249,6 +249,7 @@ class GoblinWizard extends Enemy{
         bullet.speed = 16f;
         bullet.SetSprite("res\\Effects\\FireEffect.png");
         bullet.sizeOfSprite = 1f;
+        bullet.delayBtwDealingDamage = 0.1f;
         bullet.canDamageEnemy = false;
         bullet.SetUpCollision();
 
@@ -264,7 +265,7 @@ class GoblinWizard extends Enemy{
 
 class Slime_lvl1 extends Enemy{
     public Slime_lvl1(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/Icon9.png");
         super.damage = 1f;
         super.moveSpeed = 2f;
@@ -284,7 +285,7 @@ class Slime_lvl1 extends Enemy{
 
 class Slime_lvl2 extends Enemy{
     public Slime_lvl2(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/Icon20.png");
         super.damage = 3f;
         super.moveSpeed = 2f;
@@ -304,7 +305,7 @@ class Slime_lvl2 extends Enemy{
 
 class Slime_lvl3 extends Enemy{
     public Slime_lvl3(Player player, int locX, int locY) {
-        super(player, locX, locX);
+        super(player, locX, locY);
         SetSprite("res/Characters/Icon20.png");
         super.sizeOfSprite = 2f;
         super.damage = 10f;

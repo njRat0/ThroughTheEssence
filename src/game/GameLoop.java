@@ -187,24 +187,44 @@ public class GameLoop implements Runnable {
 		if(timer % (5*30) == 0){
 			int levelOfDificulty = timer / (30*30) + 1;
 
-			for(int i = 0; i < levelOfDificulty * 5;){
+			for(int i = 0; i < levelOfDificulty * 5 - levelOfDificulty;){
 				int choosedEnemy = r.nextInt(levelOfDificulty)+1;
 				i+= choosedEnemy;
+				int posX = 0;
+				int posY = 0;
+				if(r.nextInt(2) == 1){
+					if(r.nextInt(2) == 1){
+						posY = GameFrame.gameHeight;
+					}
+					else{
+						posY = 0;
+					}
+					posX = r.nextInt(GameFrame.gameWidth + 1);
+				}
+				else{
+					if(r.nextInt(2) == 1){
+						posX = GameFrame.gameWidth;
+					}
+					else{
+						posX = 0;
+					}
+					posY = r.nextInt(GameFrame.gameHeight + 1);
+				}
 				switch (choosedEnemy) {
 					case 1:
-						listOfEnemies.add(new Slime_lvl1(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
-						listOfEnemies.add(new Slime_lvl2(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new Slime_lvl2(player, posX, posY));
 						break;
 					case 3:
-						listOfEnemies.add(new FireLizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new FireLizard(player, posX, posY));
 						break;
 					case 4:
-						listOfEnemies.add(new Slime_lvl3(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new Slime_lvl3(player, posX, posY));
 						break;
 					case 5:
-						listOfEnemies.add(new GoblinWizard(player, r.nextInt(GameFrame.gameWidth), r.nextInt(GameFrame.gameHeight)));
+						listOfEnemies.add(new GoblinWizard(player, posX, posY));
 						break;
 					default:
 						break;
