@@ -58,7 +58,7 @@ public class GameLoop implements Runnable {
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
 			MyButton button = new MyButton(player);
 			button.SetSize(98, 100);
-			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*100, GameFrame.gameCenterY - 50);
+			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*150, GameFrame.gameCenterY - 50);
 			button.id = i;
 			//int num = 0;
 			int num = r.nextInt(probabilityOfAllSkills);
@@ -112,7 +112,9 @@ public class GameLoop implements Runnable {
 				player.curWeapon = skill;
 			}
 			else{
-				player.skills.add(skill);
+				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
+				skill.chanceOfDrop = 50;
+				player.skills.add(skill);		
 			}
 		}
 		for(Skill skill1 : choosingSkillsOnButtons){

@@ -309,7 +309,7 @@ class Slime_lvl3 extends Enemy{
         SetSprite("res/Characters/Icon20.png");
         super.sizeOfSprite = 2f;
         super.damage = 10f;
-        super.moveSpeed = 1f;
+        super.moveSpeed = 2f;
         super.maxHP = 100f;
         super.curHP = 100f;
         //super.isRangeAttack = true;
