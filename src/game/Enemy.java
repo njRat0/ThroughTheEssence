@@ -34,6 +34,8 @@ public abstract class Enemy extends Character {
     public boolean isDead = false;
     public boolean hasOwnTimerSystem = true;
 
+    public boolean isStayAfterAttack = false;
+
     public int lootType = 1;
 
     public Enemy(Player player, int locX, int locY){
@@ -49,7 +51,7 @@ public abstract class Enemy extends Character {
         if(isDead == false){
             g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
 		    g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
-		    g2d.fillRect(locX + (int)((32-(int)(28 * curHP / maxHP)) / 2), locY + 32, (int)(28 * curHP / maxHP), 4);
+		    g2d.fillRect(locX + (int)((32 * sizeOfSprite - (int)((32 * sizeOfSprite - 4 * sizeOfSprite) * curHP / maxHP)) / 2), (int)(locY + 32 * sizeOfSprite), (int)((32 * sizeOfSprite - 4 * sizeOfSprite)* curHP / maxHP), 4);
         } 	
     }
 
@@ -67,21 +69,36 @@ public abstract class Enemy extends Character {
 
     abstract void SetUpOfBullet();
 
+    private float deltaX , deltaY;
+    public double angle;
     public void update(){
         if(isDead == false){
+            timerCountMeleeAttack++;
+            if(isStayAfterAttack == true){
+                if(timerCountMeleeAttack >= delayBtwMeleeAttacks*Settings.maxFps){
+                    float deltaX = player.locX - locX;
+                    float deltaY = player.locY - locY;
+                    double angle = Math.atan2( deltaY, deltaX );
+                    locX += moveSpeed * Math.cos( angle );
+                    locY += moveSpeed * Math.sin( angle );
+                }
+            }
+            else{
+                float deltaX = player.locX - locX;
+                float deltaY = player.locY - locY;
+                double angle = Math.atan2( deltaY, deltaX );
+                locX += moveSpeed * Math.cos( angle );
+                locY += moveSpeed * Math.sin( angle );
+            }
+
             
-            float deltaX = player.locX - locX;
-            float deltaY = player.locY - locY;
-            double angle = Math.atan2( deltaY, deltaX );
-            locX += moveSpeed * Math.cos( angle );
-            locY += moveSpeed * Math.sin( angle );
             timerCountForCheckingCollision++;
             //curHP -= 0.02f;
 
             collision.x = locX;
             collision.y = locY;
 
-            timerCountMeleeAttack++;
+            
             if(collision.intersects(player.collision) && timerCountMeleeAttack >= delayBtwMeleeAttacks*Settings.maxFps){
                 timerCountMeleeAttack=0;
                 player.TakeDamage(damage);
@@ -252,12 +269,14 @@ class GoblinWizard extends Enemy{
         bullet.sizeOfSprite = 1f;
         bullet.delayBtwDealingDamage = 0.1f;
         bullet.canDamageEnemy = false;
+        bullet.damage = 2f;
         bullet.SetUpCollision();
 
         Bullet bullet1 = new StandartBullet(locX,locY,player.locX,player.locY,2f, player);
         bullet1.speed = 14f;
         bullet1.SetSprite("res\\Effects\\FireEffect.png");
         bullet1.sizeOfSprite = 1f;
+        bullet.damage = 2f;
         bullet1.canDamageEnemy = false;
         bullet1.SetUpCollision();
     }
@@ -315,6 +334,121 @@ class Slime_lvl3 extends Enemy{
         super.curHP = 100f;
         //super.isRangeAttack = true;
         //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = false;
+        super.lootType = 2;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class Slime_lvl4 extends Enemy{
+    public Slime_lvl4(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon15.png");
+        super.sizeOfSprite = 2f;
+        super.damage = 20f;
+        super.moveSpeed = 2f;
+        super.maxHP = 300f;
+        super.curHP = 300f;
+        //super.isRangeAttack = true;
+        super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        StandartBullet bullet = new StandartBullet(locX, locY, player.locX, player.locY, 5, player);
+        bullet.speed = 3f;
+        bullet.damage = damage;
+        bullet.delayBtwDealingDamage = 1f;
+        bullet.canDamageEnemy = false;
+        bullet.canDamagePlayer = true;
+        bullet.SetSprite("res\\Bullets\\BasicGun_bullet.png");
+        bullet.sizeOfSprite = 4f;
+        bullet.SetUpCollision();
+    }
+    
+}
+
+class Lugart extends Enemy{
+    public Lugart(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon11.png");
+        //super.sizeOfSprite = 1f;
+        super.damage = 5f;
+        super.moveSpeed = 3f;
+        super.maxHP = 150f;
+        super.curHP = 150f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 2;
+        super.delayBtwRangeAttacks = 6f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        LugartBullet bullet = new LugartBullet(locX, locY, player.locX, player.locY, 3f, player);
+        //bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
+        bullet.sizeOfSprite = 3f;
+        bullet.SetSprite("res\\Bullets\\LugartBullet.png");
+        bullet.speed = 4f;
+        bullet.damage = 4;
+        bullet.canDamagePlayer = true;
+        bullet.canDamageEnemy = false;
+        //bullet.delayBeforeStart = 0f;
+        bullet.delayBtwDealingDamage = 0.05f;
+        bullet.isAliveAfterDealingDamage = true;
+        bullet.SetUpCollision();
+
+        bullet.bullet = new LugartBullet(-5000, -5000, player.locX, player.locY,5f, player);
+        bullet.bullet.delayBtwDealingDamage = 0.05f;
+        bullet.bullet.sizeOfSprite = 2f;
+        bullet.bullet.SetSprite("res\\Bullets\\LugartBullet.png");
+        bullet.bullet.speed = 8;
+        bullet.bullet.damage = 4;
+        bullet.bullet.canDamagePlayer = true;
+        bullet.bullet.canDamageEnemy = false;
+        bullet.bullet.showBeforeStart = false;
+        bullet.bullet.isAliveAfterDealingDamage = true;
+        bullet.bullet.SetUpCollision(); 
+
+        bullet.bullet.bullet = new LugartBullet(-5000, -5000, player.locX, player.locY,6f, player);
+        bullet.bullet.bullet.delayBtwDealingDamage = 0.05f;
+        bullet.bullet.bullet.sizeOfSprite = 1f;
+        bullet.bullet.bullet.SetSprite("res\\Bullets\\LugartBullet.png");
+        bullet.bullet.bullet.speed = 16;
+        bullet.bullet.bullet.damage = 4;
+        bullet.bullet.bullet.canDamagePlayer = true;
+        bullet.bullet.bullet.canDamageEnemy = false;
+        bullet.bullet.bullet.showBeforeStart = false;
+        bullet.bullet.bullet.isAliveAfterDealingDamage = true;
+        bullet.bullet.bullet.SetUpCollision();  
+    }
+    
+}
+
+class Kaban extends Enemy{
+    public Kaban(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon7.png");
+        super.sizeOfSprite = 1f;
+        super.damage = 8f;
+        super.moveSpeed = 8f;
+        super.maxHP = 100f;
+        super.curHP = 100f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.delayBtwMeleeAttacks = 3f;
+        super.isStayAfterAttack = true;
         super.isRangeAttack = false;
         super.lootType = 2;
         

@@ -37,7 +37,7 @@ public class Player extends Character{
 
 	public float curHP = 100;
 	public float maxHP = 100;
-	public float hpRegen = 0.05f;
+	public float hpRegen = 0.1f;
 
 	public int level = 1;
 	public int curEXP = 0;

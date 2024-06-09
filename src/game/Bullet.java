@@ -12,9 +12,10 @@ import javax.imageio.ImageIO;
 
 public abstract class Bullet {
     public BufferedImage sprite;
+    public Bullet bullet;
     public float locX, locY;
     // private double velocityX; private double velocityY;
-    public float damage = 5f;
+    public float damage = 1f;
     public float speed;
     public float sizeOfSprite = 1f;
     public float lifeTime = 3f;
@@ -29,6 +30,8 @@ public abstract class Bullet {
     public boolean isAliveAfterDealingDamage = true;
 
     public boolean isRotatable = false;
+    public boolean isRotatingBullet = false;
+    public float addAnglePerTick = 0.04f;
 
     public Player player;
 
@@ -43,11 +46,15 @@ public abstract class Bullet {
 
     public Timer timer = new Timer();
 
+    public int pointX, pointY;
+
     public Bullet(int locX,int locY,int pointX, int pointY, float lifeTime , Player player){
         this.lifeTime = lifeTime;
-        this.locX = locX + 16;
-        this.locY = locY + 16;
+        this.locX = locX;
+        this.locY = locY;
         this.player = player;
+        this.pointX = pointX;
+        this.pointY = pointY;
         
         float deltaX = pointX - locX;
         float deltaY = pointY - locY;
@@ -60,8 +67,9 @@ public abstract class Bullet {
 
             @Override
             public void run() {
-                try{
+                try{                    
                     isEnd = true;
+                    update();
                 }
                 catch(ArrayIndexOutOfBoundsException e){
                     e.getStackTrace();
@@ -100,6 +108,8 @@ public abstract class Bullet {
     public void SetSprite(String source){
         try {
 			sprite = ImageIO.read(new File(source));
+            locX -= sprite.getWidth() * sizeOfSprite / 4;
+            locY -= sprite.getHeight() * sizeOfSprite / 4;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -114,7 +124,13 @@ class StandartBullet extends Bullet{
 
     @Override
     public void update() {
-        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(isRotatingBullet){
+                angle+= addAnglePerTick;
+                if(angle >= 3.14f){
+                    angle -= 6.28f;
+                }
+            }
             locX += speed * Math.cos( angle );
             locY += speed * Math.sin( angle );
             collision.x = (int)locX;
@@ -159,7 +175,14 @@ class PushingBullet extends Bullet{
 
     @Override
     public void update() {
-        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(super.isRotatingBullet){
+                angle+= addAnglePerTick;
+                if(angle >= 3.14f){
+                    angle -= 6.28f;
+                }
+            }
+
             locX += speed * Math.cos( angle );
             locY += speed * Math.sin( angle );
             collision.x = (int)locX;
@@ -206,15 +229,23 @@ class PushingBullet extends Bullet{
 }
 
 class CastingBullet extends Bullet{
-    public Bullet bullet;
-
     public CastingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
         super(locX, locY, pointX, pointY, lifeTime, player);
     }
 
     @Override
     public void update() {
-        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps)){
+        if(isEnd){
+            CastBullet();
+        }
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(super.isRotatingBullet){
+                angle+= addAnglePerTick;
+                if(angle >= 3.14f){
+                    angle -= 6.28f;
+                }
+            }
+
             locX += speed * Math.cos( angle );
             locY += speed * Math.sin( angle );
             collision.x = (int)locX;
@@ -252,8 +283,74 @@ class CastingBullet extends Bullet{
     } 
 
     public void CastBullet(){
+        bullet.locX = locX - bullet.sprite.getWidth() * bullet.sizeOfSprite / 2;
+        bullet.locY = locY - bullet.sprite.getHeight() * bullet.sizeOfSprite / 2;
+        float deltaX = bullet.pointX - locX;
+        float deltaY = bullet.pointY - locY;
+        bullet.angle = Math.atan2( deltaY, deltaX );
         bullet.delayBeforeStart = 0;
-        bullet.locX = locX;
-        bullet.locY = locY;
     }
 }    
+
+class LugartBullet extends Bullet{
+    public LugartBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
+        super(locX, locY, pointX, pointY, lifeTime, player);
+    }
+
+    @Override
+    public void update() {
+        if(isEnd){
+            CastBullet();
+        }
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(super.isRotatingBullet){
+                angle+= addAnglePerTick;
+                if(angle >= 3.14f){
+                    angle -= 6.28f;
+                }
+            }
+            locX += speed * Math.cos( angle );
+            locY += speed * Math.sin( angle );
+            collision.x = (int)locX;
+            collision.y = (int)locY;
+            
+            if(counterBtwDealingDamage >= (int)(delayBtwDealingDamage * Settings.maxFps)){
+                counterBtwDealingDamage = 0;
+                if(canDamageEnemy){
+                    for(Enemy enemy : GameLoop.listOfEnemies){
+                        if(collision.intersects(enemy.collision)){
+                            enemy.TakeDamage(damage);
+                            if(isAliveAfterDealingDamage == false){
+                                isEnd = true;
+                                CastBullet();
+                            }
+                            //break;
+                        }
+                    }
+                }
+                if(canDamagePlayer && collision.intersects(player.collision)){
+                    player.TakeDamage(damage);
+                    if(super.isAliveAfterDealingDamage == false){
+                        isEnd = true;
+                        CastBullet();
+                    }
+                }
+            }
+            else{
+                counterBtwDealingDamage++;
+            }
+        }
+        else{
+            counterBeforeStart++;
+        }
+    } 
+
+    public void CastBullet(){
+        bullet.locX = locX - bullet.sprite.getWidth() * bullet.sizeOfSprite / 2;
+        bullet.locY = locY - bullet.sprite.getHeight() * bullet.sizeOfSprite / 2;
+        float deltaX = player.locX - locX;
+        float deltaY = player.locY - locY;
+        bullet.angle = Math.atan2( deltaY, deltaX );
+        bullet.delayBeforeStart = 0;
+    }
+}

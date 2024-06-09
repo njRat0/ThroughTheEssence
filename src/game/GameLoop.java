@@ -49,6 +49,11 @@ public class GameLoop implements Runnable {
 	
 	public static void ChoosingSkills(){
 		isPause = true;
+		probabilityOfAllSkills = 0;
+		for(Skill skill : listOfAllSkills){
+			probabilityOfAllSkills += skill.chanceOfDrop;
+		}
+		System.out.println("probability: "+probabilityOfAllSkills);
 		SetUp_ChooseSkillButtons();
 	}
 	public static void SetUp_ChooseSkillButtons(){
@@ -64,6 +69,7 @@ public class GameLoop implements Runnable {
 			int num = r.nextInt(probabilityOfAllSkills);
 			for(Skill skill : listOfAllSkills){
 				num -= skill.chanceOfDrop;
+				System.out.println(num);
 				if(num <= 0){
 					choosingSkillsOnButtons.add(skill);
 					skill.numberOfChoosedUpgrade.add(0);
@@ -100,19 +106,20 @@ public class GameLoop implements Runnable {
 		Skill skill = choosingSkillsOnButtons.get(id);
 		if(skill.chanceOfDrop == 50){
 			skill.UpgrateSkill(skill.numberOfChoosedUpgrade.get(id));
+			skill.levelOfSkill += 1;
 		}
 		else{
 			if(skill.type == TypeOfSkill.weapon){
-				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
 				skill.chanceOfDrop = 50;
 				if(player.curWeapon  != null){
-					probabilityOfAllSkills = probabilityOfAllSkills - 50 + 15; //<----need fix
 					player.curWeapon.chanceOfDrop = 15;
+					for(int i = 0; i < player.curWeapon.levelOfSkill; i++){
+						skill.UpgrateSkill(r.nextInt(skill.levelOfSkill)  + 1);
+					}
 				}
 				player.curWeapon = skill;
 			}
 			else{
-				probabilityOfAllSkills = probabilityOfAllSkills - skill.chanceOfDrop + 50;
 				skill.chanceOfDrop = 50;
 				player.skills.add(skill);		
 			}
@@ -160,9 +167,7 @@ public class GameLoop implements Runnable {
 		
 		SetUp_listOfSkills();
 
-		probabilityOfAllSkills =  probabilityOfAllSkills - listOfAllSkills.get(0).chanceOfDrop + 50;
 		listOfAllSkills.get(0).chanceOfDrop = 50;
-		//player.skills.add(listOfAllSkills.get(0));
 		player.curWeapon = listOfAllSkills.get(0);
 		
 		//ChoosingSkills(); 
@@ -171,6 +176,7 @@ public class GameLoop implements Runnable {
 	public void SetUp_listOfSkills(){
 		listOfAllSkills.add(new BasicGun(player));
 		listOfAllSkills.add(new FireGun(player));
+		listOfAllSkills.add(new IonRed_Gun(player));
 		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
 		listOfAllSkills.add(new UpgrateSkill_damage(player));
 		listOfAllSkills.add(new UpgrateSkill_Speed(player));
@@ -180,9 +186,7 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new AtomicPudge(null, player));
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
-		for(Skill skill : listOfAllSkills){
-			probabilityOfAllSkills += skill.chanceOfDrop;
-		}
+		listOfAllSkills.add(new RotatingDiscs(null, player));
 	}
 
 	private int timer = 0;
@@ -215,6 +219,7 @@ public class GameLoop implements Runnable {
 				}
 				switch (choosedEnemy) {
 					case 1:
+						//listOfEnemies.add(new Lugart(player, posX, posY));
 						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
@@ -228,6 +233,15 @@ public class GameLoop implements Runnable {
 						break;
 					case 5:
 						listOfEnemies.add(new GoblinWizard(player, posX, posY));
+						break;
+					case 6:
+						listOfEnemies.add(new Kaban(player, posX, posY));
+						break;
+					case 7:
+						listOfEnemies.add(new Lugart(player, posX, posY));
+						break;
+					case 8:
+						listOfEnemies.add(new Slime_lvl4(player, posX, posY));
 						break;
 					default:
 						break;
