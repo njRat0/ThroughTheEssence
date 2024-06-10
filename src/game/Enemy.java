@@ -577,7 +577,7 @@ class Spider_Boss extends Enemy{
 
         bullet.bullet = new SpiderWeb(-5000, -5000, player.locX, player.locY,12f, player);
         bullet.bullet.delayBtwDealingDamage = 0.05f;
-        bullet.bullet.sizeOfSprite = 5f;
+        bullet.bullet.sizeOfSprite = 6f;
         bullet.bullet.SetSprite("res\\Bullets\\Web.png");
         //bullet.bullet.speed = 8;
         bullet.bullet.damage = 0;
@@ -587,12 +587,9 @@ class Spider_Boss extends Enemy{
         bullet.bullet.isAliveAfterDealingDamage = true;
         bullet.bullet.SetUpCollision(); 
 
-        SpiderEgg egg1 = new SpiderEgg(player, locX, locY + 30);
+        SpiderEgg egg1 = new SpiderEgg(player, locX, locY);
         egg1.newSpiderHp = curHP / 2;
         GameLoop.listOfEnemies.add(egg1);
-        SpiderEgg egg2 = new SpiderEgg(player, locX, locY - 30);
-        egg2.newSpiderHp = curHP / 2;
-        GameLoop.listOfEnemies.add(egg2);
     }
     
 }
@@ -605,8 +602,8 @@ class SpiderEgg extends Enemy{
         super.sizeOfSprite = 1.5f;
         super.damage = 0;
         super.moveSpeed = 0;
-        super.maxHP = 500f;
-        super.curHP = 500f;
+        super.maxHP = 600f;
+        super.curHP = 600f;
         super.canBePushed = false;
         //super.isRangeAttack = true;
         //super.hasOwnTimerSystem = true;

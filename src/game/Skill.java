@@ -748,6 +748,92 @@ class RotatingDiscs extends Skill{
     }
 }
 
+class SwordSwing extends Skill{
+    public float sizeOfBullets = 3f;
+    private float delayBtwCast = 2f;
+    public float damage = 5f;
+    private int counter = 0;
+    public boolean canDamagePlayer = false;
+    public boolean canDamageEnemy = false;
+
+    private int counterForSkillCast = 0;
+
+    private Player player;
+
+    public SwordSwing (Character focusCharacter, Player holderCharacter) {
+        super(focusCharacter, holderCharacter, TypeOfSkill.active);
+        player = holderCharacter;
+        name = "SwordSwing";
+        chanceOfDrop = 500;
+        numberOfUpgradePoints = 3;
+    }
+
+    @Override
+    public void update() {
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            counter = 0;
+            StandartBullet bullet = new StandartBullet(holderCharacter.locX, holderCharacter.locY,0,0,1,player);
+            bullet.isRotatable = true;
+            bullet.isRotatingBullet = true;
+            bullet.addAnglePerTick = 0.21f;
+            bullet.SetCustomAngle(0f);
+            bullet.speed = 0;
+            bullet.damage = damage * holderCharacter.modificator_Damage * (holderCharacter.modificator_amountsOfCastSkill  + 1);
+            //bullet.delayBtwDealingDamage = 0.2f;
+            bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+            bullet.isAliveAfterDealingDamage = true;
+            bullet.canDamageEnemy = true;
+            bullet.canDamagePlayer = false;
+            bullet.SetSprite("res\\Other\\Sword.png");
+            bullet.SetUpCollision();
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                sizeOfBullets += 0.6f;
+                break;
+            case 2:
+                delayBtwCast -= 0.2f;
+                break;
+            case 3:
+                damage += 2.5f;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+20% area of skill";
+                if(sizeOfBullets >= 8f){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "-10% delayBtwCast";
+                if(delayBtwCast <= 0.2f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "+25% damage of skill";
+                if(damage >= 20f){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
+
+//weapon
 class FireGun extends Skill{
     public int amountBullets = 3;
     public float sizeOfBullets = 1f;

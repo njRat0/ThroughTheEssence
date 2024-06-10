@@ -92,7 +92,7 @@ public class Player extends Character{
 	 */
 	public void update() {
 		if(isSlowed == true){
-			changingSpeed = 0.6f;
+			changingSpeed = 0.5f;
 			counterForSlowing++;
 		}
 		if(counterForSlowing >= 30){
