@@ -13,6 +13,9 @@ public abstract class Character{
     public int locX, locY;
 	public BufferedImage sprite;
 	public float sizeOfSprite = 1f;
+    public float vampiric = 0;
+    public float changingSpeed = 1f;
+    public boolean canBePushed = true;
 
     public abstract void toDraw(Graphics2D g2d);
     public abstract void update();

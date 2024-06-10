@@ -44,10 +44,13 @@ public class Player extends Character{
 	public int expForLevelUp = 5;
 	public boolean isLevelingUpping = false;
 	//private int remainingEXP = 0;
+	public boolean isSlowed = false;
+	public int counterForSlowing = 0;
 
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public Player() {
+		super.modificator_Damage = 0.9f;
 		locX = 500;
 		locY = 500;
 		isDead = false;
@@ -88,6 +91,15 @@ public class Player extends Character{
 	 * The method which updates the game state.
 	 */
 	public void update() {
+		if(isSlowed == true){
+			changingSpeed = 0.6f;
+			counterForSlowing++;
+		}
+		if(counterForSlowing >= 30){
+			changingSpeed = 1f;
+			counterForSlowing = 0;
+			isSlowed = false;
+		}
 		if( isLevelingUpping == false && curEXP >= expForLevelUp){
 			LevelUp();
 		}
@@ -117,14 +129,15 @@ public class Player extends Character{
 
 		// 	bullet.SetUpCollision();
 		// }
+		System.out.println(changingSpeed);
 		if (keyUP)
-			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
+			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING  * changingSpeed: moveSpeed* changingSpeed;
 		if (keyDOWN)
-			locY += (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
+			locY += (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING * changingSpeed: moveSpeed* changingSpeed;
 		if (keyLEFT)
-			locX -= (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
+			locX -= (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING * changingSpeed: moveSpeed* changingSpeed;
 		if (keyRIGHT)
-			locX += (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING : moveSpeed;
+			locX += (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING * changingSpeed: moveSpeed* changingSpeed;
 
 		locX = Math.max(locX, 0);
 		locX = Math.min(locX, GameFrame.gameWidth);
@@ -150,6 +163,13 @@ public class Player extends Character{
 		curHP -= amount;
 		if(curHP <= 0){
 			isDead = true;
+		}
+	}
+
+	public void TakeHeale(float amount){
+		curHP += amount;
+		if(curHP > maxHP){
+			curHP = maxHP;
 		}
 	}
 

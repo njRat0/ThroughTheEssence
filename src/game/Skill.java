@@ -45,7 +45,7 @@ class UpgrateSkill_damage extends Skill{
 
     public  UpgrateSkill_damage(Player player) {
         super(null, player, TypeOfSkill.passive);
-        name = "+damage";
+        name = "+10% damage";
         chanceOfDrop = 15;
         numberOfUpgradePoints = 0;
         this.player = player;
@@ -53,7 +53,7 @@ class UpgrateSkill_damage extends Skill{
 
     @Override
     public void update() {
-        player.modificator_Damage += 0.15f;
+        player.modificator_Damage += 0.09f;
         chanceOfDrop = 15;
     }
 
@@ -83,7 +83,7 @@ class UpgrateSkill_amountOfCasts extends Skill{
     @Override
     public void update() {
         player.modificator_amountsOfCastSkill += 1;
-        chanceOfDrop = 15;
+        chanceOfDrop = 5;
     }
 
     @Override
@@ -103,7 +103,7 @@ class UpgrateSkill_HPpoints extends Skill{
 
     public  UpgrateSkill_HPpoints(Player player) {
         super(null, player, TypeOfSkill.passive);
-        name = "+20% max hp";
+        name = "+50% max hp";
         numberOfUpgradePoints = 0;
         //chanceOfDrop = 15;
         this.player = player;
@@ -111,8 +111,8 @@ class UpgrateSkill_HPpoints extends Skill{
 
     @Override
     public void update() {
-        player.maxHP += 20;
-        player.curHP += 10;
+        player.maxHP += 50;
+        player.curHP += 25;
         chanceOfDrop = 15;
     }
 
@@ -133,7 +133,7 @@ class UpgrateSkill_Speed extends Skill{
 
     public  UpgrateSkill_Speed(Player player) {
         super(null, player, TypeOfSkill.passive);
-        name = "+10% of max movement speed";
+        name = "+10% movement speed";
         numberOfUpgradePoints = 0;
         //chanceOfDrop = 15;
         this.player = player;
@@ -193,13 +193,42 @@ class UpgrateSkill_ReduceCDofSkills extends Skill{
         super(null, player, TypeOfSkill.passive);
         name = "-10% skill cooldown";
         numberOfUpgradePoints = 0;
-        chanceOfDrop = 5;
+        chanceOfDrop = 15;
         this.player = player;
     }
 
     @Override
     public void update() {
-        player.modificator_CoolDownOfSkills -= 0.1;
+        player.modificator_CoolDownOfSkills -= 0.1f;
+        chanceOfDrop = 15;
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetPointsOfUpgrateSkill'");
+    }
+}
+
+class UpgrateSkill_IncreaseVampiric extends Skill{
+    private Player player;
+
+    public UpgrateSkill_IncreaseVampiric(Player player) {
+        super(null, player, TypeOfSkill.passive);
+        name = "+5% vampirism";
+        numberOfUpgradePoints = 0;
+        chanceOfDrop = 15;
+        this.player = player;
+    }
+
+    @Override
+    public void update() {
+        player.vampiric+=0.05f;
         chanceOfDrop = 15;
     }
 
@@ -346,10 +375,13 @@ class SplashOfFire extends Skill{
     private int amountOfCast = 1;
     private int counterForSkillCast = 0;
 
-    public SplashOfFire(Character focusCharacter, Character holderCharacter) {
-        super(focusCharacter, holderCharacter, TypeOfSkill.active);
+    public Player player;
+
+    public SplashOfFire(Player player, Character holderCharacter) {
+        super(null, holderCharacter, TypeOfSkill.active);
         name = "SplashOfFire";
         chanceOfDrop = 15;
+        this.player = player;
         numberOfUpgradePoints = 6;
     }
 
@@ -363,10 +395,10 @@ class SplashOfFire extends Skill{
             }
             
             for(int i = 0; i < amountBullets; i++){
-                PushingBullet bullet = new PushingBullet(holderCharacter.locX + 12,holderCharacter.locY +  12, 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, null);
+                PushingBullet bullet = new PushingBullet(holderCharacter.locX + 12,holderCharacter.locY +  12, 0, 0, lifeTime * holderCharacter.modificator_LifeTimeOfSkills, player);
                 bullet.pushingVelocity = 10f;
-                bullet.canDamagePlayer = false;
-                bullet.canDamageEnemy = true;
+                bullet.canDamagePlayer = canDamagePlayer;
+                bullet.canDamageEnemy = canDamageEnemy;
                 bullet.damage = damage * holderCharacter.modificator_Damage;
                 bullet.speed = speed * holderCharacter.modificator_SpeedOfSkills;
                 bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
@@ -593,7 +625,7 @@ class RotatingDiscs extends Skill{
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         player = holderCharacter;
         name = "RotatingDiscks";
-        chanceOfDrop = 500;
+        chanceOfDrop = 15;
         numberOfUpgradePoints = 7;
     }
 
@@ -616,7 +648,7 @@ class RotatingDiscs extends Skill{
                 bullet.damage = damage * holderCharacter.modificator_Damage;
                 bullet.canDamagePlayer = false;
                 bullet.canDamageEnemy = true;
-                bullet.delayBtwDealingDamage = 0.05f;
+                bullet.delayBtwDealingDamage = 0.2f;
                 bullet.isAliveAfterDealingDamage = true;
                 bullet.SetUpCollision();
 
@@ -629,6 +661,7 @@ class RotatingDiscs extends Skill{
                 bullet.bullet.canDamagePlayer = false;
                 bullet.bullet.canDamageEnemy = true;
                 bullet.bullet.showBeforeStart = false;
+                bullet.bullet.delayBtwDealingDamage = 0.2f;
                 bullet.bullet.isAliveAfterDealingDamage = true;
                 bullet.bullet.SetUpCollision();  
             }
@@ -998,7 +1031,7 @@ class IonRed_Gun extends Skill{
     public float sizeOfBullets = 0.7f;
     private float delayBtwCast = 0.1f;
     public float lifeTime = 0.5f;
-    public float damage = 0.4f;
+    public float damage = 0.3f;
     public float speed  = 35f;
     private int counter = 0;
     //private float dispersion = 0.14f;
@@ -1081,7 +1114,7 @@ class IonRed_Gun extends Skill{
                 lifeTime += 0.25f;
                 break;
             case 4:
-                damage += 0.2f;
+                damage += 0.15f;
                 break;
             case 5:
                 speed += 3.5f;
@@ -1119,6 +1152,167 @@ class IonRed_Gun extends Skill{
             case 5:
                 nameOfChoosingParameter = "+10 speed of skill";
                 if(speed >= 50f){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
+
+class FiveX_Gun extends Skill{
+    public int amountBullets = 3;
+    public float sizeOfBullets = 1f;
+    private float delayBtwCast = 0.5f;
+    public float lifeTime = 1f;
+    public float damage = 1f;
+    public float speed  = 14f;
+    private int counter = 0;
+    //private float dispersion = 0.14f;
+    //private Random r = new Random();
+
+    private Player player;
+
+    public int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
+    public FiveX_Gun(Player player) {
+        super(null, player, TypeOfSkill.weapon);
+        this.player = player;
+        name = "FiveX_Gun";
+        chanceOfDrop = 15;
+        numberOfUpgradePoints = 7;
+
+        try {
+			sprite = ImageIO.read(new File("res\\GunsAssets\\1px\\5.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        sizeOfSprite = 2f;
+    }
+
+    @Override
+    public void update() {
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            if(player.mousePress){
+                counterForSkillCast++;
+                if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                    counter =0 ;
+                    counterForSkillCast = 0;
+                }
+                StandartBullet bullet = new StandartBullet(player.locX, player.locY, player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
+                bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                bullet.SetSprite("res\\Bullets\\BasicGun_bullet.png");
+                bullet.speed = speed * player.modificator_SpeedOfSkills ;
+                bullet.damage = damage * player.modificator_Damage;
+                bullet.canDamagePlayer = false;
+                bullet.canDamageEnemy = true;
+                bullet.isAliveAfterDealingDamage = false;
+                bullet.SetUpCollision();
+                for(int i = 0; i < amountBullets; i++){
+                    double angle = bullet.angle + 1.57f;
+                    if(angle>3.14){angle-=3.14;}
+                    int moveLocX = (int)( sizeOfBullets * Math.cos( angle ) * i * 10);
+                    int moveLocY = (int)(sizeOfBullets * Math.sin( angle ) * i * 10);
+                    
+                    StandartBullet bullet1 = new StandartBullet(player.locX + moveLocX, player.locY + moveLocY, 0, 0, lifeTime * player.modificator_LifeTimeOfSkills, player);
+                    bullet1.SetCustomAngle((float)bullet.angle);
+                    bullet1.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                    bullet1.SetSprite("res\\Bullets\\BasicGun_bullet.png");
+                    bullet1.speed = speed * player.modificator_SpeedOfSkills;
+                    bullet1.damage = damage * player.modificator_Damage;
+                    bullet1.canDamagePlayer = false;
+                    bullet1.canDamageEnemy = true;
+                    bullet1.isAliveAfterDealingDamage = false;
+                    bullet1.SetUpCollision();
+
+                    StandartBullet bullet2 = new StandartBullet(player.locX - moveLocX, player.locY - moveLocY, 0, 0, lifeTime * player.modificator_LifeTimeOfSkills, player);
+                    bullet2.SetCustomAngle((float)bullet.angle);
+                    bullet2.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                    bullet2.SetSprite("res\\Bullets\\BasicGun_bullet.png");
+                    bullet2.speed = speed * player.modificator_SpeedOfSkills ;
+                    bullet2.damage = damage * player.modificator_Damage;
+                    bullet2.canDamagePlayer = false;
+                    bullet2.canDamageEnemy = true;
+                    bullet2.isAliveAfterDealingDamage = false;
+                    bullet2.SetUpCollision();
+                }
+            }         
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                amountBullets++;
+                break;
+            case 2:
+                sizeOfBullets += 0.2f;
+                break;
+            case 3:
+                delayBtwCast -= 0.05f;
+                break;
+            case 4:
+                lifeTime += 0.5f;
+                break;
+            case 5:
+                damage += 0.5f;
+                break;
+            case 6:
+                speed += 1.4f;
+                break;
+            case 7:
+                amountOfCast += 1f;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+1 amount of bullet";
+                if(amountBullets >= 6){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "+20% area of skill";
+                if(sizeOfBullets >= 5f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "-10% delayBtwCast";
+                if(delayBtwCast <= 0.1f){
+                    return false;
+                }
+                break;
+            case 4:
+                nameOfChoosingParameter = "+0.5 sec duration of skill";
+                if(lifeTime >= 6f){
+                    return false;
+                }
+                break;
+            case 5:
+                nameOfChoosingParameter = "+50% damage of skill";
+                if(damage >= 6f){
+                    return false;
+                }
+                break;
+            case 6:
+                nameOfChoosingParameter = "+10 speed of skill";
+                if(speed >= 10f){
+                    return false;
+                }
+                break;
+            case 7:
+                nameOfChoosingParameter = "+1 amount of cast of skill";
+                if(amountOfCast >= 12){
                     return false;
                 }
                 break;

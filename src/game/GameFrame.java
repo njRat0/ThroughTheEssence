@@ -192,6 +192,12 @@ public class GameFrame extends JFrame {
 			g2d.fillRect(0, gameHeight - 30, gameWidth, 30);
 			g2d.setColor(Color.BLUE);
 			g2d.fillRect(0, gameHeight - 27, (int)((float)(player.curEXP) / player.expForLevelUp  * gameWidth), 16);
+				//timer
+			String strTimer = "Seconds: " + (int)(GameLoop.timer / Settings.maxFps);
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(15f));
+			int strWidthTimer = g2d.getFontMetrics().stringWidth(strTimer);
+			g2d.drawString(strTimer, gameWidth - strWidthTimer - 40, 50);
 			//<<<
 			// Print FPS info
 			long currentRender = System.currentTimeMillis();

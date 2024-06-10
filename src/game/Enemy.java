@@ -10,7 +10,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 enum TypeOfEnemy{
-    GojoSatoru
+    GojoSatoru,
+    Boss
 }
 
 public abstract class Enemy extends Character {
@@ -49,6 +50,14 @@ public abstract class Enemy extends Character {
             isDead = true;
         }
         if(isDead == false){
+            if(this.type == TypeOfEnemy.Boss){
+                try {
+                    BufferedImage crown = ImageIO.read(new File("res\\Other\\Crown.png"));
+                    g2d.drawImage(crown, (int)(locX + 8 *sizeOfSprite),(int)(locY - 8*sizeOfSprite - 4), (int)(sprite.getWidth()*sizeOfSprite / 2),(int)(sprite.getHeight()*sizeOfSprite / 2), null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite),(int)(sprite.getHeight()*sizeOfSprite), null);
 		    g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
 		    g2d.fillRect(locX + (int)((32 * sizeOfSprite - (int)((32 * sizeOfSprite - 4 * sizeOfSprite) * curHP / maxHP)) / 2), (int)(locY + 32 * sizeOfSprite), (int)((32 * sizeOfSprite - 4 * sizeOfSprite)* curHP / maxHP), 4);
@@ -138,6 +147,9 @@ public abstract class Enemy extends Character {
 
     public void TakeDamage(float amount){
         curHP -= amount;
+        if(player.vampiric != 0){
+            player.TakeHeale(amount * player.vampiric);
+        }
         if(curHP <= 0){
             Dead();
         }
@@ -357,7 +369,7 @@ class Slime_lvl4 extends Enemy{
         //super.isRangeAttack = true;
         super.hasOwnTimerSystem = true;
         super.isRangeAttack = true;
-        super.lootType = 3;
+        super.lootType = 2;
         super.delayBtwRangeAttacks = 5f;
         
         SetUpCollision();
@@ -441,7 +453,7 @@ class Kaban extends Enemy{
         super(player, locX, locY);
         SetSprite("res\\Characters\\Icon7.png");
         super.sizeOfSprite = 1f;
-        super.damage = 8f;
+        super.damage = 12f;
         super.moveSpeed = 8f;
         super.maxHP = 100f;
         super.curHP = 100f;
@@ -456,6 +468,162 @@ class Kaban extends Enemy{
     }
 
     void SetUpOfBullet() {
+    }
+    
+}
+
+class FireLeg extends Enemy{
+    public FireLeg(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon16.png");
+        super.sizeOfSprite = 2f;
+        super.damage = 5f;
+        super.moveSpeed = 2f;
+        super.maxHP = 500f;
+        super.curHP = 500f;
+        //super.isRangeAttack = true;
+        super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        PushingBullet bullet = new PushingBullet(locX, locY, player.locX, player.locY, 3, player);
+        bullet.speed = 7f;
+        //bullet.sizeOfSprite = 2f;
+        bullet.isAliveAfterDealingDamage = false;
+        bullet.damage = 35f;
+        bullet.pushingVelocity = 65f;
+        //bullet.delayBtwDealingDamage = 1f;
+        bullet.canDamageEnemy = false;
+        bullet.canDamagePlayer = true;
+        bullet.SetSprite("res\\Effects\\FireEffect.png");
+        bullet.sizeOfSprite = 2f;
+        bullet.SetUpCollision();
+    }
+    
+}
+
+class FlyingDemon_lvl1 extends Enemy{
+    public SplashOfFire skill;
+
+    public FlyingDemon_lvl1(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon22.png");
+        skill = new SplashOfFire(player, this);
+        super.sizeOfSprite = 1f;
+        super.damage = 0f;
+        super.moveSpeed = 6f;
+        super.maxHP = 400f;
+        super.curHP = 400f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        //super.delayBtwRangeAttacks = 5f;
+        super.hasOwnTimerSystem = false;
+        super.modificator_CoolDownOfSkills = 0.5f;
+        super.modificator_LifeTimeOfSkills = 1.5f;
+        super.modificator_SpeedOfSkills = 1.5f;
+        skill.canDamageEnemy = false;
+        skill.canDamagePlayer = true;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        skill.update();
+    }
+    
+}
+
+class Spider_Boss extends Enemy{
+    public Spider_Boss(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        super.sizeOfSprite = 2.5f;
+        super.type = TypeOfEnemy.Boss;
+        SetSprite("res\\Characters\\Icon25.png");
+        super.damage = 15f;
+        super.moveSpeed = 3f;
+        super.maxHP = 6000f;
+        super.curHP = 6000f;
+        super.canBePushed = false;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        super.delayBtwRangeAttacks = 4f;
+        //super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        CastingBullet bullet = new CastingBullet(locX, locY, player.locX, player.locY, 2f, player);
+        //bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
+        bullet.sizeOfSprite = 2f;
+        bullet.SetSprite("res\\Bullets\\WebBullet.png");
+        bullet.speed = 12f;
+        bullet.damage = 12;
+        bullet.canDamagePlayer = true;
+        bullet.canDamageEnemy = false;
+        //bullet.delayBeforeStart = 0f;
+        bullet.delayBtwDealingDamage = 0.05f;
+        bullet.isAliveAfterDealingDamage = false;
+        bullet.SetUpCollision();
+
+        bullet.bullet = new SpiderWeb(-5000, -5000, player.locX, player.locY,12f, player);
+        bullet.bullet.delayBtwDealingDamage = 0.05f;
+        bullet.bullet.sizeOfSprite = 5f;
+        bullet.bullet.SetSprite("res\\Bullets\\Web.png");
+        //bullet.bullet.speed = 8;
+        bullet.bullet.damage = 0;
+        bullet.bullet.canDamagePlayer = true;
+        bullet.bullet.canDamageEnemy = false;
+        bullet.bullet.showBeforeStart = false;
+        bullet.bullet.isAliveAfterDealingDamage = true;
+        bullet.bullet.SetUpCollision(); 
+
+        SpiderEgg egg1 = new SpiderEgg(player, locX, locY + 30);
+        egg1.newSpiderHp = curHP / 2;
+        GameLoop.listOfEnemies.add(egg1);
+        SpiderEgg egg2 = new SpiderEgg(player, locX, locY - 30);
+        egg2.newSpiderHp = curHP / 2;
+        GameLoop.listOfEnemies.add(egg2);
+    }
+    
+}
+
+class SpiderEgg extends Enemy{
+    public float newSpiderHp;
+    public SpiderEgg(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon40.png");
+        super.sizeOfSprite = 1.5f;
+        super.damage = 0;
+        super.moveSpeed = 0;
+        super.maxHP = 500f;
+        super.curHP = 500f;
+        super.canBePushed = false;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 0;
+        super.delayBtwRangeAttacks = 7f;
+        //super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        isDead = true;
+        Spider_Boss enemy = new Spider_Boss(player, locX, locY);
+        //enemy.maxHP = newSpiderHp;
+        enemy.curHP = newSpiderHp;
+        GameLoop.listOfEnemies.add(enemy);
     }
     
 }

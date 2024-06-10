@@ -83,7 +83,7 @@ class ExpStone_lvl2 extends InteractingObject{
 }
 
 class ExpStone_lvl3 extends InteractingObject{
-    private int amountExp = 20;
+    private int amountExp = 10;
 
     public ExpStone_lvl3(int locX, int locY, Player player) {
         super(locX, locY, player);

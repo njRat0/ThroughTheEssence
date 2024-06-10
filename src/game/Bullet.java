@@ -193,11 +193,13 @@ class PushingBullet extends Bullet{
                 if(canDamageEnemy){
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
-                            float deltaX = enemy.locX - locX;
-                            float deltaY = enemy.locY - locY;
-                            double angle = Math.atan2( deltaY, deltaX );
-                            enemy.locX += pushingVelocity * Math.cos( angle );
-                            enemy.locY += pushingVelocity * Math.sin( angle );
+                            if(enemy.canBePushed == true){
+                                float deltaX = enemy.locX - locX;
+                                float deltaY = enemy.locY - locY;
+                                double angle = Math.atan2( deltaY, deltaX );
+                                enemy.locX += pushingVelocity * Math.cos( angle );
+                                enemy.locY += pushingVelocity * Math.sin( angle );
+                            }
                             enemy.TakeDamage(damage);
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
@@ -207,11 +209,13 @@ class PushingBullet extends Bullet{
                     }
                 }
                 if(canDamagePlayer && collision.intersects(player.collision)){
-                    float deltaX = player.locX - locX;
-                    float deltaY = player.locY - locY;
-                    double angle = Math.atan2( deltaY, deltaX );
-                    player.locX += pushingVelocity* Math.cos( angle );
-                    player.locY += pushingVelocity * Math.sin( angle );
+                    if(player.canBePushed == true){
+                        float deltaX = player.locX - locX;
+                        float deltaY = player.locY - locY;
+                        double angle = Math.atan2( deltaY, deltaX );
+                        player.locX += pushingVelocity* Math.cos( angle );
+                        player.locY += pushingVelocity * Math.sin( angle );
+                    }   
                     player.TakeDamage(damage);
                     if(isAliveAfterDealingDamage == false){
                         isEnd = true;
@@ -354,3 +358,29 @@ class LugartBullet extends Bullet{
         bullet.delayBeforeStart = 0;
     }
 }
+
+class SpiderWeb extends Bullet{
+
+    public SpiderWeb(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
+        super(locX, locY, pointX, pointY, lifeTime, player);
+    }
+
+    @Override
+    public void update() {
+        super.collision.x = (int)locX;
+        super.collision.y = (int)locY;
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(collision.intersects(player.collision)){
+                //System.out.println("works");
+                player.TakeDamage(damage);
+                if(isAliveAfterDealingDamage == false){
+                    isEnd = true;
+                }
+                player.isSlowed = true;
+            }
+        }
+        else{
+            counterBeforeStart++;
+        }
+    }  
+}    

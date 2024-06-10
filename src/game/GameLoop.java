@@ -177,8 +177,10 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new BasicGun(player));
 		listOfAllSkills.add(new FireGun(player));
 		listOfAllSkills.add(new IonRed_Gun(player));
+		listOfAllSkills.add(new FiveX_Gun(player));
 		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
 		listOfAllSkills.add(new UpgrateSkill_damage(player));
+		listOfAllSkills.add(new UpgrateSkill_IncreaseVampiric(player));
 		listOfAllSkills.add(new UpgrateSkill_Speed(player));
 		listOfAllSkills.add(new UpgrateSkill_HPregen(player));
 		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player));
@@ -189,10 +191,50 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new RotatingDiscs(null, player));
 	}
 
-	private int timer = 0;
+	public static int timer = 0;
+	public int levelOfDificulty = 0;
 	public void SpawnEnemies(){
-		if(timer % (5*30) == 0){
-			int levelOfDificulty = timer / (30*30) + 1;
+		if(timer % (300*Settings.maxFps) == 0){
+			levelOfDificulty ++;
+			int choosedEnemy = r.nextInt(levelOfDificulty)+1;
+			int posX = 0;
+			int posY = 0;
+			if(r.nextInt(2) == 1){
+				if(r.nextInt(2) == 1){
+					posY = GameFrame.gameHeight;
+				}
+				else{
+					posY = 0;
+				}
+				posX = r.nextInt(GameFrame.gameWidth + 1);
+			}
+			else{
+				if(r.nextInt(2) == 1){
+					posX = GameFrame.gameWidth;
+				}
+				else{
+					posX = 0;
+				}
+				posY = r.nextInt(GameFrame.gameHeight + 1);
+			}
+			switch (choosedEnemy) {
+				case 1:
+					int rBoss = r.nextInt(1) + 1;
+					switch (rBoss) {
+						case 1:
+							listOfEnemies.add(new Spider_Boss(player, posX, posY));
+							break;
+					
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		if(timer % (5*Settings.maxFps) == 0){
+			int levelOfDificulty = timer / (30*Settings.maxFps) + 1;
 
 			for(int i = 0; i < levelOfDificulty * 5 - levelOfDificulty;){
 				int choosedEnemy = r.nextInt(levelOfDificulty)+1;
@@ -219,7 +261,7 @@ public class GameLoop implements Runnable {
 				}
 				switch (choosedEnemy) {
 					case 1:
-						//listOfEnemies.add(new Lugart(player, posX, posY));
+						//listOfEnemies.add(new Spider_Boss(player, posX, posY));
 						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
@@ -242,6 +284,12 @@ public class GameLoop implements Runnable {
 						break;
 					case 8:
 						listOfEnemies.add(new Slime_lvl4(player, posX, posY));
+						break;
+					case 9:
+						listOfEnemies.add(new FireLeg(player, posX, posY));
+						break;
+					case 10:
+						listOfEnemies.add(new FlyingDemon_lvl1(player, posX, posY));
 						break;
 					default:
 						break;
