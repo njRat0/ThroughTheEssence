@@ -129,7 +129,7 @@ public class Player extends Character{
 
 		// 	bullet.SetUpCollision();
 		// }
-		System.out.println(changingSpeed);
+		//System.out.println(changingSpeed);
 		if (keyUP)
 			locY -= (keyLEFT || keyRIGHT) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING  * changingSpeed: moveSpeed* changingSpeed;
 		if (keyDOWN)
@@ -153,7 +153,7 @@ public class Player extends Character{
 		mousePress = false;
 		isLevelingUpping = true;
 		curEXP = curEXP - expForLevelUp;
-		//System.out.println(curEXP);
+		//w.println(curEXP);
 		expForLevelUp = (int)(1.2*level+4);
 		level++;
 		GameLoop.ChoosingSkills();

@@ -625,3 +625,52 @@ class SpiderEgg extends Enemy{
     
 }
 
+class Spider_lvl1 extends Enemy{
+    public Spider_lvl1(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        super.sizeOfSprite = 1.5f;
+        SetSprite("res\\Characters\\Icon4.png");
+        super.damage = 10f;
+        super.moveSpeed = 3f;
+        super.maxHP = 1500f;
+        super.curHP = 1500f;
+        super.canBePushed = false;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        super.delayBtwRangeAttacks = 3f;
+        //super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        CastingBullet bullet = new CastingBullet(locX, locY, player.locX, player.locY, 2f, player);
+        //bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
+        bullet.sizeOfSprite = 1f;
+        bullet.SetSprite("res\\Bullets\\WebBullet.png");
+        bullet.speed = 12f;
+        bullet.damage = 12;
+        bullet.canDamagePlayer = true;
+        bullet.canDamageEnemy = false;
+        //bullet.delayBeforeStart = 0f;
+        bullet.delayBtwDealingDamage = 0.05f;
+        bullet.isAliveAfterDealingDamage = false;
+        bullet.SetUpCollision();
+
+        bullet.bullet = new SpiderWeb(-5000, -5000, player.locX, player.locY,12f, player);
+        bullet.bullet.delayBtwDealingDamage = 0.05f;
+        bullet.bullet.sizeOfSprite = 4f;
+        bullet.bullet.SetSprite("res\\Bullets\\Web.png");
+        //bullet.bullet.speed = 8;
+        bullet.bullet.damage = 0;
+        bullet.bullet.canDamagePlayer = true;
+        bullet.bullet.canDamageEnemy = false;
+        bullet.bullet.showBeforeStart = false;
+        bullet.bullet.isAliveAfterDealingDamage = true;
+        bullet.bullet.SetUpCollision(); 
+    }
+    
+}
+

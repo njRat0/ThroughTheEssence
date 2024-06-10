@@ -748,43 +748,43 @@ class RotatingDiscs extends Skill{
     }
 }
 
-class SwordSwing extends Skill{
-    public float sizeOfBullets = 3f;
-    private float delayBtwCast = 2f;
-    public float damage = 5f;
+class VampiricDisc extends Skill{
+    public float sizeOfBullets = 6f;
+    private float delayBtwCast = 8f;
+    public float damage = 2f;
     private int counter = 0;
     public boolean canDamagePlayer = false;
     public boolean canDamageEnemy = false;
+    public float lifeTime = 5f;
 
     private int counterForSkillCast = 0;
 
     private Player player;
 
-    public SwordSwing (Character focusCharacter, Player holderCharacter) {
+    public VampiricDisc (Character focusCharacter, Player holderCharacter) {
         super(focusCharacter, holderCharacter, TypeOfSkill.active);
         player = holderCharacter;
-        name = "SwordSwing";
-        chanceOfDrop = 500;
-        numberOfUpgradePoints = 3;
+        name = "VampiricDisc";
+        chanceOfDrop = 15;
+        numberOfUpgradePoints = 4;
     }
 
     @Override
     public void update() {
         if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
             counter = 0;
-            StandartBullet bullet = new StandartBullet(holderCharacter.locX, holderCharacter.locY,0,0,1,player);
-            bullet.isRotatable = true;
-            bullet.isRotatingBullet = true;
-            bullet.addAnglePerTick = 0.21f;
-            bullet.SetCustomAngle(0f);
+            FollowingBullet bullet = new FollowingBullet(holderCharacter.locX,holderCharacter.locY ,0,0,lifeTime *holderCharacter.modificator_LifeTimeOfSkills,player);
             bullet.speed = 0;
-            bullet.damage = damage * holderCharacter.modificator_Damage * (holderCharacter.modificator_amountsOfCastSkill  + 1);
-            //bullet.delayBtwDealingDamage = 0.2f;
-            bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+            bullet.isMomental = true;
+            bullet.damage = damage * holderCharacter.modificator_Damage + (holderCharacter.modificator_amountsOfCastSkill  + 1);
+            bullet.delayBtwDealingDamage = 0.2f;
+            bullet.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills + (holderCharacter.modificator_amountsOfCastSkill  + 1);
             bullet.isAliveAfterDealingDamage = true;
             bullet.canDamageEnemy = true;
             bullet.canDamagePlayer = false;
-            bullet.SetSprite("res\\Other\\Sword.png");
+            bullet.hasAdditionalVampirism = true;
+            bullet.amountAdditionalVampirism = 0.5f;
+            bullet.SetSprite("res\\Bullets\\RedDisk.png");
             bullet.SetUpCollision();
         }
         else{
@@ -796,13 +796,16 @@ class SwordSwing extends Skill{
     public void UpgrateSkill(int point) {
         switch (point){
             case 1:
-                sizeOfBullets += 0.6f;
+                sizeOfBullets += 1f;
                 break;
             case 2:
                 delayBtwCast -= 0.2f;
                 break;
             case 3:
-                damage += 2.5f;
+                damage += 1f;
+                break;
+            case 4:
+                lifeTime += 0.5f;
                 break;
         }
     }
@@ -825,6 +828,12 @@ class SwordSwing extends Skill{
             case 3:
                 nameOfChoosingParameter = "+25% damage of skill";
                 if(damage >= 20f){
+                    return false;
+                }
+                break;
+            case 4:
+                nameOfChoosingParameter = "+0.5 sec lifetime";
+                if(lifeTime >= 10f){
                     return false;
                 }
                 break;

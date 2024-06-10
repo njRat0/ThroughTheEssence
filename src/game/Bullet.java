@@ -33,6 +33,9 @@ public abstract class Bullet {
     public boolean isRotatingBullet = false;
     public float addAnglePerTick = 0.04f;
 
+    public boolean hasAdditionalVampirism = false;
+    public float amountAdditionalVampirism = 0.05f;
+
     public Player player;
 
     public Rectangle collision;
@@ -142,6 +145,9 @@ class StandartBullet extends Bullet{
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
                             enemy.TakeDamage(damage);
+                            if(hasAdditionalVampirism == true){
+                                player.TakeHeale(damage * amountAdditionalVampirism);
+                            }
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
                             }
@@ -201,6 +207,9 @@ class PushingBullet extends Bullet{
                                 enemy.locY += pushingVelocity * Math.sin( angle );
                             }
                             enemy.TakeDamage(damage);
+                            if(hasAdditionalVampirism == true){
+                                player.TakeHeale(damage * amountAdditionalVampirism);
+                            }
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
                             }
@@ -261,6 +270,9 @@ class CastingBullet extends Bullet{
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
                             enemy.TakeDamage(damage);
+                            if(hasAdditionalVampirism == true){
+                                player.TakeHeale(damage * amountAdditionalVampirism);
+                            }
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
                                 CastBullet();
@@ -324,6 +336,9 @@ class LugartBullet extends Bullet{
                     for(Enemy enemy : GameLoop.listOfEnemies){
                         if(collision.intersects(enemy.collision)){
                             enemy.TakeDamage(damage);
+                            if(hasAdditionalVampirism == true){
+                                player.TakeHeale(damage * amountAdditionalVampirism);
+                            }
                             if(isAliveAfterDealingDamage == false){
                                 isEnd = true;
                                 CastBullet();
@@ -377,6 +392,70 @@ class SpiderWeb extends Bullet{
                     isEnd = true;
                 }
                 player.isSlowed = true;
+            }
+        }
+        else{
+            counterBeforeStart++;
+        }
+    }  
+} 
+
+class FollowingBullet extends Bullet{
+    public int xOfset = 14;
+    public int yOfset = 14;
+    public boolean isMomental = false;
+    public FollowingBullet(int locX, int locY, int pointX, int pointY, float lifeTime, Player player) {
+        super(locX, locY, pointX, pointY, lifeTime, player);
+    }
+
+    @Override
+    public void update() {
+        if(counterBeforeStart >= (int)(delayBeforeStart * Settings.maxFps) && isEnd == false){
+            if(isRotatingBullet){
+                angle+= addAnglePerTick;
+                if(angle >= 3.14f){
+                    angle -= 6.28f;
+                }
+            }
+            if(isMomental == true){
+                locX = player.locX - xOfset * sizeOfSprite;
+                locY = player.locY - yOfset * sizeOfSprite;
+            }
+            else{
+                float deltaX = locX- player.locX;
+                float deltaY = locY- player.locY;
+                bullet.angle = Math.atan2( deltaY, deltaX );
+                locX += speed * Math.cos( angle );
+                locY += speed * Math.sin( angle );
+            }
+            collision.x = (int)locX;
+            collision.y = (int)locY;
+            if(counterBtwDealingDamage >= (int)(delayBtwDealingDamage * Settings.maxFps)){
+                counterBtwDealingDamage = 0;
+                if(canDamageEnemy){
+                    for(Enemy enemy : GameLoop.listOfEnemies){
+                        if(collision.intersects(enemy.collision)){
+                            enemy.TakeDamage(damage);
+                            if(hasAdditionalVampirism == true){
+                                player.TakeHeale(damage * amountAdditionalVampirism);
+                            }
+                        
+                            if(isAliveAfterDealingDamage == false){
+                                isEnd = true;
+                            }
+                            //break;
+                        }
+                    }
+                }
+                if(canDamagePlayer && collision.intersects(player.collision)){
+                    player.TakeDamage(damage);
+                    if(isAliveAfterDealingDamage == false){
+                        isEnd = true;
+                    }
+                }
+            }
+            else{
+                counterBtwDealingDamage++;
             }
         }
         else{

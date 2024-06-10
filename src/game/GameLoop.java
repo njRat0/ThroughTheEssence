@@ -53,7 +53,7 @@ public class GameLoop implements Runnable {
 		for(Skill skill : listOfAllSkills){
 			probabilityOfAllSkills += skill.chanceOfDrop;
 		}
-		System.out.println("probability: "+probabilityOfAllSkills);
+		//System.out.println("probability: "+probabilityOfAllSkills);
 		SetUp_ChooseSkillButtons();
 	}
 	public static void SetUp_ChooseSkillButtons(){
@@ -69,7 +69,7 @@ public class GameLoop implements Runnable {
 			int num = r.nextInt(probabilityOfAllSkills);
 			for(Skill skill : listOfAllSkills){
 				num -= skill.chanceOfDrop;
-				System.out.println(num);
+				//System.out.println(num);
 				if(num <= 0){
 					choosingSkillsOnButtons.add(skill);
 					skill.numberOfChoosedUpgrade.add(0);
@@ -130,10 +130,10 @@ public class GameLoop implements Runnable {
 		if(choosingSkillsOnButtons.get(id).type == TypeOfSkill.weapon){
 			player.curWeapon = choosingSkillsOnButtons.get(id);
 		}
-		System.out.println(skill.chanceOfDrop);
+		//System.out.println(skill.chanceOfDrop);
 		player.isLevelingUpping = false;
 		player.mousePress = false;
-		System.out.println("player skills: " + player.skills.size());
+		//System.out.println("player skills: " + player.skills.size());
 		//choosingSkillsOnButtons.clear();
 		//chooseSkillButtons.clear();
 	}
@@ -167,8 +167,8 @@ public class GameLoop implements Runnable {
 		
 		SetUp_listOfSkills();
 
-		listOfAllSkills.get(1).chanceOfDrop = 50;
-		player.curWeapon = listOfAllSkills.get(1);
+		listOfAllSkills.get(0).chanceOfDrop = 50;
+		player.curWeapon = listOfAllSkills.get(0);
 		
 		//ChoosingSkills(); 
 	}
@@ -185,7 +185,7 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new UpgrateSkill_HPregen(player));
 		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player));
 		listOfAllSkills.add(new UpgrateSkill_HPpoints(player));
-		listOfAllSkills.add(new SwordSwing(null, player));
+		listOfAllSkills.add(new VampiricDisc(null, player));
 		listOfAllSkills.add(new AtomicPudge(null, player));
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
@@ -262,7 +262,7 @@ public class GameLoop implements Runnable {
 				}
 				switch (choosedEnemy) {
 					case 1:
-						//listOfEnemies.add(new Spider_Boss(player, posX, posY));
+						//listOfEnemies.add(new Spider_lvl1(player, posX, posY));
 						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
@@ -291,6 +291,9 @@ public class GameLoop implements Runnable {
 						break;
 					case 10:
 						listOfEnemies.add(new FlyingDemon_lvl1(player, posX, posY));
+						break;
+					case 11:
+						listOfEnemies.add(new Spider_lvl1(player, posX, posY));
 						break;
 					default:
 						break;
