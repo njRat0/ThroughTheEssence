@@ -141,7 +141,7 @@ public class GameFrame extends JFrame {
 						g2d.drawImage(weapon.sprite, player.locX + weapon.sprite.getWidth()/2,player.locY + weapon.sprite.getHeight()/2, (int)(weapon.sprite.getWidth() * weapon.sizeOfSprite),(int)(-weapon.sprite.getHeight() * weapon.sizeOfSprite), null);
 					}
 					else{
-						g2d.drawImage(weapon.sprite, player.locX + 16,player.locY+ 8, (int)(weapon.sprite.getWidth() * weapon.sizeOfSprite),(int)(weapon.sprite.getHeight() * weapon.sizeOfSprite), null);
+						g2d.drawImage(weapon.sprite, player.locX + weapon.sprite.getWidth()/2,player.locY + weapon.sprite.getHeight()/2, (int)(weapon.sprite.getWidth() * weapon.sizeOfSprite),(int)(weapon.sprite.getHeight() * weapon.sizeOfSprite), null);
 					}
 					g2d.rotate(-angle,player.locX + weapon.sprite.getWidth()/2,player.locY + weapon.sprite.getHeight()/2);
 					

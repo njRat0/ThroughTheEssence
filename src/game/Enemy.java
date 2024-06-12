@@ -674,3 +674,124 @@ class Spider_lvl1 extends Enemy{
     
 }
 
+class DemonGigant_lvl1 extends Enemy{
+    public DemonGigant_lvl1(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon10.png");
+        super.sizeOfSprite = 2f;
+        super.damage = 50f;
+        super.moveSpeed = 3f;
+        super.maxHP = 5000f;
+        super.curHP = 5000f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.delayBtwMeleeAttacks = 1f;
+        super.isStayAfterAttack = true;
+        super.isRangeAttack = false;
+        super.lootType = 3;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class DemonGigant_lvl2 extends Enemy{
+    public DemonGigant_lvl2(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon10.png");
+        super.sizeOfSprite = 3f;
+        super.damage = 80f;
+        super.moveSpeed = 3f;
+        super.maxHP = 12000;
+        super.curHP = 12000;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.delayBtwMeleeAttacks = 1f;
+        super.isStayAfterAttack = true;
+        super.isRangeAttack = false;
+        super.lootType = 3;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class Bulurk extends Enemy{
+    public Bulurk(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon33.png");
+        super.sizeOfSprite = 1f;
+        super.damage = 10f;
+        super.moveSpeed = 7f;
+        super.maxHP = 8000;
+        super.curHP = 8000;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.delayBtwMeleeAttacks = 2f;
+        super.isStayAfterAttack = true;
+        super.isRangeAttack = false;
+        super.lootType = 3;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+    }
+    
+}
+
+class BlackSpider extends Enemy{
+    public BlackSpider(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        super.sizeOfSprite = 1.5f;
+        SetSprite("res\\Characters\\Icon46.png");
+        super.damage = 5f;
+        super.moveSpeed = 3f;
+        super.maxHP = 2200f;
+        super.curHP = 2200f;
+        super.canBePushed = false;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        super.delayBtwRangeAttacks = 1f;
+        //super.delayBtwRangeAttacks = 5f;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        CastingBullet bullet = new CastingBullet(locX, locY, player.locX, player.locY, 2f, player);
+        //bullet.AddAngle((float)((r.nextFloat() - 0.5) * dispersion * 2));
+        bullet.sizeOfSprite = 1f;
+        bullet.SetSprite("res\\Bullets\\GreeenWebBullet.png");
+        bullet.speed = 14f;
+        bullet.damage = 3;
+        bullet.canDamagePlayer = true;
+        bullet.canDamageEnemy = false;
+        //bullet.delayBeforeStart = 0f;
+        //bullet.delayBtwDealingDamage = 0.05f;
+        bullet.isAliveAfterDealingDamage = false;
+        bullet.SetUpCollision();
+
+        bullet.bullet = new SpiderWeb(-5000, -5000, player.locX, player.locY,6f, player);
+        bullet.bullet.delayBtwDealingDamage = 0.1f;
+        bullet.bullet.sizeOfSprite = 1.5f;
+        bullet.bullet.SetSprite("res\\Bullets\\GreenWeb.png");
+        //bullet.bullet.speed = 8;
+        bullet.bullet.damage = 2f;
+        bullet.bullet.canDamagePlayer = true;
+        bullet.bullet.canDamageEnemy = false;
+        bullet.bullet.showBeforeStart = false;
+        bullet.bullet.isAliveAfterDealingDamage = true;
+        bullet.bullet.SetUpCollision(); 
+    }
+    
+}
+

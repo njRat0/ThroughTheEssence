@@ -178,6 +178,7 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new FireGun(player));
 		listOfAllSkills.add(new IonRed_Gun(player));
 		listOfAllSkills.add(new FiveX_Gun(player));
+		listOfAllSkills.add(new Crest_weapon(player));
 		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
 		listOfAllSkills.add(new UpgrateSkill_damage(player));
 		listOfAllSkills.add(new UpgrateSkill_IncreaseVampiric(player));
@@ -262,7 +263,7 @@ public class GameLoop implements Runnable {
 				}
 				switch (choosedEnemy) {
 					case 1:
-						//listOfEnemies.add(new Spider_lvl1(player, posX, posY));
+						//listOfEnemies.add(new BlackSpider(player, posX, posY));
 						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
@@ -294,6 +295,18 @@ public class GameLoop implements Runnable {
 						break;
 					case 11:
 						listOfEnemies.add(new Spider_lvl1(player, posX, posY));
+						break;
+					case 12:
+						listOfEnemies.add(new BlackSpider(player, posX, posY));
+						break;
+					case 13:
+						listOfEnemies.add(new DemonGigant_lvl1(player, posX, posY));
+						break;
+					case 14:
+						listOfEnemies.add(new Bulurk(player, posX, posY));
+						break;
+					case 15:
+						listOfEnemies.add(new DemonGigant_lvl2(player, posX, posY));
 						break;
 					default:
 						break;

@@ -1416,3 +1416,129 @@ class FiveX_Gun extends Skill{
     }
 }
 
+class Crest_weapon extends Skill{
+    public int amountBullets = 1;
+    public float sizeOfBullets = 1f;
+    private float delayBtwCast = 0.5f;
+    public float lifeTime = 1f;
+    public float damage = 1f;
+    public float speed  = 12f;
+    private int counter = 0;
+    //private float dispersion = 0.14f;
+    private Random r = new Random();
+
+    private Player player;
+
+    public int amountOfCast = 1;
+    private int counterForSkillCast = 0;
+
+    public Crest_weapon(Player player) {
+        super(null, player, TypeOfSkill.weapon);
+        this.player = player;
+        name = "Crest(weapon)";
+        chanceOfDrop = 15;
+        numberOfUpgradePoints = 5;
+
+        try {
+			sprite = ImageIO.read(new File("res\\Other\\Crest.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        sizeOfSprite = 2f;
+    }
+
+    @Override
+    public void update(){
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            if(player.mousePress){
+                counterForSkillCast++;
+                if(counterForSkillCast == amountOfCast + holderCharacter.modificator_amountsOfCastSkill){
+                    counter =0 ;
+                    counterForSkillCast = 0;
+                }
+                for(int i = 0; i < amountBullets; i++){
+                    StandartBullet bullet1 = new StandartBullet(player.locX, player.locY , player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
+                    bullet1.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
+                    bullet1.SetSprite("res\\Bullets\\LightBullet.png");
+                    bullet1.speed = speed * player.modificator_SpeedOfSkills;
+                    bullet1.damage = damage * player.modificator_Damage;
+                    bullet1.canDamagePlayer = false;
+                    bullet1.canDamageEnemy = true;
+                    bullet1.isAliveAfterDealingDamage = true;
+                    bullet1.SetUpCollision();
+                }
+            }         
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                amountBullets++;
+                break;
+            case 2:
+                sizeOfBullets += 0.2f;
+                break;
+            case 3:
+                lifeTime += 0.25f;
+                break;
+            case 4:
+                damage += 0.5f;
+                break;
+            case 5:
+                speed += 1.2f;
+                break;
+            case 6:
+                amountOfCast += 1;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+1 amount of bullet";
+                if(amountBullets >= 6){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "+20% area of skill";
+                if(sizeOfBullets >= 6f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "+50% lifetime";
+                if(lifeTime >= 6f){
+                    return false;
+                }
+                break;
+            case 4:
+                nameOfChoosingParameter = "+50% damage of skill";
+                if(damage >= 10f){
+                    return false;
+                }
+                break;
+            case 5:
+                nameOfChoosingParameter = "+10 speed of skill";
+                if(speed >= 25f){
+                    return false;
+                }
+                break;
+            case 6:
+                nameOfChoosingParameter = "+1 amount of cast";
+                if(speed >= 4f){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
+
