@@ -5,6 +5,12 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+enum ClassOfPlayer{
+	Warrior,
+	Assasin,
+	Mage
+}
+
 public class Settings {
     public static int sizeOfUI = 1;
     public static Dimension sizeOfWindow;

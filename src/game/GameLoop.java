@@ -168,24 +168,24 @@ public class GameLoop implements Runnable {
 	}
 
 	public void SetUp_listOfSkills(){
-		listOfAllSkills.add(new BasicGun(player));
-		listOfAllSkills.add(new FireGun(player));
-		listOfAllSkills.add(new IonRed_Gun(player));
-		listOfAllSkills.add(new FiveX_Gun(player));
-		listOfAllSkills.add(new Crest_weapon(player));
-		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player));
-		listOfAllSkills.add(new UpgrateSkill_damage(player));
-		listOfAllSkills.add(new UpgrateSkill_IncreaseVampiric(player));
-		listOfAllSkills.add(new UpgrateSkill_Speed(player));
-		listOfAllSkills.add(new UpgrateSkill_HPregen(player));
-		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player));
-		listOfAllSkills.add(new UpgrateSkill_HPpoints(player));
-		listOfAllSkills.add(new VampiricDisc(null, player));
-		listOfAllSkills.add(new AtomicPudge(null, player));
-		listOfAllSkills.add(new BlueCross(null , player));
-		listOfAllSkills.add(new SplashOfFire(null, player));
-		listOfAllSkills.add(new RotatingDiscs(null, player));
-		listOfAllSkills.add(new SniperShoot(null, player));
+		listOfAllSkills.add(new BasicGun(player)); //0
+		listOfAllSkills.add(new FireGun(player)); //1
+		listOfAllSkills.add(new IonRed_Gun(player)); //2
+		listOfAllSkills.add(new FiveX_Gun(player)); //3
+		listOfAllSkills.add(new Crest_weapon(player)); //4
+		listOfAllSkills.add(new UpgrateSkill_amountOfCasts(player)); //5
+		listOfAllSkills.add(new UpgrateSkill_damage(player)); //6
+		listOfAllSkills.add(new UpgrateSkill_IncreaseVampiric(player)); //7
+		listOfAllSkills.add(new UpgrateSkill_Speed(player)); //8
+		listOfAllSkills.add(new UpgrateSkill_HPregen(player)); //9
+		listOfAllSkills.add(new UpgrateSkill_ReduceCDofSkills(player)); //10
+		listOfAllSkills.add(new UpgrateSkill_HPpoints(player)); //11
+		listOfAllSkills.add(new VampiricDisc(null, player)); //12
+		listOfAllSkills.add(new AtomicPudge(null, player)); //13
+		listOfAllSkills.add(new BlueCross(null , player)); //14
+		listOfAllSkills.add(new SplashOfFire(null, player)); //15
+		listOfAllSkills.add(new RotatingDiscs(null, player)); //16
+		listOfAllSkills.add(new SniperShoot(null, player)); //17
 	}
 
 	public static int timer = 0;
@@ -355,6 +355,14 @@ public class GameLoop implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				player.classOfPlayer = ClassOfPlayer.Warrior;
+				player.canBePushed = false;
+				player.maxHP = 250;
+				player.curHP = 250;
+				player.hpRegen = 1f;
+				player.canBeSlowed = false;
+				player.moveSpeed = 4f;
+				player.modificator_Damage = 0.8f;
 				break;
 			case 1:
 				try {
@@ -362,12 +370,40 @@ public class GameLoop implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				player.classOfPlayer = ClassOfPlayer.Assasin;
+				player.canBePushed = true;
+				player.maxHP = 150;
+				player.curHP = 150;
+				player.hpRegen = 0.45f;
+				player.canBeSlowed = true;
+				player.moveSpeed = 6f;
+				player.modificator_CoolDownOfSkills = 1.2f;
+				player.modificator_Damage = 1.2f;
 				break;
 			case 2:
 				try {
 					player.sprite = ImageIO.read(new File("res\\Characters\\Mage.png"));
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+				player.classOfPlayer = ClassOfPlayer.Mage;
+				player.canBePushed = true;
+				player.maxHP = 80;
+				player.curHP = 80;
+				player.hpRegen = 0.25f;
+				player.canBeSlowed = true;
+				player.moveSpeed = 5;
+				player.modificator_CoolDownOfSkills = 0.8f;
+				player.modificator_Damage = 1f;
+				player.modificator_AreaOfSkills = 1.2f;
+				player.modificator_amountsOfCastSkill = 1;
+				player.curWeapon = null;
+				player.skills.add(listOfAllSkills.get(14));
+				listOfAllSkills.get(14).chanceOfDrop = 50;
+				for(Skill skill : listOfAllSkills){
+					if(skill.type == TypeOfSkill.weapon){
+						skill.chanceOfDrop = 0;
+					}
 				}
 				break;
 		}

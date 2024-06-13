@@ -23,6 +23,8 @@ public class Player extends Character{
 	//parameters
 	public float moveSpeed = 5f;
 
+	public ClassOfPlayer classOfPlayer;
+
 	public boolean isDead;
 	
 	public boolean keyUP, keyDOWN, keyRIGHT, keyLEFT;
@@ -44,6 +46,7 @@ public class Player extends Character{
 	public int expForLevelUp = 5;
 	public boolean isLevelingUpping = false;
 	//private int remainingEXP = 0;
+	public boolean canBeSlowed = true;
 	public boolean isSlowed = false;
 	public int counterForSlowing = 0;
 
@@ -91,7 +94,7 @@ public class Player extends Character{
 	 * The method which updates the game state.
 	 */
 	public void update() {
-		if(isSlowed == true){
+		if(isSlowed == true && canBeSlowed == true){
 			changingSpeed = 0.5f;
 			counterForSlowing++;
 		}
