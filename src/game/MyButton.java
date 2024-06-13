@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-
+enum TypeOfButton{
+    ChooseClass,
+    ChooseSkill,
+    Menu
+}
 
 
 
 class MyButton{
     private boolean isMouseOver =  false;
+    private boolean isPressed = false;
+    public TypeOfButton type;
 
     private Color curColor = new Color(0,0,0);
     public Color colorOver = new Color(179, 250, 160);
@@ -57,12 +63,29 @@ class MyButton{
         }
 
         if(player.mousePress == true && isMouseOver == true ){
-            curColor = colorClick;
-            GameLoop.EndChoosingSkills(id);
+            curColor = colorClick; 
+            isPressed = true;
         }
         else{
             if(isMouseOver == true){
                 curColor = colorOver;
+                if(isPressed){
+                    isPressed = false;
+                    switch (type) {
+                        case ChooseSkill:
+                            GameLoop.EndChoosingSkills(id);
+                            break;
+                        case ChooseClass:
+                            GameLoop.ChooseClass(id);
+                            break;
+                        case Menu:
+                            //more code
+                            break;
+                        default:
+                            System.out.println("Button type error");
+                            break;
+                    }
+                }
             }
             else{
                 curColor = colorBackground;
@@ -71,8 +94,9 @@ class MyButton{
     }
 
     
-    public MyButton(Player player){
+    public MyButton(Player player, TypeOfButton type){
         this.player = player;
+        this.type = type;
         //this.setLayout(new FlowLayout());
         curColor = colorBackground;
         //GameFrame.add(this);

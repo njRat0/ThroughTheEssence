@@ -371,6 +371,7 @@ class Slime_lvl4 extends Enemy{
         super.isRangeAttack = true;
         super.lootType = 2;
         super.delayBtwRangeAttacks = 5f;
+        super.canBePushed = false;
         
         SetUpCollision();
     }
@@ -681,14 +682,15 @@ class DemonGigant_lvl1 extends Enemy{
         super.sizeOfSprite = 2f;
         super.damage = 50f;
         super.moveSpeed = 3f;
-        super.maxHP = 5000f;
-        super.curHP = 5000f;
+        super.maxHP = 10000f;
+        super.curHP = 10000f;
         //super.isRangeAttack = true;
         //super.hasOwnTimerSystem = true;
         super.delayBtwMeleeAttacks = 1f;
         super.isStayAfterAttack = true;
         super.isRangeAttack = false;
         super.lootType = 3;
+        super.canBePushed = false;
         
         SetUpCollision();
     }
@@ -705,14 +707,15 @@ class DemonGigant_lvl2 extends Enemy{
         super.sizeOfSprite = 3f;
         super.damage = 80f;
         super.moveSpeed = 3f;
-        super.maxHP = 12000;
-        super.curHP = 12000;
+        super.maxHP = 16000;
+        super.curHP = 16000;
         //super.isRangeAttack = true;
         //super.hasOwnTimerSystem = true;
         super.delayBtwMeleeAttacks = 1f;
         super.isStayAfterAttack = true;
         super.isRangeAttack = false;
         super.lootType = 3;
+        super.canBePushed = false;
         
         SetUpCollision();
     }
@@ -731,6 +734,7 @@ class Bulurk extends Enemy{
         super.moveSpeed = 7f;
         super.maxHP = 8000;
         super.curHP = 8000;
+        super.canBePushed = false;
         //super.isRangeAttack = true;
         //super.hasOwnTimerSystem = true;
         super.delayBtwMeleeAttacks = 2f;
@@ -791,6 +795,41 @@ class BlackSpider extends Enemy{
         bullet.bullet.showBeforeStart = false;
         bullet.bullet.isAliveAfterDealingDamage = true;
         bullet.bullet.SetUpCollision(); 
+    }
+    
+}
+
+class FlyingDemon_lvl2 extends Enemy{
+    public SplashOfFire skill;
+
+    public FlyingDemon_lvl2(Player player, int locX, int locY) {
+        super(player, locX, locY);
+        SetSprite("res\\Characters\\Icon22.png");
+        skill = new SplashOfFire(player, this);
+        super.sizeOfSprite = 2f;
+        super.damage = 0f;
+        super.moveSpeed = 6f;
+        super.maxHP = 9000f;
+        super.curHP = 9000f;
+        //super.isRangeAttack = true;
+        //super.hasOwnTimerSystem = true;
+        super.isRangeAttack = true;
+        super.lootType = 3;
+        //super.delayBtwRangeAttacks = 5f;
+        super.hasOwnTimerSystem = false;
+        super.modificator_CoolDownOfSkills = 0.3f;
+        super.modificator_LifeTimeOfSkills = 2f;
+        super.modificator_SpeedOfSkills = 3f;
+        super.modificator_Damage = 2f;
+        super.modificator_AreaOfSkills = 3f;
+        skill.canDamageEnemy = false;
+        skill.canDamagePlayer = true;
+        
+        SetUpCollision();
+    }
+
+    void SetUpOfBullet() {
+        skill.update();
     }
     
 }

@@ -1,6 +1,7 @@
 /*** In The Name of Allah ***/
 package game;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -35,6 +36,8 @@ public class GameLoop implements Runnable {
 
 	public static boolean isPause = false;
 
+	public static boolean isChoosedClass;
+
 	//ChoosingSkill system
 	public static ArrayList<Skill> listOfAllSkills = new ArrayList<Skill>();
 	public static int probabilityOfAllSkills;
@@ -61,7 +64,7 @@ public class GameLoop implements Runnable {
 		chooseSkillButtons.clear();
 		choosingSkillsOnButtons.clear();
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
-			MyButton button = new MyButton(player);
+			MyButton button = new MyButton(player, TypeOfButton.ChooseSkill);
 			button.SetSize(98, 100);
 			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*150, GameFrame.gameCenterY - 50);
 			button.id = i;
@@ -148,19 +151,6 @@ public class GameLoop implements Runnable {
 	public void init() {
 		// Perform all initializations ...
 		player = new Player();
-
-		//>>Creating test enemies
-		// listOfEnemies.add(new TestMob(player, 500, 200));
-		
-		// for(int i = 0; i<20;i++){
-		// 	listOfEnemies.add(new FireLizard(player, 10*i, 500));
-		// }
-		// try{
-		// 	listOfEnemies.get(0).curHP = 10f;
-		// }
-		// catch(ArrayIndexOutOfBoundsException e){
-		// 	e.getStackTrace();
-		// }
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
@@ -169,8 +159,6 @@ public class GameLoop implements Runnable {
 
 		listOfAllSkills.get(0).chanceOfDrop = 50;
 		player.curWeapon = listOfAllSkills.get(0);
-		
-		//ChoosingSkills(); 
 	}
 
 	public void SetUp_listOfSkills(){
@@ -191,6 +179,7 @@ public class GameLoop implements Runnable {
 		listOfAllSkills.add(new BlueCross(null , player));
 		listOfAllSkills.add(new SplashOfFire(null, player));
 		listOfAllSkills.add(new RotatingDiscs(null, player));
+		listOfAllSkills.add(new SniperShoot(null, player));
 	}
 
 	public static int timer = 0;
@@ -263,7 +252,7 @@ public class GameLoop implements Runnable {
 				}
 				switch (choosedEnemy) {
 					case 1:
-						//listOfEnemies.add(new BlackSpider(player, posX, posY));
+						//listOfEnemies.add(new FlyingDemon_lvl2(player, posX, posY));
 						listOfEnemies.add(new Slime_lvl1(player, posX, posY));
 						break;
 					case 2:
@@ -308,6 +297,9 @@ public class GameLoop implements Runnable {
 					case 15:
 						listOfEnemies.add(new DemonGigant_lvl2(player, posX, posY));
 						break;
+					case 16:
+						listOfEnemies.add(new FlyingDemon_lvl2(player, posX, posY));
+						break;
 					default:
 						break;
 				}
@@ -315,14 +307,61 @@ public class GameLoop implements Runnable {
 		}
 	}
 
+	public static MyButton[] listOfClassButtons = new MyButton[3];
+	public static void SetUp_ChooseClassButtons(){
+		MyButton warriorButton = new MyButton(player, TypeOfButton.ChooseClass);
+		MyButton assasinButton = new MyButton(player, TypeOfButton.ChooseClass);
+		MyButton mageButton = new MyButton(player, TypeOfButton.ChooseClass);
+
+		listOfClassButtons[0] = warriorButton;
+		listOfClassButtons[1] = assasinButton;
+		listOfClassButtons[2] = mageButton;
+
+		int width = GameFrame.gameWidth / 3;
+		int height = GameFrame.gameHeight;
+		for(int i = 0; i < 3; i++){
+			MyButton button = listOfClassButtons[i];
+			button.id=i;
+			button.borderSize = 3;
+			button.SetSize(width, height);
+			button.SetLocation(i*width, 0);
+			button.colorBackground = Color.gray;
+			button.colorBorders = Color.black;
+			button.colorOver = new Color(94, 94, 94);
+			button.colorClick = Color.black;
+		}
+	}
+	public static void ChooseClass(int index){
+		isPause = false;
+		switch (index) {
+			case 0:
+				
+				break;
+			case 1:
+				
+				break;
+			case 2:
+				
+				break;
+		}
+		isChoosedClass = true;
+	}
+
 	@Override
 	public void run() {
 		boolean gameOver = false;
+		isPause = true;
 		while (!gameOver) {
 			try {
 				long start = System.currentTimeMillis();
 				//System.out.println(player.mouseX + ", " + player.mouseY);
 				//
+				// if(isChoosedClass == false){
+				// 	for(MyButton button : listOfClassButtons){
+				// 		button.update();
+				// 	}
+				// 	continue;
+				// }
 				if(isChoosingSkills == true){
 					for(MyButton button : chooseSkillButtons){
 						button.update();

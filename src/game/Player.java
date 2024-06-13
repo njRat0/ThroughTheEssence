@@ -37,7 +37,7 @@ public class Player extends Character{
 
 	public float curHP = 100;
 	public float maxHP = 100;
-	public float hpRegen = 0.1f;
+	public float hpRegen = 0.3f;
 
 	public int level = 1;
 	public int curEXP = 0;
@@ -51,8 +51,8 @@ public class Player extends Character{
 	
 	public Player() {
 		super.modificator_Damage = 0.9f;
-		locX = 500;
-		locY = 500;
+		locX = GameFrame.gameCenterX;
+		locY = GameFrame.gameCenterY;
 		isDead = false;
 		//
 		keyUP = false;

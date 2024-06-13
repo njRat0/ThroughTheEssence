@@ -170,7 +170,7 @@ class UpgrateSkill_HPregen extends Skill{
 
     @Override
     public void update() {
-        player.hpRegen += 0.02f;
+        player.hpRegen += 0.06f;
         chanceOfDrop = 15;
     }
 
@@ -366,7 +366,7 @@ class SplashOfFire extends Skill{
     public float speed  = 12f;
     private float delayBtwCast = 1.5f;
     public float sizeOfBullets = 1f;
-    public float lifeTime = 0.1f;
+    public float lifeTime = 0.2f;
     private int counter = 0;
     public boolean canDamagePlayer = false;
     public boolean canDamageEnemy = false;
@@ -834,6 +834,96 @@ class VampiricDisc extends Skill{
             case 4:
                 nameOfChoosingParameter = "+0.5 sec lifetime";
                 if(lifeTime >= 10f){
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+}
+
+class SniperShoot extends Skill{
+    //public float sizeOfBullets = 1f;
+    private float delayBtwCast = 2f;
+    public float damage = 5f;
+    private int counter = 0;
+    public boolean canDamagePlayer = false;
+    public boolean canDamageEnemy = false;
+    public int amountBullets = 2;
+    public Random r = new Random();
+
+    private Player player;
+
+    public SniperShoot (Character focusCharacter, Player holderCharacter) {
+        super(focusCharacter, holderCharacter, TypeOfSkill.active);
+        player = holderCharacter;
+        name = "SniperShoot";
+        chanceOfDrop = 500;
+        numberOfUpgradePoints = 4;
+    }
+
+    @Override
+    public void update() {
+        if(counter >= (int)(delayBtwCast * Settings.maxFps * holderCharacter.modificator_CoolDownOfSkills)){
+            counter = 0;
+            for(int i = 0 ; i < amountBullets * (holderCharacter.modificator_amountsOfCastSkill + 1); i++){
+                if(GameLoop.listOfEnemies.size() > 0){
+                    int choosedID = r.nextInt(GameLoop.listOfEnemies.size());
+                    int locX = GameLoop.listOfEnemies.get(choosedID).locX;
+                    int locY = GameLoop.listOfEnemies.get(choosedID).locY;
+                    PushingBullet bullet = new PushingBullet(locX + r.nextInt(11) - 5, locY + r.nextInt(11) - 5,0,0,1f,player);
+                    bullet.pushingVelocity = 25f;
+                    bullet.speed = 0;
+                    bullet.damage = damage * holderCharacter.modificator_Damage;
+                    bullet.isAliveAfterDealingDamage = false;
+                    bullet.delayBeforeStart = 0.4f;
+                    bullet.showBeforeStart = true;
+                    bullet.sizeOfSprite = 1.7f;
+                    bullet.canDamageEnemy = true;
+                    bullet.canDamagePlayer = false;
+                    bullet.SetSprite("res\\Other\\SniperTarget.png");
+                    bullet.SetUpCollision();
+                }
+            }
+        }
+        else{
+            counter++;
+        }
+    }
+
+    @Override
+    public void UpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                amountBullets += 1f;
+                break;
+            case 2:
+                delayBtwCast -= 0.2f;
+                break;
+            case 3:
+                damage += 5f;
+                break;
+        }
+    }
+
+    @Override
+    public boolean GetPointsOfUpgrateSkill(int point) {
+        switch (point){
+            case 1:
+                nameOfChoosingParameter = "+1 amount of bullet";
+                if(amountBullets >= 10f){
+                    return false;
+                }
+                break;
+            case 2:
+                nameOfChoosingParameter = "-10% delayBtwCast";
+                if(delayBtwCast <= 0.4f){
+                    return false;
+                }
+                break;
+            case 3:
+                nameOfChoosingParameter = "+100% damage of skill";
+                if(damage >= 50f){
                     return false;
                 }
                 break;
@@ -1418,11 +1508,11 @@ class FiveX_Gun extends Skill{
 
 class Crest_weapon extends Skill{
     public int amountBullets = 1;
-    public float sizeOfBullets = 1f;
-    private float delayBtwCast = 0.5f;
+    public float sizeOfBullets = 2f;
+    private float delayBtwCast = 0.6f;
     public float lifeTime = 1f;
     public float damage = 1f;
-    public float speed  = 12f;
+    public float speed  = 6f;
     private int counter = 0;
     //private float dispersion = 0.14f;
     private Random r = new Random();
@@ -1444,7 +1534,7 @@ class Crest_weapon extends Skill{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        sizeOfSprite = 2f;
+        sizeOfSprite = 1f;
     }
 
     @Override
@@ -1460,8 +1550,9 @@ class Crest_weapon extends Skill{
                     StandartBullet bullet1 = new StandartBullet(player.locX, player.locY , player.mouseX, player.mouseY, lifeTime * player.modificator_LifeTimeOfSkills, player);
                     bullet1.sizeOfSprite = sizeOfBullets * holderCharacter.modificator_AreaOfSkills;
                     bullet1.SetSprite("res\\Bullets\\LightBullet.png");
-                    bullet1.speed = speed * player.modificator_SpeedOfSkills;
+                    bullet1.speed = speed * player.modificator_SpeedOfSkills  * (float)(r.nextFloat() *0.2f + 0.4f);
                     bullet1.damage = damage * player.modificator_Damage;
+                    bullet1.delayBtwDealingDamage = 0.1f;
                     bullet1.canDamagePlayer = false;
                     bullet1.canDamageEnemy = true;
                     bullet1.isAliveAfterDealingDamage = true;
@@ -1481,16 +1572,16 @@ class Crest_weapon extends Skill{
                 amountBullets++;
                 break;
             case 2:
-                sizeOfBullets += 0.2f;
+                sizeOfBullets += 0.4f;
                 break;
             case 3:
-                lifeTime += 0.25f;
+                lifeTime += 0.5f;
                 break;
             case 4:
                 damage += 0.5f;
                 break;
             case 5:
-                speed += 1.2f;
+                speed += 0.6f;
                 break;
             case 6:
                 amountOfCast += 1;
