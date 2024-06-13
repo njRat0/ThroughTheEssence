@@ -3,6 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 enum TypeOfButton{
     ChooseClass,
@@ -13,6 +14,13 @@ enum TypeOfButton{
 
 
 class MyButton{
+    //>>>class button
+    public String description = "null";
+    public BufferedImage icon;
+    //<<<
+
+    public String name = "null";
+
     private boolean isMouseOver =  false;
     private boolean isPressed = false;
     public TypeOfButton type;

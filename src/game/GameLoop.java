@@ -2,8 +2,12 @@
 package game;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 
 /**
@@ -159,6 +163,8 @@ public class GameLoop implements Runnable {
 
 		listOfAllSkills.get(0).chanceOfDrop = 50;
 		player.curWeapon = listOfAllSkills.get(0);
+		isPause = true;
+		SetUp_ChooseClassButtons();
 	}
 
 	public void SetUp_listOfSkills(){
@@ -309,39 +315,60 @@ public class GameLoop implements Runnable {
 
 	public static MyButton[] listOfClassButtons = new MyButton[3];
 	public static void SetUp_ChooseClassButtons(){
-		MyButton warriorButton = new MyButton(player, TypeOfButton.ChooseClass);
-		MyButton assasinButton = new MyButton(player, TypeOfButton.ChooseClass);
-		MyButton mageButton = new MyButton(player, TypeOfButton.ChooseClass);
-
-		listOfClassButtons[0] = warriorButton;
-		listOfClassButtons[1] = assasinButton;
-		listOfClassButtons[2] = mageButton;
-
 		int width = GameFrame.gameWidth / 3;
 		int height = GameFrame.gameHeight;
 		for(int i = 0; i < 3; i++){
-			MyButton button = listOfClassButtons[i];
-			button.id=i;
-			button.borderSize = 3;
-			button.SetSize(width, height);
-			button.SetLocation(i*width, 0);
-			button.colorBackground = Color.gray;
-			button.colorBorders = Color.black;
-			button.colorOver = new Color(94, 94, 94);
-			button.colorClick = Color.black;
+			listOfClassButtons[i] = new MyButton(player, TypeOfButton.ChooseClass);
+			listOfClassButtons[i].id=i;
+			listOfClassButtons[i].borderSize = 3;
+			listOfClassButtons[i].colorBackground = new Color(125, 125, 125);
+			listOfClassButtons[i].colorBorders = new Color(0, 0, 0);
+			listOfClassButtons[i].colorOver = new Color(94, 94, 94);
+			listOfClassButtons[i].colorClick = new Color(0, 0, 0);
+			listOfClassButtons[i].SetSize(width - 10, height);
+			listOfClassButtons[i].SetLocation(width * i - 10 * i + 15, 0);
 		}
+
+		listOfClassButtons[0].name = "Warrior";
+		listOfClassButtons[1].name = "Assasin";
+		listOfClassButtons[2].name = "Mage";
+
+		listOfClassButtons[0].description = "Warrior";
+		listOfClassButtons[1].description = "Assasin";
+		listOfClassButtons[2].description = "Mage";
+
+		try {
+			listOfClassButtons[0].icon = ImageIO.read(new File("res\\Characters\\Warrior.png"));
+			listOfClassButtons[1].icon = ImageIO.read(new File("res\\Characters\\Assasin.png"));
+			listOfClassButtons[2].icon = ImageIO.read(new File("res\\Characters\\Mage.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	public static void ChooseClass(int index){
 		isPause = false;
 		switch (index) {
 			case 0:
-				
+				try {
+					player.sprite = ImageIO.read(new File("res\\Characters\\Warrior.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				break;
 			case 1:
-				
+				try {
+					player.sprite= ImageIO.read(new File("res\\Characters\\Assasin.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				break;
 			case 2:
-				
+				try {
+					player.sprite = ImageIO.read(new File("res\\Characters\\Mage.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				break;
 		}
 		isChoosedClass = true;
@@ -354,14 +381,15 @@ public class GameLoop implements Runnable {
 		while (!gameOver) {
 			try {
 				long start = System.currentTimeMillis();
-				//System.out.println(player.mouseX + ", " + player.mouseY);
-				//
-				// if(isChoosedClass == false){
-				// 	for(MyButton button : listOfClassButtons){
-				// 		button.update();
-				// 	}
-				// 	continue;
-				// }
+				System.out.println(player.mouseX + ", " + player.mouseY);
+				
+				if(isChoosedClass == false){
+					for(MyButton classButton : listOfClassButtons){
+						classButton.update();
+					}
+					canvas.render(player, listOfEnemies, listOfBullets, listOfInteractingObjects, player.curWeapon);
+					continue;
+				}
 				if(isChoosingSkills == true){
 					for(MyButton button : chooseSkillButtons){
 						button.update();

@@ -118,7 +118,23 @@ public class GameFrame extends JFrame {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
 		//Draw player and enemies
-		if(!player.isDead){
+		if(GameLoop.isChoosedClass == false){
+			g2d.setColor(Color.white);
+			g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
+			for(MyButton button : GameLoop.listOfClassButtons){
+				button.toDraw(g2d);
+				int x = button.GetLocationX();
+				int y = button.GetLocationY();
+				String nameOfClass = button.name;
+				g2d.setColor(Color.WHITE);
+				g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(24.0f));
+				//int strWidth = g2d.getFontMetrics().stringWidth(str);
+				g2d.drawString(nameOfClass, x + 25, y + 65);
+
+				g2d.drawImage(button.icon, x+25,y+85,button.icon.getWidth()*12,button.icon.getHeight()*12, null);
+			}
+		}
+		else if(!player.isDead){
 			player.toDraw(g2d);
 			if(interactingObjects != null){
 				for(InteractingObject object : interactingObjects){
