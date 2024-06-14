@@ -588,9 +588,11 @@ class Spider_Boss extends Enemy{
         bullet.bullet.isAliveAfterDealingDamage = true;
         bullet.bullet.SetUpCollision(); 
 
-        SpiderEgg egg1 = new SpiderEgg(player, locX, locY);
-        egg1.newSpiderHp = curHP / 2;
-        GameLoop.listOfEnemies.add(egg1);
+        if(curHP / 2 >=1000){
+            SpiderEgg egg1 = new SpiderEgg(player, locX, locY);
+            egg1.newSpiderHp = curHP / 2;
+            GameLoop.listOfEnemies.add(egg1);
+        }    
     }
     
 }

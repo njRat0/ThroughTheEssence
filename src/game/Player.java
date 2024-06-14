@@ -53,9 +53,8 @@ public class Player extends Character{
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	public Player() {
-		super.modificator_Damage = 0.9f;
-		locX = GameFrame.gameCenterX;
-		locY = GameFrame.gameCenterY;
+		locX = Frame.gameCenterX;
+		locY = Frame.gameCenterY;
 		isDead = false;
 		//
 		keyUP = false;
@@ -143,9 +142,9 @@ public class Player extends Character{
 			locX += (keyUP || keyDOWN) ? moveSpeed * Settings.COEFFICIENT_OF_DIAGANOL_MOVING * changingSpeed: moveSpeed* changingSpeed;
 
 		locX = Math.max(locX, 0);
-		locX = Math.min(locX, GameFrame.gameWidth);
+		locX = Math.min(locX, Frame.gameWidth);
 		locY = Math.max(locY, 0);
-		locY = Math.min(locY, GameFrame.gameHeight);
+		locY = Math.min(locY, Frame.gameHeight);
 
 		collision.x = locX;
 		collision.y = locY;
@@ -178,9 +177,9 @@ public class Player extends Character{
 
 	public void toDraw(Graphics2D g2d){
 		//g2d.drawImage(sprite, locX, locY, sprite.getWidth(), sprite.getHeight(), null);
-        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite * GameFrame.coeficient),(int)(sprite.getHeight()*sizeOfSprite * GameFrame.coeficient), null);
+        g2d.drawImage(sprite, locX,locY, (int)(sprite.getWidth()*sizeOfSprite * Frame.coeficient),(int)(sprite.getHeight()*sizeOfSprite * Frame.coeficient), null);
 		g2d.setColor(new Color((int)((1 - curHP / maxHP) * 255),(int)(curHP / maxHP*255),0));
-		g2d.fillRect(locX+ (int)((32-(int)(28 * curHP / maxHP)) / 2 *sizeOfSprite * GameFrame.coeficient),(int)(locY + 32 *sizeOfSprite * GameFrame.coeficient), (int)(28 * curHP / maxHP*sizeOfSprite * GameFrame.coeficient), (int)(4 *sizeOfSprite * GameFrame.coeficient));	
+		g2d.fillRect(locX+ (int)((32-(int)(28 * curHP / maxHP)) / 2 *sizeOfSprite * Frame.coeficient),(int)(locY + 32 *sizeOfSprite * Frame.coeficient), (int)(28 * curHP / maxHP*sizeOfSprite * Frame.coeficient), (int)(4 *sizeOfSprite * Frame.coeficient));	
     }
 	
 	

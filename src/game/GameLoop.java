@@ -32,7 +32,7 @@ public class GameLoop implements Runnable {
 	
 	public static Random r = new Random();
 
-	private GameFrame canvas;
+	private Frame canvas;
 	private static Player player;
 	public static ArrayList<Enemy> listOfEnemies = new ArrayList<Enemy>();
 	public static ArrayList<Bullet> listOfBullets = new ArrayList<Bullet>();
@@ -70,7 +70,7 @@ public class GameLoop implements Runnable {
 		for(int i = 0; i < GameLoop.countChoosingSlotsForAS; i++){
 			MyButton button = new MyButton(player, TypeOfButton.ChooseSkill);
 			button.SetSize(98, 100);
-			button.SetLocation((GameFrame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*150, GameFrame.gameCenterY - 50);
+			button.SetLocation((Frame.gameCenterX - GameLoop.countChoosingSlotsForAS*100 / 2) + i*150, Frame.gameCenterY - 50);
 			button.id = i;
 			//int num = 0;
 			int num = r.nextInt(probabilityOfAllSkills);
@@ -145,7 +145,7 @@ public class GameLoop implements Runnable {
 		//chooseSkillButtons.clear();
 	}
 
-	public GameLoop(GameFrame frame) {
+	public GameLoop(Frame frame) {
 		canvas = frame;
 	}
 	
@@ -165,6 +165,7 @@ public class GameLoop implements Runnable {
 		player.curWeapon = listOfAllSkills.get(0);
 		isPause = true;
 		SetUp_ChooseClassButtons();
+		
 	}
 
 	public void SetUp_listOfSkills(){
@@ -198,21 +199,21 @@ public class GameLoop implements Runnable {
 			int posY = 0;
 			if(r.nextInt(2) == 1){
 				if(r.nextInt(2) == 1){
-					posY = GameFrame.gameHeight;
+					posY = Frame.gameHeight;
 				}
 				else{
 					posY = 0;
 				}
-				posX = r.nextInt(GameFrame.gameWidth + 1);
+				posX = r.nextInt(Frame.gameWidth + 1);
 			}
 			else{
 				if(r.nextInt(2) == 1){
-					posX = GameFrame.gameWidth;
+					posX = Frame.gameWidth;
 				}
 				else{
 					posX = 0;
 				}
-				posY = r.nextInt(GameFrame.gameHeight + 1);
+				posY = r.nextInt(Frame.gameHeight + 1);
 			}
 			switch (choosedEnemy) {
 				case 1:
@@ -240,21 +241,21 @@ public class GameLoop implements Runnable {
 				int posY = 0;
 				if(r.nextInt(2) == 1){
 					if(r.nextInt(2) == 1){
-						posY = GameFrame.gameHeight;
+						posY = Frame.gameHeight;
 					}
 					else{
 						posY = 0;
 					}
-					posX = r.nextInt(GameFrame.gameWidth + 1);
+					posX = r.nextInt(Frame.gameWidth + 1);
 				}
 				else{
 					if(r.nextInt(2) == 1){
-						posX = GameFrame.gameWidth;
+						posX = Frame.gameWidth;
 					}
 					else{
 						posX = 0;
 					}
-					posY = r.nextInt(GameFrame.gameHeight + 1);
+					posY = r.nextInt(Frame.gameHeight + 1);
 				}
 				switch (choosedEnemy) {
 					case 1:
@@ -315,8 +316,8 @@ public class GameLoop implements Runnable {
 
 	public static MyButton[] listOfClassButtons = new MyButton[3];
 	public static void SetUp_ChooseClassButtons(){
-		int width = GameFrame.gameWidth / 3;
-		int height = GameFrame.gameHeight;
+		int width = Frame.gameWidth / 3;
+		int height = Frame.gameHeight;
 		for(int i = 0; i < 3; i++){
 			listOfClassButtons[i] = new MyButton(player, TypeOfButton.ChooseClass);
 			listOfClassButtons[i].id=i;
@@ -357,7 +358,7 @@ public class GameLoop implements Runnable {
 				}
 				player.classOfPlayer = ClassOfPlayer.Warrior;
 				player.canBePushed = false;
-				player.maxHP = 250;
+				player.maxHP = 260;
 				player.curHP = 250;
 				player.hpRegen = 1f;
 				player.canBeSlowed = false;

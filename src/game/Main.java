@@ -14,7 +14,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				GameFrame frame = new GameFrame("ThroughTheEssence");
+				Frame frame = new Frame("ThroughTheEssence");
 				frame.setLocationRelativeTo(null); // put frame at center of screen
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				frame.setVisible(true);
