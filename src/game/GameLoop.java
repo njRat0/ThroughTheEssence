@@ -42,6 +42,8 @@ public class GameLoop implements Runnable {
 
 	public static boolean isChoosedClass;
 
+	
+
 	//ChoosingSkill system
 	public static ArrayList<Skill> listOfAllSkills = new ArrayList<Skill>();
 	public static int probabilityOfAllSkills;
@@ -158,7 +160,7 @@ public class GameLoop implements Runnable {
 		canvas.addKeyListener(player.getKeyListener());
 		canvas.addMouseListener(player.getMouseListener());
 		canvas.addMouseMotionListener(player.getMouseMotionListener());
-		
+		SetUp_MenuButtons();
 		SetUp_listOfSkills();
 
 		listOfAllSkills.get(0).chanceOfDrop = 50;
@@ -314,6 +316,33 @@ public class GameLoop implements Runnable {
 		}
 	}
 
+	public static int curLayout = 3; // 0 -> menu; 1 -> settings; 2 -> rules; 3 -> game
+	public static MyButton[] menuButtons = new MyButton[4];
+	public static MyButton[] settingsButtons = new MyButton[4];
+	public static MyButton[] rulesButtons = new MyButton[1];
+	public static void SetUp_MenuButtons(){
+		for(int i = 0; i < menuButtons.length; i++){
+			menuButtons[i] = new MyButton(player, TypeOfButton.Menu);
+			menuButtons[i].id=i;
+			menuButtons[i].borderSize = 3;
+			menuButtons[i].colorBackground = new Color(125, 125, 125);
+			menuButtons[i].colorBorders = new Color(0, 0, 0);
+			menuButtons[i].colorOver = new Color(94, 94, 94);
+			menuButtons[i].colorClick = new Color(0, 0, 0);
+			menuButtons[i].SetSize(100, 50);
+			menuButtons[i].SetLocation(Frame.gameCenterX -50 , Frame.gameCenterY -240 + 60 * i );
+		}
+		menuButtons[0].name = "Start";
+		menuButtons[1].name = "Settings";
+		menuButtons[2].name = "Rules";
+		menuButtons[3].name = "Exit";
+
+		menuButtons[0].goTo = 3;
+		menuButtons[1].goTo = 1;
+		menuButtons[2].goTo = 2;
+		menuButtons[3].goTo = -1;
+	}
+
 	public static MyButton[] listOfClassButtons = new MyButton[3];
 	public static void SetUp_ChooseClassButtons(){
 		int width = Frame.gameWidth / 3;
@@ -419,7 +448,12 @@ public class GameLoop implements Runnable {
 			try {
 				long start = System.currentTimeMillis();
 				System.out.println(player.mouseX + ", " + player.mouseY);
-				
+				if(curLayout == 0){
+					for(MyButton button : GameLoop.menuButtons){
+						button.update();
+					}
+					//continue;
+				}
 				if(isChoosedClass == false){
 					for(MyButton classButton : listOfClassButtons){
 						classButton.update();

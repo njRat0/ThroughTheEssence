@@ -19,6 +19,10 @@ class MyButton{
     public BufferedImage icon;
     //<<<
 
+    //>>>menu button
+    public int goTo = 0;
+    //<<<
+
     public String name = "null";
 
     private boolean isMouseOver =  false;
@@ -87,7 +91,8 @@ class MyButton{
                             GameLoop.ChooseClass(id);
                             break;
                         case Menu:
-                            //more code
+                            GameLoop.curLayout = goTo;   
+                            player.mousePress = false; 
                             break;
                         default:
                             System.out.println("Button type error");

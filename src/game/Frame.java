@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Frame extends JFrame {
-	public static int curLayout = 2; // 0 -> menu; 1 -> settings; 2 -> game
-	
 	public static int gameHeight;                  // 720p game resolution
 	public static int gameWidth;  // wide aspect ratio
 	public static int gameCenterY;
@@ -32,8 +30,6 @@ public class Frame extends JFrame {
 		lastRender = -1;
 		fpsHistory = new ArrayList<>(100);
 	}
-
-	
 
 
 	public static void SetUp_WindowSizeParameters(){
@@ -101,23 +97,27 @@ public class Frame extends JFrame {
 		g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
 		
 		
-		if(curLayout == 0){
-			for(int i = 0; i < 3; i++){
-				listOfMenuButtons[i] = new MyButton(player, TypeOfButton.ChooseClass);
-				listOfMenuButtons[i].id=i;
-				listOfMenuButtons[i].borderSize = 3;
-				listOfMenuButtons[i].colorBackground = new Color(125, 125, 125);
-				listOfMenuButtons[i].colorBorders = new Color(0, 0, 0);
-				listOfMenuButtons[i].colorOver = new Color(94, 94, 94);
-				listOfMenuButtons[i].colorClick = new Color(0, 0, 0);
-				listOfMenuButtons[i].SetSize(10 - 10, 0);
-				listOfMenuButtons[i].SetLocation(0 * i - 10 * i + 15, 0);
+		if(GameLoop.curLayout == 0){
+			for(MyButton button : GameLoop.menuButtons){
+				button.toDraw(g2d);
+				String str = button.name;
+				g2d.setColor(Color.WHITE);
+				g2d.setFont(g2d.getFont().deriveFont(Font.BOLD).deriveFont(12.0f));
+				int strWidth = g2d.getFontMetrics().stringWidth(str);
+				g2d.drawString(str, button.GetLocationX() + (100 - strWidth) / 2,  button.GetLocationY() + 28);
 			}
 		}
-		else if(curLayout == 1){
-			
+		else if(GameLoop.curLayout == 1){
+			for(MyButton button : GameLoop.settingsButtons){
+				button.toDraw(g2d);
+			}
 		}
-		else if(curLayout == 2){
+		else if(GameLoop.curLayout == 2){
+			for(MyButton button : GameLoop.rulesButtons){
+				button.toDraw(g2d);
+			}
+		}
+		else if(GameLoop.curLayout == 3){
 			if(GameLoop.isChoosedClass == false){
 				g2d.setColor(Color.white);
 				g2d.fillRect(0, 0, gameWidth + 20, gameHeight + 20);
